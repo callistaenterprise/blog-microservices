@@ -1,0 +1,3 @@
+include 'microservices/core/ProductService'
+include 'microservices/core/ReviewService'
+include 'microservices/api/ProductApiService'
