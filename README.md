@@ -10,3 +10,7 @@ I: http://stackoverflow.com/questions/24643483/how-to-find-port-of-spring-boot-c
 
 Q: How to configure port-range?
 A: http://stackoverflow.com/questions/28053753/spring-boot-server-port-range-setting
+
+Q: Generalise jackson helper methods <T>...
+
+ZUUL + OAuth....

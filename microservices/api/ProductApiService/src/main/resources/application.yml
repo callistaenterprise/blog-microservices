@@ -9,4 +9,15 @@ eureka:
 #      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${local.server.port}}}
       instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
   client:
+#    region: default
     registryFetchIntervalSeconds: 5
+#    availabilityZones:
+#      default: ${APPLICATION_DOMAIN:${DOMAIN:defaultZone}}
+
+#stores:
+#  ribbon:
+#    ServerListRefreshInterval: 1000
+
+logging:
+  level:
+    se.callista: DEBUG

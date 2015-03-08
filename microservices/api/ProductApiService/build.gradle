@@ -40,6 +40,13 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE")
 
+
+/*
+    compile("org.springframework.cloud:spring-cloud-starter-bus-amqp:1.0.0.BUILD-SNAPSHOT")
+    compile("org.springframework.cloud:spring-cloud-netflix-hystrix-amqp:1.0.0.BUILD-SNAPSHOT")
+    testCompile("org.springframework.cloud:spring-cloud-starter-feign:1.0.0.BUILD-SNAPSHOT")
+*/
+
     compile("se.callista.microservises.core.product:ProductService:0.0.1-SNAPSHOT")
     compile("se.callista.microservises.core.review:ReviewService:0.0.1-SNAPSHOT")
 //    compile project(':microservices/core/ProductsService'), project(':microservices/core/ReviewService')

@@ -8,9 +8,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableCircuitBreaker
 @EnableDiscoveryClient
-public class ProductServiceApplication {
-
+public class ProductApiServiceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ProductServiceApplication.class, args);
+        SpringApplication.run(ProductApiServiceApplication.class, args);
     }
 }
