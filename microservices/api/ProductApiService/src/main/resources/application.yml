@@ -1,6 +1,12 @@
 server:
   port: 10021
 
+spring:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:9999/uaa/user
+
+
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
