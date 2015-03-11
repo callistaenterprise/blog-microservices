@@ -1,0 +1,38 @@
+info:
+  component: Zuul Server
+
+spring:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:9999/uaa/user
+
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+
+zuul:
+  routes:
+    stores:
+      path: /stores/**
+      stripPrefix: false
+    customers:
+      path: /customers/**
+      stripPrefix: false
+    productapi:
+      path: /productapi/**
+#      stripPrefix: false
+    prodapi:
+      path: /prodapi/**
+      url: http://localhost:10021
+
+server:
+  port: 8765
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.web: INFO

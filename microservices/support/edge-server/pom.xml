@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.demo</groupId>
+	<artifactId>zuul-server</artifactId>
+	<packaging>jar</packaging>
+	<name>Spring Cloud Netflix Zuul Server</name>
+	<url>http://projects.spring.io/spring-cloud/</url>
+    <version>1.0.0.BUILD-SNAPSHOT</version>
+
+	<parent>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-starter-parent</artifactId>
+		<version>1.0.0.BUILD-SNAPSHOT</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+	        <plugin>
+		      <!--skip deploy (this is just a test module) -->
+		      <artifactId>maven-deploy-plugin</artifactId>
+		      <configuration>
+		        <skip>true</skip>
+		      </configuration>
+	        </plugin>
+		</plugins>
+	</build>
+
+	<properties>
+		<spring-cloud-config.version>1.0.0.BUILD-SNAPSHOT</spring-cloud-config.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starters</artifactId>
+				<version>${spring-cloud-config.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-zuul</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka</artifactId>
+		</dependency>
+<!-- TODO: Temp fix
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-security</artifactId>
+            <version>1.0.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>2.0.6.RELEASE</version>
+        </dependency>
+-->
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>http://repo.spring.io/libs-snapshot-local</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>http://repo.spring.io/libs-miletone-local</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-releases</id>
+			<name>Spring Releases</name>
+			<url>http://repo.spring.io/libs-release-local</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>http://repo.spring.io/libs-snapshot-local</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>http://repo.spring.io/libs-milestone-local</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>
