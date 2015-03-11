@@ -1,0 +1,34 @@
+# $ termrc start
+#
+# Assumes:
+#   alias setJdk6='export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)'
+#   alias setJdk7='export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)'
+#   alias setJdk8='export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)'
+
+
+root:
+  ~/Documents/projects/blogs/git/blog-microservices/microservices
+
+commands:
+  rabbitMq: ~/Applications/rabbitmq_server-3.4.3/sbin/rabbitmq-server
+
+  auth-server:       cd support/auth-server;               mvn spring-boot:run
+  config-server:     cd support/config-server;             mvn spring-boot:run
+  discovery-server:  cd support/discovery-server;          mvn package; java -jar target/*.jar # Don't work: mvn spring-boot:run
+  monitor-dashboard: cd support/monitor-dashboard;         mvn spring-boot:run
+  edge-server:       sleep 15; cd support/edge-server;     mvn spring-boot:run
+
+  product:           sleep 30; cd core/product-service;    setJdk8; ./gradlew bootRun
+  review:            sleep 30; cd core/review-service;     setJdk8; ./gradlew bootRun
+  product-api:       sleep 30; cd api/product-api-service; setJdk8; ./gradlew bootRun
+  resource-api:      sleep 30; cd api/resource;            mvn spring-boot:run
+
+  webapp:            sleep 10; cd webapp/ui;               mvn spring-boot:run
+
+layout_type: row
+
+layout:
+  - [ rabbitMq, auth-server, config-server ]
+  - [ discovery-server, monitor-dashboard, edge-server ]
+  - [ product, review, product-api ]
+  - [ resource-api, webapp ]
