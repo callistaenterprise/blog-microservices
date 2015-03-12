@@ -1,3 +1,4 @@
+include 'microservices/support/auth-server'
 include 'microservices/core/product-service'
 include 'microservices/core/review-service'
 include 'microservices/api/product-api-service'
