@@ -16,7 +16,7 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'ProductApiService'
+    baseName = 'product-api-service'
     version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
@@ -51,9 +51,8 @@ dependencies {
     testCompile("org.springframework.cloud:spring-cloud-starter-feign:1.0.0.BUILD-SNAPSHOT")
 */
 
-    compile("se.callista.microservises.core.product:ProductService:0.0.1-SNAPSHOT")
-    compile("se.callista.microservises.core.review:ReviewService:0.0.1-SNAPSHOT")
-//    compile project(':microservices/core/ProductsService'), project(':microservices/core/ReviewService')
+    compile("se.callista.microservises.core.product:product-service:0.0.1-SNAPSHOT")
+    compile("se.callista.microservises.core.review:review-service:0.0.1-SNAPSHOT")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

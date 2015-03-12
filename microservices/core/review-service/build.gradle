@@ -17,7 +17,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'maven-publish'
 
 jar {
-    baseName = 'ReviewService'
+    baseName = 'review-service'
     version = '0.0.1-SNAPSHOT'
 }
 
@@ -27,7 +27,7 @@ publishing {
         mavenJava(MavenPublication) {
             // TODO: Where to place these properties?
             groupId 'se.callista.microservises.core.review'
-            artifactId 'ReviewService'
+            artifactId 'review-service'
             version '0.0.1-SNAPSHOT'
 
             from components.java

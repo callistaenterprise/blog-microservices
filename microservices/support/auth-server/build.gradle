@@ -1,0 +1,56 @@
+buildscript {
+    ext {
+        springBootVersion = '1.2.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = 'auth-server'
+    version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+/*
+     maven { url "http://repo.spring.io/libs-snapshot-local" }
+     maven { url "http://repo.spring.io/libs-milestone-local" }
+     maven { url "http://repo.spring.io/libs-release-local" }
+     maven { url "http://repo.maven.apache.org/maven2" }
+*/
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web') {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile("org.springframework.boot:spring-boot-starter-undertow")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-security")
+
+    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.6.RELEASE")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module: 'commons-logging')
+    }
+    testCompile('org.apache.httpcomponents:httpclient:4.3.6') {
+        exclude(module: 'commons-logging')
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
