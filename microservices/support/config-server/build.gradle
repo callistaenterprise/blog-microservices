@@ -1,0 +1,46 @@
+buildscript {
+    ext {
+        springBootVersion = '1.2.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = 'config-server'
+    version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+/*
+     maven { url "http://repo.spring.io/libs-snapshot-local" }
+     maven { url "http://repo.spring.io/libs-milestone-local" }
+     maven { url "http://repo.spring.io/libs-release-local" }
+     maven { url "http://repo.maven.apache.org/maven2" }
+*/
+}
+
+dependencies {
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-config-server', version:'1.0.0.RELEASE'
+    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version:'1.0.0.RELEASE')
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version:'1.2.2.RELEASE'
+
+    testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.2.2.RELEASE')
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}

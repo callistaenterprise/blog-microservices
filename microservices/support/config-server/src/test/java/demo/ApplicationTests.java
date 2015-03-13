@@ -1,7 +1,10 @@
 package demo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.net.HttpRetryException;
 import java.util.Map;
 
 import org.junit.Test;
@@ -18,6 +21,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import javax.validation.constraints.AssertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ConfigServerApplication.class)
@@ -49,9 +54,13 @@ public class ApplicationTests {
 	@Test
 	public void envPostSecure() {
 		MultiValueMap<String, String> form = new LinkedMultiValueMap<String, String>();
-		@SuppressWarnings("rawtypes")
-		ResponseEntity<Map> entity = new TestRestTemplate().postForEntity("http://localhost:" + port + "/admin/env", form , Map.class);
-		assertEquals(HttpStatus.UNAUTHORIZED, entity.getStatusCode());
+        try {
+            @SuppressWarnings("rawtypes")
+            ResponseEntity<Map> entity = new TestRestTemplate().postForEntity("http://localhost:" + port + "/admin/env", form, Map.class);
+            fail("An HttpRetryException should have been raised here!");
+        } catch (RuntimeException ex) {
+            assertTrue(ex.getCause() instanceof HttpRetryException);
+        }
 	}
 
 }
