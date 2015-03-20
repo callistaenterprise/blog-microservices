@@ -1,5 +1,8 @@
 package se.callista.microservises.core.review.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +19,18 @@ import java.util.List;
 @EnableHystrix
 public class ReviewService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ReviewService.class);
+
+    /*
+    private int port;
+
+    @Value("local.server.port")
+    public void setPort (int port) {
+        LOG.info("getReviews will be called on port: {}", port);
+        this.port = port;
+    }
+    */
+
     /**
      * Sample usage: curl localhost:10002/products/1
      * 
@@ -30,6 +45,8 @@ public class ReviewService {
         list.add(new Review(productId, 1, "Author 1", "Subject 1", "Content 1"));
         list.add(new Review(productId, 2, "Author 2", "Subject 2", "Content 2"));
         list.add(new Review(productId, 3, "Author 3", "Subject 3", "Content 3"));
+
+        LOG.info("getReviews called: {}", list.size());
 
         return list;
     }
