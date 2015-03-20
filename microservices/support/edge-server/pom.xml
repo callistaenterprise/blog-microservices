@@ -13,10 +13,11 @@
 	<parent>
 		<groupId>org.springframework.cloud</groupId>
 		<artifactId>spring-cloud-starter-parent</artifactId>
-		<version>1.0.0.BUILD-SNAPSHOT</version>
+		<version>1.0.0.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
+  <!--
 	<build>
 		<plugins>
 			<plugin>
@@ -24,7 +25,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 	        <plugin>
-		      <!--skip deploy (this is just a test module) -->
+		      <!- -skip deploy (this is just a test module) - ->
 		      <artifactId>maven-deploy-plugin</artifactId>
 		      <configuration>
 		        <skip>true</skip>
@@ -32,11 +33,13 @@
 	        </plugin>
 		</plugins>
 	</build>
+  -->
 
 	<properties>
 		<spring-cloud-config.version>1.0.0.BUILD-SNAPSHOT</spring-cloud-config.version>
 	</properties>
 
+  <!--
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -48,6 +51,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+    -->
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -123,5 +127,4 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
 </project>

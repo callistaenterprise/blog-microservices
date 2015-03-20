@@ -12,9 +12,9 @@ root:
 commands:
   rabbitMq: ~/Applications/rabbitmq_server-3.4.3/sbin/rabbitmq-server
 
-  auth-server:       cd support/auth-server;               mvn spring-boot:run
-  config-server:     cd support/config-server;             mvn spring-boot:run
-  discovery-server:  cd support/discovery-server;          mvn package; java -jar target/*.jar # Don't work: mvn spring-boot:run
+  auth-server:       cd support/auth-server;               setJdk8; ./gradlew bootRun
+  config-server:     cd support/config-server;             setJdk8; ./gradlew bootRun
+  discovery-server:  cd support/discovery-server;          mvn package -DskipTest; java -jar target/*.jar # Don't work: mvn spring-boot:run
   monitor-dashboard: cd support/monitor-dashboard;         mvn spring-boot:run
   edge-server:       sleep 15; cd support/edge-server;     mvn spring-boot:run
 

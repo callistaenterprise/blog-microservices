@@ -36,7 +36,7 @@ repositories {
 dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-config-server', version:'1.0.0.RELEASE'
     compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version:'1.0.0.RELEASE')
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version:'1.2.2.RELEASE'
+//    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version:'1.2.2.RELEASE'
 
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.2.2.RELEASE')
 }

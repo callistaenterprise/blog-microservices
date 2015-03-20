@@ -13,4 +13,24 @@ A: http://stackoverflow.com/questions/28053753/spring-boot-server-port-range-set
 
 Q: Generalise jackson helper methods <T>...
 
-ZUUL + OAuth....
+* ELK, v4 instruktion från Ola
+
+* NIO + ELK + Correlation Id's...
+
+* ZUUL + OAuth....
+
+* GUI för Zuul och Eureka?
+
+* Hur använda Config?
+
+* Hur exekvera tjänster som inte når eureka?
+* Hur exekvera tjänster som inte når config?
+ 
+* Hur sätta upp stödtjänster med HA?
+
+* spring-boot-starter-security bortagen från config och eureka...
+
+* har disablat i eureka/discovery server:
+	<groupId>pl.project13.maven</groupId>
+	<artifactId>git-commit-id-plugin</artifactId>
+ 

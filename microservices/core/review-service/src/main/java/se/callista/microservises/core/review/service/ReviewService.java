@@ -17,7 +17,7 @@ import java.util.List;
 public class ReviewService {
 
     /**
-     * Sample usage: curl localhost:10021/products/1
+     * Sample usage: curl localhost:10002/products/1
      * 
      * @param productId
      * @return
