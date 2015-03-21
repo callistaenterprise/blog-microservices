@@ -2,6 +2,10 @@ server:
   port: 0
 #  port: 10002
 
+service:
+  defaultMinMs: 100
+  defaultMaxMs: 200
+
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10

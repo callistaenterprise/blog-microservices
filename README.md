@@ -8,6 +8,9 @@ Q: Zuul, needs to add extra top level name, e.g. /stores/stores ???
 Q:  Dynamic IP, how to setup instanceID?
 I: http://stackoverflow.com/questions/24643483/how-to-find-port-of-spring-boot-container-when-running-a-spock-test-using-proper
 
+* Hur hitta port numret i runtime för att sätta det på en sys property?
+(local.server.port går inte at injicera i application-klassen...)
+
 Q: How to configure port-range?
 A: http://stackoverflow.com/questions/28053753/spring-boot-server-port-range-setting
 
@@ -34,3 +37,5 @@ Q: Generalise jackson helper methods <T>...
 	<groupId>pl.project13.maven</groupId>
 	<artifactId>git-commit-id-plugin</artifactId>
  
+* har disablat säkerhet (ofrivilligt) i product API i ett försök att disabla säkerhet för hystrix
+*

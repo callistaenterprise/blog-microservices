@@ -1,6 +1,11 @@
 server:
   port: 10021
 
+# TODO: ML, Did not help
+# endpoints:
+#   health:
+#     sensitive: false
+
 spring:
   oauth2:
     resource:
@@ -26,4 +31,4 @@ eureka:
 
 logging:
   level:
-    se.callista: DEBUG
+    se.callista: INFO

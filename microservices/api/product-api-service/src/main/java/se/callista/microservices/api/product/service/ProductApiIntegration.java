@@ -7,6 +7,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -30,6 +31,9 @@ public class ProductApiIntegration {
 
     private RestTemplate restTemplate = new RestTemplate();
 
+    // -------- //
+    // PRODUCTS //
+    // -------- //
 
     @HystrixCommand(fallbackMethod = "defaultProduct")
     public ResponseEntity<Product> getProduct(int productId) {
@@ -54,12 +58,19 @@ public class ProductApiIntegration {
      * @param productId
      * @return
      */
-    public Product defaultProduct(int productId) {
-        return null;
+    public ResponseEntity<Product> defaultProduct(int productId) {
+        LOG.warn("Using fallback method for product-service");
+        return util.createResponse(null, HttpStatus.BAD_GATEWAY);
     }
+
+
+    // ------- //
+    // REVIEWS //
+    // ------- //
 
     @HystrixCommand(fallbackMethod = "defaultReviews")
     public ResponseEntity<List<Review>> getReviews(int productId) {
+        LOG.info("GetReviews...");
 
         URI uri = util.getServiceUrl("reviews", "http://localhost:8081/reviews");
 
@@ -83,9 +94,14 @@ public class ProductApiIntegration {
      * @param productId
      * @return
      */
-    public List<Review> defaultReviews(int productId) {
-        return null;
+    public ResponseEntity<List<Review>> defaultReviews(int productId) {
+        LOG.warn("Using fallback method for review-service");
+        return util.createResponse(null, HttpStatus.BAD_GATEWAY);
     }
+
+    // ----- //
+    // UTILS //
+    // ----- //
 
 
     private ObjectReader productReader = null;

@@ -49,7 +49,7 @@ public class ProductApiService {
         List<Review> reviews = null;
         if (!reviewsResult.getStatusCode().is2xxSuccessful()) {
             // Something went wrong with getReviews, simply skip the review-information in the response
-            LOG.warn("Call to getReviews failed: {}", reviewsResult.getStatusCode());
+            LOG.debug("Call to getReviews failed: {}", reviewsResult.getStatusCode());
         } else {
             reviews = reviewsResult.getBody();
         }

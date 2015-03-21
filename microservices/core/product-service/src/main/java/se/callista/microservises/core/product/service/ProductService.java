@@ -11,7 +11,6 @@ import se.callista.microservises.core.product.model.Product;
  * Created by magnus on 04/03/15.
  */
 @RestController
-@EnableHystrix
 public class ProductService {
 
     @RequestMapping("/products/{productId}")
