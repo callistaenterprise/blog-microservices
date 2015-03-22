@@ -9,18 +9,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import java.util.UUID;
 
 @SpringBootApplication
-@EnableCircuitBreaker
 @EnableDiscoveryClient
 public class ReviewServiceApplication {
-
-    private int port;
-
-//    @Value("${local.server.port}")
-//    @Value("${server.port}")
-    public void setPort (int port) {
-        System.err.println("### GOT THE PORT NUMBER: " + port);
-        this.port = port;
-    }
 
     public static void main(String[] args) {
         System.setProperty("MY_UUID", UUID.randomUUID().toString());

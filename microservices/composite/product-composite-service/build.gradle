@@ -17,7 +17,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'maven-publish'
 
 jar {
-    baseName = 'product-service'
+    baseName = 'product-composite-service'
     version = '0.0.1-SNAPSHOT'
 }
 
@@ -26,8 +26,8 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             // TODO: Where to place these properties?
-            groupId 'se.callista.microservises.core.product'
-            artifactId 'product-service'
+            groupId 'se.callista.microservises.composite.product'
+            artifactId 'product-composite-service'
             version '0.0.1-SNAPSHOT'
 
             from components.java

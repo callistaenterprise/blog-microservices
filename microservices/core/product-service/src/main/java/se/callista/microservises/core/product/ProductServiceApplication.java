@@ -6,7 +6,6 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
-@EnableCircuitBreaker
 @EnableDiscoveryClient
 public class ProductServiceApplication {
 

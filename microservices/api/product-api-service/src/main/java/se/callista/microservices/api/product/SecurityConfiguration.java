@@ -30,13 +30,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     */
 
-    @Override
+//    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        LOG.info("### Setting up access to hystrix...");
+        LOG.info("### Setting up access to hystrix, vIII...");
 
+        // TODO: Can't get this to work so for now security is in fact disabled, e.g. ".anyRequest().authenticated()" is a comment
         http
             .authorizeRequests()
-                .antMatchers("/hystrix.stream").permitAll();
+                .antMatchers("/hystrix.stream").permitAll()
+//                .anyRequest().authenticated()
+        ;
+
         LOG.info("### Setting up access to hystrix, done!");
     }
 
