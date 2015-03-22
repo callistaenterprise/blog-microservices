@@ -17,6 +17,7 @@ commands:
   discovery-server:  cd support/discovery-server;          mvn package -DskipTest; java -jar target/*.jar # Don't work: mvn spring-boot:run
   monitor-dashboard: cd support/monitor-dashboard;         mvn spring-boot:run
   edge-server:       sleep 15; cd support/edge-server;     mvn spring-boot:run
+  turbine:           sleep 15; cd support/turbine;         setJdk8; mvn spring-boot:run
 
   product:           sleep 30; cd core/product-service;    setJdk8; ./gradlew bootRun
   review:            sleep 30; cd core/review-service;     setJdk8; ./gradlew bootRun
@@ -28,7 +29,7 @@ commands:
 layout_type: row
 
 layout:
-  - [ rabbitMq, auth-server, config-server ]
-  - [ discovery-server, monitor-dashboard, edge-server ]
+  - [ rabbitMq, auth-server, config-server, discovery-server ]
+  - [ monitor-dashboard, turbine, edge-server ]
   - [ product, review, product-api ]
-  - [ resource-api, webapp ]
+  - [ webapp ]
