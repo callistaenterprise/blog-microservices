@@ -14,25 +14,10 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'maven-publish'
 
 jar {
     baseName = 'product-composite-service'
     version = '0.0.1-SNAPSHOT'
-}
-
-// $ gradle publishToMavenLocal
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            // TODO: Where to place these properties?
-            groupId 'se.callista.microservises.composite.product'
-            artifactId 'product-composite-service'
-            version '0.0.1-SNAPSHOT'
-
-            from components.java
-        }
-    }
 }
 
 sourceCompatibility = 1.8

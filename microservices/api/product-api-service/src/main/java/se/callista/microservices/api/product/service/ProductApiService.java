@@ -1,19 +1,20 @@
 package se.callista.microservices.api.product.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.callista.microservices.api.product.model.ProductAggregated;
-import se.callista.microservises.core.product.model.Product;
-import se.callista.microservises.core.review.model.Review;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by magnus on 04/03/15.
@@ -24,44 +25,41 @@ public class ProductApiService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductApiService.class);
 
-    @Autowired
-    ProductApiIntegration integration;
+    private RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
-    Util util;
+    private LoadBalancerClient loadBalancer;
 
-    @RequestMapping("/")
+    @RequestMapping("/ping")
     public String getProduct() {
         return "{\"timestamp\":\"" + new Date() + "\",\"content\":\"Hello from ProductAPi\"}";
     }
 
     @RequestMapping("/products/{productId}")
-    public ResponseEntity<String> getProduct(@PathVariable int productId) {
+    @HystrixCommand(fallbackMethod = "defaultProductComposite")
+    public ResponseEntity<String> getProductComposite(@PathVariable int productId) {
 
-        LOG.info("ProductApi: /reviews called with productId={}", productId);
-        ResponseEntity<String> productComposite = integration.getProductComposite(productId);
-        LOG.info("ProductApi: /reviews returns with http status={}", productComposite.getStatusCode().value());
+        LOG.info("ProductApi: Called with productId={}", productId);
 
-        return productComposite;
+        URI uri = loadBalancer.choose("productcomposite").getUri();
+        String url = uri.toString() + "/products/" + productId;
+        LOG.debug("GetProductComposite from URL: {}", url);
 
-        /*
-        ResponseEntity<Product> productResult = integration.getProduct(productId);
+        ResponseEntity<String> result = restTemplate.getForEntity(url, String.class);
+        LOG.info("GetProductComposite http-status: {}", result.getStatusCode());
+        LOG.debug("GetProductComposite body: {}", result.getBody());
 
-        if (!productResult.getStatusCode().is2xxSuccessful()) {
-            // We can't proceed, return whatever fault we got from the getProduct call
-            return util.createResponse(null, productResult.getStatusCode());
-        }
+        return result;
+    }
 
-        ResponseEntity<List<Review>> reviewsResult = integration.getReviews(productId);
-        List<Review> reviews = null;
-        if (!reviewsResult.getStatusCode().is2xxSuccessful()) {
-            // Something went wrong with getReviews, simply skip the review-information in the response
-            LOG.debug("Call to getReviews failed: {}", reviewsResult.getStatusCode());
-        } else {
-            reviews = reviewsResult.getBody();
-        }
-
-        return util.createOkResponse(new ProductAggregated(productResult.getBody(), reviews));
-        */
+    /**
+     * Fallback method for getProductComposite()
+     *
+     * @param productId
+     * @return
+     */
+    public ResponseEntity<String> defaultProductComposite(int productId) {
+        LOG.warn("Using fallback method for product-composite-service");
+        return new ResponseEntity<String>("", HttpStatus.BAD_GATEWAY);
     }
 }

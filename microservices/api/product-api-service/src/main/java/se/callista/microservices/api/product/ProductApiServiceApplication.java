@@ -4,8 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-// TODO: temp fix
 import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
+
+// TODO: temp fix
 
 @SpringBootApplication
 @EnableCircuitBreaker

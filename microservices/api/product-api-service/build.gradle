@@ -53,9 +53,6 @@ dependencies {
     testCompile("org.springframework.cloud:spring-cloud-starter-feign:1.0.0.BUILD-SNAPSHOT")
 */
 
-    compile("se.callista.microservises.core.product:product-service:0.0.1-SNAPSHOT")
-    compile("se.callista.microservises.core.review:review-service:0.0.1-SNAPSHOT")
-
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 

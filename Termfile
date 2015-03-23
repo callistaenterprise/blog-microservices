@@ -21,8 +21,8 @@ commands:
 
   product:           sleep 30; cd core/product-service;    setJdk8; ./gradlew bootRun
   review:            sleep 30; cd core/review-service;     setJdk8; ./gradlew bootRun
+  product-composite: sleep 30; cd composite/product-composite-service; setJdk8; ./gradlew bootRun
   product-api:       sleep 30; cd api/product-api-service; setJdk8; ./gradlew bootRun
-  resource-api:      sleep 30; cd api/resource;            mvn spring-boot:run
 
   webapp:            sleep 10; cd webapp/ui;               mvn spring-boot:run
 

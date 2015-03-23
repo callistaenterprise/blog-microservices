@@ -1,7 +1,6 @@
 package hystrixdashboard;
 
 import hystrixdashboard.stream.MockStreamServlet;
-
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
