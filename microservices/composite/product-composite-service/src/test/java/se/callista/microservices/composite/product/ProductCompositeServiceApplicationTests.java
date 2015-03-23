@@ -1,4 +1,4 @@
-package se.callista.microservises.core.product;
+package se.callista.microservices.composite.product;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,9 +7,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ProductServiceApplication.class)
+@SpringApplicationConfiguration(classes = ProductCompositeServiceApplication.class)
 @WebAppConfiguration
-public class ProductServiceApplicationTests {
+public class ProductCompositeServiceApplicationTests {
 
 	@Test
 	public void contextLoads() {

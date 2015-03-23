@@ -13,7 +13,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 //@EnableWebMvcSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration { // TODO: sec-config disabled for now, so hystrix will get auth-problems... extends WebSecurityConfigurerAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(SecurityConfiguration.class);
 

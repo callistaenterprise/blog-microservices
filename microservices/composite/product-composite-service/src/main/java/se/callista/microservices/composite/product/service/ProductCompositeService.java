@@ -1,4 +1,4 @@
-package se.callista.microservices.api.product.service;
+package se.callista.microservices.composite.product.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +20,12 @@ import java.util.List;
  */
 @RestController
 @EnableHystrix
-public class ProductApiService {
+public class ProductCompositeService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProductApiService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeService.class);
 
     @Autowired
-    ProductApiIntegration integration;
+    ProductCompositeIntegration integration;
 
     @Autowired
     Util util;
@@ -36,15 +36,8 @@ public class ProductApiService {
     }
 
     @RequestMapping("/products/{productId}")
-    public ResponseEntity<String> getProduct(@PathVariable int productId) {
+    public ResponseEntity<ProductAggregated> getProduct(@PathVariable int productId) {
 
-        LOG.info("ProductApi: /reviews called with productId={}", productId);
-        ResponseEntity<String> productComposite = integration.getProductComposite(productId);
-        LOG.info("ProductApi: /reviews returns with http status={}", productComposite.getStatusCode().value());
-
-        return productComposite;
-
-        /*
         ResponseEntity<Product> productResult = integration.getProduct(productId);
 
         if (!productResult.getStatusCode().is2xxSuccessful()) {
@@ -62,6 +55,5 @@ public class ProductApiService {
         }
 
         return util.createOkResponse(new ProductAggregated(productResult.getBody(), reviews));
-        */
     }
 }

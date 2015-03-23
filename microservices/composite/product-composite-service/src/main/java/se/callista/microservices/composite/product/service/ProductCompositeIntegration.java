@@ -1,4 +1,4 @@
-package se.callista.microservices.api.product.service;
+package se.callista.microservices.composite.product.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import se.callista.microservices.api.product.model.ProductAggregated;
 import se.callista.microservises.core.product.model.Product;
 import se.callista.microservises.core.review.model.Review;
 
@@ -23,44 +22,14 @@ import java.util.List;
  * Created by magnus on 05/03/15.
  */
 @Component
-public class ProductApiIntegration {
+public class ProductCompositeIntegration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProductApiIntegration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeIntegration.class);
 
     @Autowired
     Util util;
 
     private RestTemplate restTemplate = new RestTemplate();
-
-    // ---------------- //
-    // PRODUCTCOMPOSITE //
-    // ---------------- //
-
-    @HystrixCommand(fallbackMethod = "defaultProductComposite")
-    public ResponseEntity<String> getProductComposite(int productId) {
-
-        URI uri = util.getServiceUrl("productcomposite", "http://localhost:8081/products");
-        String url = uri.toString() + "/products/" + productId;
-        LOG.debug("GetProductComposite from URL: {}", url);
-
-        ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
-        LOG.debug("GetProductComposite http-status: {}", resultStr.getStatusCode());
-        LOG.debug("GetProductComposite body: {}", resultStr.getBody());
-
-        return resultStr;
-    }
-
-    /**
-     * Fallback method for getProduct()
-     *
-     * @param productId
-     * @return
-     */
-    public ResponseEntity<ProductAggregated> defaultProductComposite(int productId) {
-        LOG.warn("Using fallback method for product-service");
-        return util.createResponse(null, HttpStatus.BAD_GATEWAY);
-    }
-
 
     // -------- //
     // PRODUCTS //
