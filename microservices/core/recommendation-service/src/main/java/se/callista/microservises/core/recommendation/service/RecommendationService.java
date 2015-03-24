@@ -1,4 +1,4 @@
-package se.callista.microservises.core.review.service;
+package se.callista.microservises.core.recommendation.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import se.callista.microservises.core.review.model.Review;
-import se.callista.microservises.core.review.service.util.SetProcTimeBean;
+import se.callista.microservises.core.recommendation.model.Recommendation;
+import se.callista.microservises.core.recommendation.service.util.SetProcTimeBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +16,9 @@ import java.util.List;
  * Created by magnus on 04/03/15.
  */
 @RestController
-public class ReviewService {
+public class RecommendationService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReviewService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RecommendationService.class);
 
     @Autowired
     private SetProcTimeBean setProcTimeBean;
@@ -34,26 +34,26 @@ public class ReviewService {
     */
 
     /**
-     * Sample usage: curl $HOST:$PORT/review?productId=1
+     * Sample usage: curl $HOST:$PORT/recommendation?productId=1
      *
      * @param productId
      * @return
      */
-    @RequestMapping("/review")
-    public List<Review> getReviews(
+    @RequestMapping("/recommendation")
+    public List<Recommendation> getRecommendations(
             @RequestParam(value = "productId",  required = true) int productId) {
 
         int pt = setProcTimeBean.calculateProcessingTime();
-        LOG.info("/reviews called, processing time: {}", pt);
+        LOG.info("/recommendation called, processing time: {}", pt);
 
         sleep(pt);
 
-        List<Review> list = new ArrayList<>();
-        list.add(new Review(productId, 1, "Author 1", "Subject 1", "Content 1"));
-        list.add(new Review(productId, 2, "Author 2", "Subject 2", "Content 2"));
-        list.add(new Review(productId, 3, "Author 3", "Subject 3", "Content 3"));
+        List<Recommendation> list = new ArrayList<>();
+        list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1"));
+        list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2"));
+        list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3"));
 
-        LOG.info("/reviews response size: {}", list.size());
+        LOG.info("/recommendation response size: {}", list.size());
 
         return list;
     }

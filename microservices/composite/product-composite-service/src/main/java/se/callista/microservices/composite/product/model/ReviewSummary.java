@@ -1,9 +1,10 @@
-package se.callista.microservices.api.product.model;
+package se.callista.microservices.composite.product.model;
 
 /**
  * Created by magnus on 05/03/15.
  */
 public class ReviewSummary {
+
     private int reviewId;
     private String author;
     private String subject;

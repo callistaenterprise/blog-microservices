@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import se.callista.microservises.core.product.model.Product;
 import se.callista.microservises.core.review.model.Review;
+//import se.callista.microservises.core.recommendation.model.Recommendation;
+import se.callista.microservises.core.recommendation.model.Recommendation;
 
 import java.io.IOException;
 import java.net.URI;
@@ -38,8 +40,8 @@ public class ProductCompositeIntegration {
     @HystrixCommand(fallbackMethod = "defaultProduct")
     public ResponseEntity<Product> getProduct(int productId) {
 
-        URI uri = util.getServiceUrl("products", "http://localhost:8081/products");
-        String url = uri.toString() + "/products/" + productId;
+        URI uri = util.getServiceUrl("product", "http://localhost:8081/product");
+        String url = uri.toString() + "/product/" + productId;
         LOG.debug("GetProduct from URL: {}", url);
 
         ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
@@ -63,6 +65,47 @@ public class ProductCompositeIntegration {
         return util.createResponse(null, HttpStatus.BAD_GATEWAY);
     }
 
+    // --------------- //
+    // RECOMMENDATIONS //
+    // --------------- //
+
+    @HystrixCommand(fallbackMethod = "defaultRecommendations")
+    public ResponseEntity<List<Recommendation>> getRecommendations(int productId) {
+        try {
+            LOG.info("GetRecommendations...");
+
+            URI uri = util.getServiceUrl("recommendation", "http://localhost:8081/recommendation");
+
+            String url = uri.toString() + "/recommendation?productId=" + productId;
+            LOG.debug("GetRecommendations from URL: {}", url);
+
+            ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
+            LOG.debug("GetRecommendations http-status: {}", resultStr.getStatusCode());
+            LOG.debug("GetRecommendations body: {}", resultStr.getBody());
+
+            List<Recommendation> recommendations = response2Recommendations(resultStr);
+            LOG.debug("GetRecommendations.cnt {}", recommendations.size());
+
+            return util.createOkResponse(recommendations);
+        } catch (Throwable t) {
+            LOG.error("getRecommendations error", t);
+            throw t;
+//            throw new RuntimeException(t);
+        }
+    }
+
+
+    /**
+     * Fallback method for getRecommendations()
+     *
+     * @param productId
+     * @return
+     */
+    public ResponseEntity<List<Review>> defaultRecommendations(int productId) {
+        LOG.warn("Using fallback method for recommendation-service");
+        return util.createResponse(null, HttpStatus.BAD_GATEWAY);
+    }
+
 
     // ------- //
     // REVIEWS //
@@ -72,9 +115,9 @@ public class ProductCompositeIntegration {
     public ResponseEntity<List<Review>> getReviews(int productId) {
         LOG.info("GetReviews...");
 
-        URI uri = util.getServiceUrl("reviews", "http://localhost:8081/reviews");
+        URI uri = util.getServiceUrl("review", "http://localhost:8081/review");
 
-        String url = uri.toString() + "/reviews?productId=" + productId;
+        String url = uri.toString() + "/review?productId=" + productId;
         LOG.debug("GetReviews from URL: {}", url);
 
         ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
@@ -103,6 +146,9 @@ public class ProductCompositeIntegration {
     // UTILS //
     // ----- //
 
+    /*
+     * TODO: Extract to a common util-lib
+     */
 
     private ObjectReader productReader = null;
     private ObjectReader getProductReader() {
@@ -130,6 +176,23 @@ public class ProductCompositeIntegration {
     }
 
     // TODO: Gereralize with <T> method, skip objectReader objects!
+    private List<Recommendation> response2Recommendations(ResponseEntity<String> response) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            List list = mapper.readValue(response.getBody(), new TypeReference<List<Recommendation>>() {});
+            List<Recommendation> recommendations = list;
+            return recommendations;
+
+        } catch (IOException e) {
+            LOG.warn("IO-err. Failed to read JSON", e);
+            throw new RuntimeException(e);
+
+        } catch (RuntimeException re) {
+            LOG.warn("RTE-err. Failed to read JSON", re);
+            throw re;
+        }
+    }
+
     private List<Review> response2Reviews(ResponseEntity<String> response) {
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -147,5 +210,45 @@ public class ProductCompositeIntegration {
         }
     }
 
+// FIXME: DOESN'T WORK. GIVER ERORS LIKE: Caused by: java.lang.ClassCastException: java.util.LinkedHashMap cannot be cast to se.callista.microservises.core.recommendation.model.Recommendation
+//    private <T> T responseString2Type(ResponseEntity<String> response) {
+//        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            T object = mapper.readValue(response.getBody(), new TypeReference<T>() {});
+//            return object;
+//
+//        } catch (IOException e) {
+//            LOG.warn("IO-err. Failed to read JSON", e);
+//            throw new RuntimeException(e);
+//
+//        } catch (RuntimeException re) {
+//            LOG.warn("RTE-err. Failed to read JSON", re);
+//            throw re;
+//        }
+//    }
+//
+//    /**
+//     * TODO: DO WE REALLY NEED THIS ONE???
+//     *
+//     * @param response
+//     * @param <T>
+//     * @return
+//     */
+//    private <T> List<T> responseString2List(ResponseEntity<String> response) {
+//        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            List<T> list = mapper.readValue(response.getBody(), new TypeReference<List<T>>() {});
+//            return list;
+//
+//        } catch (IOException e) {
+//            LOG.warn("IO-err. Failed to read JSON", e);
+//            throw new RuntimeException(e);
+//
+//        } catch (RuntimeException re) {
+//            LOG.warn("RTE-err. Failed to read JSON", re);
+//            throw re;
+//        }
+//    }
+//
 
 }

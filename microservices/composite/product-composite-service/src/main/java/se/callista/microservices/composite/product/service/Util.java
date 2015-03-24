@@ -13,7 +13,10 @@ import java.net.URI;
 
 /**
  * Created by magnus on 08/03/15.
+ *
+ * TODO: Extract to a common util-lib
  */
+
 @Component
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
@@ -21,6 +24,13 @@ public class Util {
     @Autowired
     private LoadBalancerClient loadBalancer;
 
+    /**
+     * TODO: Complement this with a simpler version without fallback-url!
+     *
+     * @param serviceId
+     * @param fallbackUri
+     * @return
+     */
     public URI getServiceUrl(String serviceId, String fallbackUri) {
         URI uri = null;
         try {

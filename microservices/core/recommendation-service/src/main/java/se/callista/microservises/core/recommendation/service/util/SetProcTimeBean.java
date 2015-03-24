@@ -1,4 +1,4 @@
-package se.callista.microservises.core.review.service.util;
+package se.callista.microservises.core.recommendation.service.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

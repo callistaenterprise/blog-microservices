@@ -42,7 +42,7 @@ public class ProductApiService {
         LOG.info("ProductApi: Called with productId={}", productId);
 
         URI uri = loadBalancer.choose("productcomposite").getUri();
-        String url = uri.toString() + "/products/" + productId;
+        String url = uri.toString() + "/product/" + productId;
         LOG.debug("GetProductComposite from URL: {}", url);
 
         ResponseEntity<String> result = restTemplate.getForEntity(url, String.class);

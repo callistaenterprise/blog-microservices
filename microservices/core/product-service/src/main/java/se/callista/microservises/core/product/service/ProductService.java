@@ -11,9 +11,14 @@ import se.callista.microservises.core.product.model.Product;
 @RestController
 public class ProductService {
 
-    @RequestMapping("/products/{productId}")
-    public Product getProduct(
-        @PathVariable int productId) {
+    /**
+     * Sample usage: curl $HOST:$PORT/product/1
+     *
+     * @param productId
+     * @return
+     */
+    @RequestMapping("/product/{productId}")
+    public Product getProduct(@PathVariable int productId) {
 
         return new Product(productId, "name", 123);
     }

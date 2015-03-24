@@ -14,17 +14,31 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'maven-publish'
 
 jar {
-    baseName = 'product-composite-service'
+    baseName = 'recommendation-service'
     version = '0.0.1-SNAPSHOT'
+}
+
+// $ gradle publishToMavenLocal
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            // TODO: Where to place these properties?
+            groupId 'se.callista.microservises.core.recommendation'
+            artifactId 'recommendation-service'
+            version '0.0.1-SNAPSHOT'
+
+            from components.java
+        }
+    }
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven {
         // Can't find spring-cloud-build in maven central...
@@ -32,29 +46,16 @@ repositories {
     }
 }
 
-
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web") {
+    // TODO: Added ver no on the three core starter deps to make the maven plugin to work
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
         exclude module: 'spring-boot-starter-tomcat'
     }
-    compile("org.springframework.boot:spring-boot-starter-undertow")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE")
-    compile("org.springframework.cloud:spring-cloud-starter-bus-amqp:1.0.0.RELEASE")
-    compile("org.springframework.cloud:spring-cloud-netflix-hystrix-amqp:1.0.0.RELEASE")
-
-/*
-    TODO: temp fix
-
-    testCompile("org.springframework.cloud:spring-cloud-starter-feign:1.0.0.BUILD-SNAPSHOT")
-*/
-
-    compile("se.callista.microservises.core.product:product-service:0.0.1-SNAPSHOT")
-    compile("se.callista.microservises.core.recommendation:recommendation-service:0.0.1-SNAPSHOT")
-    compile("se.callista.microservises.core.review:review-service:0.0.1-SNAPSHOT")
-
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }
 
 task wrapper(type: Wrapper) {
