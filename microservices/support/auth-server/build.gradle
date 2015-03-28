@@ -25,12 +25,6 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
-/*
-     maven { url "http://repo.spring.io/libs-snapshot-local" }
-     maven { url "http://repo.spring.io/libs-milestone-local" }
-     maven { url "http://repo.spring.io/libs-release-local" }
-     maven { url "http://repo.maven.apache.org/maven2" }
-*/
 }
 
 dependencies {

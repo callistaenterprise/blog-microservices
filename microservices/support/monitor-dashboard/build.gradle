@@ -16,7 +16,7 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'config-server'
+    baseName = 'monitor-dashboard'
     version = '0.0.1-SNAPSHOT'
 }
 
@@ -28,13 +28,6 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.cloud:spring-cloud-config-server:1.0.0.RELEASE')
-    compile('org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE')
-//  compile('org.springframework.boot:spring-boot-starter-security')
-
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard:1.0.0.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
 }
