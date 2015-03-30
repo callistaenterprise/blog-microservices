@@ -29,6 +29,11 @@ repositories {
 
 dependencies {
 
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile("org.springframework.boot:spring-boot-starter-undertow")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
     compile('org.springframework.cloud:spring-cloud-starter-eureka-server:1.0.0.RELEASE') {
         exclude(module: 'servlet-api') // Drags in an old 2.5 spec...
     }
@@ -36,35 +41,6 @@ dependencies {
 //    compile('org.springframework.boot:spring-boot-starter-security')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
-
-/*
-compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka-server', version:'1.0.0.RELEASE') {
-exclude(module: 'guice-grapher')
-exclude(module: 'guice-assistedinject')
-exclude(module: 'jsr166y')
-exclude(module: 'xbean-finder')
-exclude(module: 'asm-all')
-exclude(module: 'guice-multibindings')
-exclude(module: 'xbean-bundleutils')
-exclude(module: 'commons-math')
-exclude(module: 'netflix-infix')
-exclude(module: 'joda-time')
-exclude(module: 'commons-jxpath')
-exclude(module: 'antlr-runtime')
-exclude(module: 'stringtemplate')
-exclude(module: 'antlr')
-exclude(module: 'gson')
-exclude(module: 'annotations')
-exclude(module: 'dagger')
-    }
-    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-security', version:'1.2.2.RELEASE') {
-exclude(module: 'spring-boot-starter-logging')
-    }
-    testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.2.2.RELEASE') {
-exclude(module: 'commons-logging')
-    }
-*/
-
 }
 
 task wrapper(type: Wrapper) {

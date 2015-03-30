@@ -28,6 +28,12 @@ repositories {
 }
 
 dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile("org.springframework.boot:spring-boot-starter-undertow")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
     compile('org.springframework.cloud:spring-cloud-starter-zuul:1.0.0.RELEASE')
     compile('org.springframework.cloud:spring-cloud-starter-security:1.0.0.RELEASE')
     compile('org.springframework.boot:spring-boot-starter-security:1.2.1.RELEASE')

@@ -48,13 +48,6 @@ dependencies {
 
     compile("org.apache.httpcomponents:httpclient:4.2.1")
     compile("org.apache.httpcomponents:fluent-hc:4.2.1")
-/*
-    TODO: temp fix
-
-    compile("org.springframework.cloud:spring-cloud-starter-bus-amqp:1.0.0.BUILD-SNAPSHOT")
-    compile("org.springframework.cloud:spring-cloud-netflix-hystrix-amqp:1.0.0.BUILD-SNAPSHOT")
-    testCompile("org.springframework.cloud:spring-cloud-starter-feign:1.0.0.BUILD-SNAPSHOT")
-*/
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

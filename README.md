@@ -1,5 +1,19 @@
 # blog-microservices
 
+- gå igenom gradle.build filer (Undertow överallt t ex)
+- bort med alla .gradle filer
+- importera in alla projet i InetelliJ Igen
+- port = 0 för alla business tjänster
+- ta tillfälligt bort test med att fånga portnummer
+- prova byggscript
+- ta bort setting.gradle
+- kör igenom tester enligt ppt...
+- sätt tag
+- maila jesper om grdle
+- skriv blog
+  - länka från gamla bloggen (tvåvägs)
+
+
 Q: spring-cloud on Docker?
 A: Docker - Eureka setup: http://stackoverflow.com/questions/28728745/spring-cloud-samples-eureka-docker-use-of-underscore-in-link
 

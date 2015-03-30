@@ -44,12 +44,6 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-bus-amqp:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-netflix-hystrix-amqp:1.0.0.RELEASE")
 
-/*
-    TODO: temp fix
-
-    testCompile("org.springframework.cloud:spring-cloud-starter-feign:1.0.0.BUILD-SNAPSHOT")
-*/
-
     compile("se.callista.microservises.core.product:product-service:0.0.1-SNAPSHOT")
     compile("se.callista.microservises.core.recommendation:recommendation-service:0.0.1-SNAPSHOT")
     compile("se.callista.microservises.core.review:review-service:0.0.1-SNAPSHOT")
