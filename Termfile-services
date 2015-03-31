@@ -9,12 +9,8 @@ commands:
   recommendation:    cd core/recommendation-service;         ./gradlew bootRun
   review:            cd core/review-service;                 ./gradlew bootRun
   product-composite: cd composite/product-composite-service; ./gradlew bootRun
-  product-api:       cd api/product-api-service;             ./gradlew bootRun
-
-  webapp:            cd ../webapp/ui;                        mvn spring-boot:run
 
 layout_type: row
 
 layout:
-  - [ product, recommendation, review, product-composite, product-api ]
-  - [ webapp ]
+  - [ product, recommendation, review, product-composite ]
