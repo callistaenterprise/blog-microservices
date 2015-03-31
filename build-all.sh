@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd gradle-microservices-plugin;                       ./gradlew clean install; cd -
+
 cd microservices/core/product-service;                ./gradlew clean install; cd -
 cd microservices/core/recommendation-service;         ./gradlew clean install; cd -
 cd microservices/core/review-service;                 ./gradlew clean install; cd -
