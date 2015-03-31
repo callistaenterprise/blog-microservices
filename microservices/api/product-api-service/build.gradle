@@ -1,45 +1,18 @@
 buildscript {
-    ext {
-        springBootVersion = '1.2.2.RELEASE'
-    }
     repositories {
+        mavenLocal()
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "se.callista.microservices:gradle-microservices-plugin:1.0.0-SNAPSHOT"
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'callista-ms'
 
-jar {
-    baseName = 'product-api-service'
-    version = '0.0.1-SNAPSHOT'
-}
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven {
-        // Can't find spring-cloud-build in maven central...
-        url 'http://maven.springframework.org/release'
-    }
-}
-
+version = '0.0.1-SNAPSHOT'
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web") {
-        exclude module: 'spring-boot-starter-tomcat'
-    }
-    compile("org.springframework.boot:spring-boot-starter-undertow")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
-    compile("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-bus-amqp:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-netflix-hystrix-amqp:1.0.0.RELEASE")
 
@@ -48,10 +21,4 @@ dependencies {
 
     compile("org.apache.httpcomponents:httpclient:4.2.1")
     compile("org.apache.httpcomponents:fluent-hc:4.2.1")
-
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
 }
