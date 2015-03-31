@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-//@Ignore
+@Ignore
 public class ProductApiServiceSystemIntegrationTests {
 
 	private static final String LOGIN_URL = "http://localhost:8080/login";

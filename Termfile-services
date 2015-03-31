@@ -11,7 +11,7 @@ commands:
   product-composite: cd composite/product-composite-service; ./gradlew bootRun
   product-api:       cd api/product-api-service;             ./gradlew bootRun
 
-  webapp:            cd webapp/ui;                           mvn spring-boot:run
+  webapp:            cd ../webapp/ui;                        mvn spring-boot:run
 
 layout_type: row
 

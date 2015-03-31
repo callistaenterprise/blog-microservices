@@ -13,4 +13,4 @@ cd microservices/support/edge-server;                 ./gradlew clean build; cd 
 cd microservices/support/monitor-dashboard;           ./gradlew clean build; cd -
 cd microservices/support/turbine;                     ./gradlew clean build; cd -
 
-cd microservices/webapp/ui;                           mvn clean package; cd -
+cd webapp/ui;                                         mvn clean package; cd -
