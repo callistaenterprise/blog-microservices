@@ -33,7 +33,7 @@ public class RecommendationServiceApplication {
     public static void main(String[] args) {
         String uuid = UUID.randomUUID().toString();
         System.err.println("### III. SKIP SETTING MY_UUDI: " + uuid);
-//        System.setProperty("MY_UUID", uuid);
+        System.setProperty("MY_UUID", uuid);
         SpringApplication.run(RecommendationServiceApplication.class, args);
     }
 }

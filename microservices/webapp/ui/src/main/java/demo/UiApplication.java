@@ -1,6 +1,7 @@
 package demo;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.security.oauth2.sso.EnableOAuth2Sso;
@@ -24,6 +25,7 @@ import java.io.IOException;
 
 @SpringBootApplication
 @EnableZuulProxy
+@EnableAutoConfiguration
 @EnableOAuth2Sso
 public class UiApplication {
 

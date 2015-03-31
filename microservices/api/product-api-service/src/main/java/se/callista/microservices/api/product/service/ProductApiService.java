@@ -35,7 +35,7 @@ public class ProductApiService {
         return "{\"timestamp\":\"" + new Date() + "\",\"content\":\"Hello from ProductAPi\"}";
     }
 
-    @RequestMapping("/products/{productId}")
+    @RequestMapping("/product/{productId}")
     @HystrixCommand(fallbackMethod = "defaultProductComposite")
     public ResponseEntity<String> getProductComposite(@PathVariable int productId) {
 

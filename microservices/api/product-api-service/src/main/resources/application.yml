@@ -1,5 +1,5 @@
 server:
-  port: 10021
+  port: 10001
 
 # TODO: ML, Did not help
 # endpoints:
@@ -16,8 +16,6 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
     metadataMap:
-# TODO: local.server.port doesn't get translated, to be userd when server.port = 0, i.e. dynamic.
-#      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${local.server.port}}}
       instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
   client:
 #    region: default

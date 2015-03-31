@@ -2,17 +2,16 @@ debug:
 security:
   user:
     password: password
+
 zuul:
   routes:
-    resource:
-      path: /resource/**
-      url: http://localhost:9000
     user:
       path: /user/**
       url: http://localhost:9999/uaa/user
     productapi:
       path: /productapi/**
-      url: http://localhost:10021
+      url: http://localhost:10001
+
 
 spring:
   oauth2:

@@ -1,6 +1,7 @@
 package eurekademo;
 
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
@@ -13,10 +14,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Map;
 
+import static org.junit.Assert.*;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = EurekaApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port=0")
+@Ignore
 public class ApplicationTests {
 	
 	@Value("${local.server.port}")

@@ -9,17 +9,13 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
@@ -33,13 +29,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Ignore
+//@Ignore
 public class ProductApiServiceSystemIntegrationTests {
+
+	private static final String LOGIN_URL = "http://localhost:8080/login";
+	private static final String RESOURCE_URL = "http://localhost:8080/productapi/product/123";
 
 	private static DefaultHttpClient client = new DefaultHttpClient();
 	private static HttpParams        params = new BasicHttpParams();
@@ -65,8 +63,8 @@ public class ProductApiServiceSystemIntegrationTests {
 	@Test
 	public void notAuthenticated() throws IOException, AuthenticationException {
 		// Try to acces a page without an initial login...
-		performHttpGetAndAssertStatusCodeWithAutoRedirect("http://localhost:8080/login", SC_UNAUTHORIZED);
-		performHttpGetAndAssertStatusCodeWithAutoRedirect("http://localhost:8080/productapi/products/123", SC_UNAUTHORIZED);
+		performHttpGetAndAssertStatusCodeWithAutoRedirect(LOGIN_URL, SC_UNAUTHORIZED);
+		performHttpGetAndAssertStatusCodeWithAutoRedirect(RESOURCE_URL, SC_UNAUTHORIZED);
 	}
 
 
@@ -76,18 +74,17 @@ public class ProductApiServiceSystemIntegrationTests {
 
 
 	@Test
-	public void authOkUsingWebApp() throws IOException, AuthenticationException {
+	public void authOkUsingWebApp() throws IOException, AuthenticationException, InterruptedException {
 
 		// -------------------------------
 		// 1. Try to access a resource...
 		// -------------------------------
-		String resourceUrl = "http://localhost:8080/productapi/products/123";
-		response = performHttpGetAndAssertStatusCode(resourceUrl, SC_MOVED_TEMPORARILY);
+		response = performHttpGetAndAssertStatusCode(RESOURCE_URL, SC_MOVED_TEMPORARILY);
 
 		// Pick up and assert the login redirect
 		String redirectLoginUrl = response.getHeaders("Location")[0].getValue();
 
-		String expectedLoginUrl = "http://localhost:8080/login";
+		String expectedLoginUrl = LOGIN_URL;
 		assertEquals(expectedLoginUrl, redirectLoginUrl);
 		EntityUtils.consumeQuietly(response.getEntity());
 
@@ -123,8 +120,10 @@ public class ProductApiServiceSystemIntegrationTests {
 
 			// We need to ask the user for its consent...
 			String approvalPage = getBodyAsString(response);
-			String expectedApprovalPage = "<html><body><h1>OAuth Approval</h1><p>Do you authorize 'acme' to access your protected resources?</p><form id='confirmationForm' name='confirmationForm' action='/uaa/oauth/authorize' method='post'><input name='user_oauth_approval' value='true' type='hidden'/><ul><li><div class='form-group'>scope.openid: <input type='radio' name='scope.openid' value='true'>Approve</input> <input type='radio' name='scope.openid' value='false' checked>Deny</input></div></li></ul><label><input name='authorize' value='Authorize' type='submit'/></label></form></body></html>";
-			assertEquals(expectedApprovalPage, approvalPage);
+			String expectedApprovalPageAlt1 = "<html><body><h1>OAuth Approval</h1><p>Do you authorize 'acme' to access your protected resources?</p><form id='confirmationForm' name='confirmationForm' action='/uaa/oauth/authorize' method='post'><input name='user_oauth_approval' value='true' type='hidden'/><ul><li><div class='form-group'>scope.openid: <input type='radio' name='scope.openid' value='true'>Approve</input> <input type='radio' name='scope.openid' value='false' checked>Deny</input></div></li></ul><label><input name='authorize' value='Authorize' type='submit'/></label></form></body></html>";
+			String expectedApprovalPageAlt2 = "<html><body><h1>OAuth Approval</h1><p>Do you authorize 'acme' to access your protected resources?</p><form id='confirmationForm' name='confirmationForm' action='/uaa/oauth/authorize' method='post'><input name='user_oauth_approval' value='true' type='hidden'/><ul><li><div class='form-group'>scope.openid: <input type='radio' name='scope.openid' value='true' checked>Approve</input> <input type='radio' name='scope.openid' value='false'>Deny</input></div></li></ul><label><input name='authorize' value='Authorize' type='submit'/></label></form></body></html>";
+//			assertEquals(expectedApprovalPage, approvalPage);
+			assertTrue(approvalPage.equals(expectedApprovalPageAlt1) || approvalPage.equals(expectedApprovalPageAlt2));
 
 			// Extract the jsessionid to be able to feed it into the curl-workaround in the next step
 			String jsession = response.getHeaders("Set-Cookie")[0].getValue();
@@ -166,7 +165,7 @@ public class ProductApiServiceSystemIntegrationTests {
 		//
 		response = performHttpGetAndAssertStatusCode(redirectLoginWithCodeGrantUrl, SC_MOVED_TEMPORARILY);
 		String redirectStartPageUrl = response.getHeaders("Location")[0].getValue();
-		assertEquals(resourceUrl, redirectStartPageUrl);
+		assertEquals(RESOURCE_URL, redirectStartPageUrl);
 
 		EntityUtils.consumeQuietly(response.getEntity());
 
@@ -184,12 +183,13 @@ public class ProductApiServiceSystemIntegrationTests {
 		// 7. Finally, get the OAuth protected resource
 		//
 		for (int i = 0; i < 1; i++) {
-			System.err.println(i);
-			EntityUtils.consumeQuietly(response.getEntity()); // LEave the last call open for the tests below...
-			response = performHttpGetAndAssertStatusCode(resourceUrl, SC_OK);
+			System.err.println(i + ", url = " + RESOURCE_URL);
+			EntityUtils.consumeQuietly(response.getEntity()); // Leave the last call open for the tests below...
+			response = performHttpGetAndAssertStatusCode(RESOURCE_URL, SC_OK);
 		}
 		String resourceInfo = getBodyAsString(response);
-		System.err.println("Resource: " + resourceInfo);
+		System.err.println("### Resource: " + resourceInfo);
+		Thread.sleep(1000);
 		String expectedResourceInfo = "{\"productId\":123,\"name\":\"name\",\"weight\":123,\"recommendations\":[{\"recommendationId\":0,\"author\":\"Author 1\",\"rate\":1},{\"recommendationId\":0,\"author\":\"Author 2\",\"rate\":2},{\"recommendationId\":0,\"author\":\"Author 3\",\"rate\":3}],\"reviews\":[{\"reviewId\":1,\"author\":\"Author 1\",\"subject\":\"Subject 1\"},{\"reviewId\":2,\"author\":\"Author 2\",\"subject\":\"Subject 2\"},{\"reviewId\":3,\"author\":\"Author 3\",\"subject\":\"Subject 3\"}]}";
 		assertEquals(expectedResourceInfo, resourceInfo);
 
@@ -203,85 +203,6 @@ public class ProductApiServiceSystemIntegrationTests {
 		paramsList2.forEach(p -> System.err.println(p.getName() + " = " + p.getValue()));
 		return paramsList2.stream().collect(Collectors.toMap(p -> p.getName(), p -> p.getValue()));
 	}
-		/*
-
-POST /uaa/oauth/authorize HTTP/1.1
-Host: localhost:9999
-Connection: keep-alive
-Content-Length: 62
-Cache-Control: max-age=0
-Authorization: Basic dXNlcjpwYXNzd29yZA==
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,* /*;q=0.8
-Origin: http://localhost:9999
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.104 Safari/537.36
-Content-Type: application/x-www-form-urlencoded
-Referer: http://localhost:9999/uaa/oauth/authorize?client_id=acme&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Flogin&response_type=code&state=bBmmdQ
-Accept-Encoding: gzip, deflate
-Accept-Language: en-US,en;q=0.8,sv;q=0.6
-Cookie: JSESSIONID=uNPCfjHyZxtYT-x00GIGFoS0; JSESSIONID=F99D0D48738941118A173F4A392E5D4F; XSRF-TOKEN=f6897d05-3078-4683-9a54-ca40ef931c37
-
-curl 'http://localhost:9999/uaa/oauth/authorize'
-		-H 'Cookie: JSESSIONID=uNPCfjHyZxtYT-x00GIGFoS0; JSESSIONID=F99D0D48738941118A173F4A392E5D4F; XSRF-TOKEN=f6897d05-3078-4683-9a54-ca40ef931c37'
-		-H 'Origin: http://localhost:9999'
-		-H 'Accept-Encoding: gzip, deflate'
-		-H 'Accept-Language: en-US,en;q=0.8,sv;q=0.6'
-		-H 'Authorization: Basic dXNlcjpwYXNzd29yZA=='
-		-H 'Content-Type: application/x-www-form-urlencoded'
-		-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,* /*;q=0.8'
-		-H 'Cache-Control: max-age=0'
-		-H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.104 Safari/537.36'
-		-H 'Connection: keep-alive'
-		-H 'Referer: http://localhost:9999/uaa/oauth/authorize?client_id=acme&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Flogin&response_type=code&state=bBmmdQ'
-		--data 'user_oauth_approval=true&scope.openid=true&authorize=Authorize'
-		--compressed
-		*/
-
-/*
-		HttpPost httpPost = new HttpPost("http://localhost:9999/uaa/oauth/authorize");
-		List<NameValuePair> nvps = new ArrayList<>();
-		nvps.add(new BasicNameValuePair("user_oauth_approval", "true"));
-		nvps.add(new BasicNameValuePair("scope.openid", "true"));
-		nvps.add(new BasicNameValuePair("authorize", "Authorize"));
-
-		httpPost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
-
-		UsernamePasswordCredentials creds = new UsernamePasswordCredentials("user", "password");
-		httpPost.setHeader(new BasicScheme().authenticate(creds, httpPost));
-
-		httpPost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,* /*;q=0.8");
-		httpPost.setHeader("Origin", "http://localhost:9999");
-		httpPost.setHeader("Referer", location);
-		httpPost.setHeader("Accept-Encoding", "gzip, deflate");
-		httpPost.setHeader("Accept-Language", "en-US,en;q=0.8,sv;q=0.6");
-
-//		httpPost.setHeader("Cookie", jsession);
-
-		System.err.println("\n### REQUEST HEADERS");
-		for (Header h: httpPost.getAllHeaders()) {
-			System.err.println("### " + h.getName() + " = " + h.getValue());
-		}
-
-		System.err.println("\n### CLIENT COOKIES #2.PRE:");
-		printCookies();
-
-		HttpResponse response = client.execute(httpPost);
-
-		HttpEntity entity = response.getEntity();
-		System.err.println("SC: " + response.getStatusLine());
-		String code = getBodyAsString(response);
-		System.err.println("CODE: " + code);
-
-		System.err.println("\n### RESPONSE HEADERS #2:");
-		for (Header h: response.getAllHeaders()) {
-			System.err.println("### " + h.getName() + " = " + h.getValue());
-		}
-
-		System.err.println("\n### CLIENT COOKIES #2:");
-		printCookies();
-
-		EntityUtils.consumeQuietly(entity);
-	}
-*/
 
 	private int getStatusCodeFromCurlResult(String result) {
 		// Extract the status code from the first line that looks like:
@@ -375,7 +296,7 @@ curl 'http://localhost:9999/uaa/oauth/authorize'
 	@Ignore
 	@Test
 	public void noAuthNotWorking() throws IOException {
-		response = performHttpGetAndAssertStatusCodeWithAutoRedirect("http://localhost:8080/login", SC_UNAUTHORIZED);
+		response = performHttpGetAndAssertStatusCodeWithAutoRedirect(LOGIN_URL, SC_UNAUTHORIZED);
 
 		System.err.println("SC = " + response.getStatusLine());
 		System.err.println("Body = " + getBodyAsString(response));

@@ -1,6 +1,7 @@
 package demo;
 
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import static org.junit.Assert.*;
 @SpringApplicationConfiguration(classes = ConfigServerApplication.class)
 @WebAppConfiguration
 @IntegrationTest("server.port=0")
+@Ignore
 public class ApplicationTests {
 	
 	@Value("${local.server.port}")

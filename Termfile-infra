@@ -1,0 +1,21 @@
+# Use:
+#  $ termrc start Termfile-infra
+
+root:
+  ~/Documents/projects/blogs/git/blog-microservices/microservices
+
+commands:
+  rabbitMq: ~/Applications/rabbitmq_server-3.4.3/sbin/rabbitmq-server
+
+  auth-server:       cd support/auth-server;                           ./gradlew bootRun
+  config-server:     cd support/config-server;                         ./gradlew bootRun
+  discovery-server:  cd support/discovery-server;                      ./gradlew bootRun
+  monitor-dashboard: cd support/monitor-dashboard;                     ./gradlew bootRun
+  edge-server:       sleep 15; cd support/edge-server;                 ./gradlew bootRun
+  turbine:           sleep 15; cd support/turbine;                     ./gradlew bootRun
+
+layout_type: row
+
+layout:
+  - [ rabbitMq, auth-server, config-server, discovery-server ]
+  - [ monitor-dashboard, turbine, edge-server ]

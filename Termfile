@@ -12,20 +12,20 @@ root:
 commands:
   rabbitMq: ~/Applications/rabbitmq_server-3.4.3/sbin/rabbitmq-server
 
-  auth-server:       cd support/auth-server;               setJdk8; ./gradlew bootRun
-  config-server:     cd support/config-server;             setJdk8; ./gradlew bootRun
-  discovery-server:  cd support/discovery-server;          setJdk8; ./gradlew bootRun # mvn package -DskipTest; java -jar target/*.jar # Don't work: mvn spring-boot:run
-  monitor-dashboard: cd support/monitor-dashboard;         setJdk8; ./gradlew bootRun # mvn spring-boot:run
-  edge-server:       sleep 15; cd support/edge-server;     setJdk8; ./gradlew bootRun # mvn spring-boot:run
-  turbine:           sleep 15; cd support/turbine;         setJdk8; ./gradlew bootRun # setJdk8; mvn spring-boot:run
+  auth-server:       cd support/auth-server;                           ./gradlew bootRun
+  config-server:     cd support/config-server;                         ./gradlew bootRun
+  discovery-server:  cd support/discovery-server;                      ./gradlew bootRun
+  monitor-dashboard: cd support/monitor-dashboard;                     ./gradlew bootRun
+  edge-server:       sleep 15; cd support/edge-server;                 ./gradlew bootRun
+  turbine:           sleep 15; cd support/turbine;                     ./gradlew bootRun
 
-  product:           sleep 30; cd core/product-service;                setJdk8; ./gradlew bootRun
-  recommendation:    sleep 30; cd core/recommendation-service;         setJdk8; ./gradlew bootRun
-  review:            sleep 30; cd core/review-service;                 setJdk8; ./gradlew bootRun
-  product-composite: sleep 30; cd composite/product-composite-service; setJdk8; ./gradlew bootRun
-  product-api:       sleep 30; cd api/product-api-service;             setJdk8; ./gradlew bootRun
+  product:           sleep 30; cd core/product-service;                ./gradlew bootRun
+  recommendation:    sleep 30; cd core/recommendation-service;         ./gradlew bootRun
+  review:            sleep 30; cd core/review-service;                 ./gradlew bootRun
+  product-composite: sleep 30; cd composite/product-composite-service; ./gradlew bootRun
+  product-api:       sleep 30; cd api/product-api-service;             ./gradlew bootRun
 
-  webapp:            sleep 10; cd webapp/ui;               setJdk8; ./gradlew bootRun # mvn spring-boot:run
+  webapp:            sleep 10; cd webapp/ui;                           ./gradlew bootRun
 
 layout_type: row
 

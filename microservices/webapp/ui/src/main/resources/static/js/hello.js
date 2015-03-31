@@ -36,10 +36,7 @@ function($rootScope, $scope, $http, $location, $route) {
 	}
 
 }).controller('home', function($scope, $http) {
-    $http.get('resource/').success(function(data) {
-        $scope.greeting = data;
-    });
-    $http.get('productapi/products/123').success(function(data) {
+    $http.get('productapi/product/123').success(function(data) {
         $scope.product = data;
     });
 });
