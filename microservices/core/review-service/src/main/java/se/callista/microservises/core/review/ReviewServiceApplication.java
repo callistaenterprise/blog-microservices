@@ -11,7 +11,6 @@ import java.util.UUID;
 public class ReviewServiceApplication {
 
     public static void main(String[] args) {
-        System.setProperty("MY_UUID", UUID.randomUUID().toString());
         SpringApplication.run(ReviewServiceApplication.class, args);
     }
 }

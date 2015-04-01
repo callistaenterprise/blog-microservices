@@ -12,8 +12,6 @@ import java.util.UUID;
 @EnableDiscoveryClient
 public class ProductCompositeServiceApplication {
     public static void main(String[] args) {
-        System.setProperty("MY_UUID", UUID.randomUUID().toString());
         SpringApplication.run(ProductCompositeServiceApplication.class, args);
-        System.err.println("### PCS-1");
     }
 }
