@@ -7,14 +7,13 @@ root:
 commands:
   rabbitMq: ~/Applications/rabbitmq_server-3.4.3/sbin/rabbitmq-server
 
-  config-server:     cd support/config-server;                         ./gradlew bootRun
-  discovery-server:  cd support/discovery-server;                      ./gradlew bootRun
-  edge-server:       cd support/edge-server;                           ./gradlew bootRun
-  monitor-dashboard: cd support/monitor-dashboard;                     ./gradlew bootRun
-  turbine:           sleep 15; cd support/turbine;                     ./gradlew bootRun
+  discovery-server:  cd support/discovery-server;  ./gradlew bootRun
+  monitor-dashboard: cd support/monitor-dashboard; ./gradlew bootRun
+  edge-server:       cd support/edge-server;       ./gradlew bootRun
+  turbine:           cd support/turbine;           ./gradlew bootRun
 
 layout_type: row
 
 layout:
-  - [ rabbitMq, config-server, discovery-server ]
+  - [ rabbitMq, discovery-server ]
   - [ edge-server, monitor-dashboard, turbine ]
