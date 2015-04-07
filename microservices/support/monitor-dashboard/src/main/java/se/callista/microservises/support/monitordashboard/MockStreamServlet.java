@@ -1,4 +1,4 @@
-package hystrixdashboard.stream;
+package se.callista.microservises.support.monitordashboard;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

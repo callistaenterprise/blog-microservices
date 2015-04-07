@@ -1,6 +1,5 @@
 package se.callista.microservises.support.monitordashboard;
 
-import hystrixdashboard.stream.MockStreamServlet;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
