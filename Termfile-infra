@@ -5,15 +5,10 @@ root:
   ~/Documents/projects/blogs/git/blog-microservices/microservices
 
 commands:
-  rabbitMq: ~/Applications/rabbitmq_server-3.4.3/sbin/rabbitmq-server
-
   discovery-server:  cd support/discovery-server;  ./gradlew bootRun
-  monitor-dashboard: cd support/monitor-dashboard; ./gradlew bootRun
   edge-server:       cd support/edge-server;       ./gradlew bootRun
-  turbine:           cd support/turbine;           ./gradlew bootRun
 
 layout_type: row
 
 layout:
-  - [ rabbitMq, discovery-server ]
-  - [ edge-server, monitor-dashboard, turbine ]
+  - [ discovery-server, edge-server ]

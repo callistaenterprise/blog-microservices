@@ -53,7 +53,6 @@ dependencies {
     }
     compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
-    compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }
