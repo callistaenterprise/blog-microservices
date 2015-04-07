@@ -10,21 +10,11 @@ endpoints:
     sensitive: false
 
 zuul:
+  ignoredServices: "*"
   routes:
-    stores:
-      path: /stores/**
-      stripPrefix: false
-    customers:
-      path: /customers/**
-      stripPrefix: false
     productcomposite:
       path: /productcomposite/**
-    productapi:
-      path: /productapi/**
 #      stripPrefix: false
-    prodapi:
-      path: /prodapi/**
-      url: http://localhost:10021
 
 server:
   port: 8765
