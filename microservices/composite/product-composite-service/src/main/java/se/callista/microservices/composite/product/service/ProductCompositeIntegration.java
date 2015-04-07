@@ -12,9 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import se.callista.microservises.core.product.model.Product;
-import se.callista.microservises.core.review.model.Review;
-//import se.callista.microservises.core.recommendation.model.Recommendation;
 import se.callista.microservises.core.recommendation.model.Recommendation;
+import se.callista.microservises.core.review.model.Review;
 
 import java.io.IOException;
 import java.net.URI;

@@ -33,7 +33,7 @@ public class Recommendation {
         return recommendationId;
     }
 
-    public void setRecommendationId(int reviewId) {
+    public void setRecommendationId(int recommendationId) {
         this.recommendationId = recommendationId;
     }
 

@@ -1,7 +1,7 @@
-package eurekademo;
+package se.callista.microservises.support.discovery;
 
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
@@ -14,7 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = EurekaApplication.class)
