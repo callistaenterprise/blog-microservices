@@ -17,5 +17,6 @@ commands:
 layout_type: row
 
 layout:
-  - [ rabbitMq, auth-server, config-server, discovery-server ]
+#  - [ rabbitMq, auth-server, config-server, discovery-server ]
+  - [ rabbitMq, auth-server, discovery-server ]
   - [ monitor-dashboard, turbine, edge-server ]

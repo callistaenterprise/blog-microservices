@@ -17,4 +17,4 @@ layout_type: row
 
 layout:
   - [ product, recommendation, review, product-composite, product-api ]
-  - [ webapp ]
+#  - [ webapp ]

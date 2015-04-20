@@ -46,8 +46,8 @@ public class AuthserverApplication {
 			clients.inMemory()
 					.withClient("acme")
 					.secret("acmesecret")
-					.authorizedGrantTypes("authorization_code", "refresh_token",
-							"password").scopes("openid");
+					.authorizedGrantTypes("authorization_code", "refresh_token", "implicit", "password", "client_credentials")
+					.scopes("openid");
 		}
 
 	}

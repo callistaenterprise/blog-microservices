@@ -190,7 +190,7 @@ public class ProductApiServiceSystemIntegrationTests {
 		String resourceInfo = getBodyAsString(response);
 		System.err.println("### Resource: " + resourceInfo);
 		Thread.sleep(1000);
-		String expectedResourceInfo = "{\"productId\":123,\"name\":\"name\",\"weight\":123,\"recommendations\":[{\"recommendationId\":0,\"author\":\"Author 1\",\"rate\":1},{\"recommendationId\":0,\"author\":\"Author 2\",\"rate\":2},{\"recommendationId\":0,\"author\":\"Author 3\",\"rate\":3}],\"reviews\":[{\"reviewId\":1,\"author\":\"Author 1\",\"subject\":\"Subject 1\"},{\"reviewId\":2,\"author\":\"Author 2\",\"subject\":\"Subject 2\"},{\"reviewId\":3,\"author\":\"Author 3\",\"subject\":\"Subject 3\"}]}";
+		String expectedResourceInfo = "{\"productId\":123,\"name\":\"name\",\"weight\":123,\"recommendations\":[{\"recommendationId\":1,\"author\":\"Author 1\",\"rate\":1},{\"recommendationId\":2,\"author\":\"Author 2\",\"rate\":2},{\"recommendationId\":3,\"author\":\"Author 3\",\"rate\":3}],\"reviews\":[{\"reviewId\":1,\"author\":\"Author 1\",\"subject\":\"Subject 1\"},{\"reviewId\":2,\"author\":\"Author 2\",\"subject\":\"Subject 2\"},{\"reviewId\":3,\"author\":\"Author 3\",\"subject\":\"Subject 3\"}]}";
 		assertEquals(expectedResourceInfo, resourceInfo);
 
 		EntityUtils.consumeQuietly(response.getEntity());

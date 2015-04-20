@@ -10,7 +10,6 @@ zuul:
       url: http://localhost:9999/uaa/user
     productapi:
       path: /productapi/**
-      url: http://localhost:10001
 
 
 spring:
