@@ -44,12 +44,10 @@ public class AuthserverApplication {
 		@Override
 		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 			clients.inMemory()
-					.withClient("acme")
-					.secret("acmesecret")
-					.authorizedGrantTypes("authorization_code", "refresh_token", "implicit", "password", "client_credentials")
-					.scopes("openid");
+				.withClient("acme")
+				.secret("acmesecret")
+				.authorizedGrantTypes("authorization_code", "refresh_token", "implicit", "password", "client_credentials")
+				.scopes("webshop");
 		}
-
 	}
-
 }
