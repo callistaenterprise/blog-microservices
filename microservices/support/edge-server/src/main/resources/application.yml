@@ -1,3 +1,6 @@
+server:
+  port: 8765
+
 info:
   component: Zuul Server
 
@@ -16,19 +19,16 @@ endpoints:
 
 zuul:
   ignoredServices: "*"
+  prefix: /api
   routes:
-    productcomposite:
-      path: /productcomposite/**
+    productapi: /product/**
+    
+#    productcomposite:
+#      path: /productcomposite/**
 #      stripPrefix: false
-    productapi:
-      path: /productapi/**
-#      stripPrefix: false
-
-server:
-  port: 8765
 
 logging:
   level:
     ROOT: INFO
     org.springframework.web: INFO
-    org.springframework.security: DEBUG
+#    org.springframework.security: DEBUG

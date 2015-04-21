@@ -32,12 +32,7 @@ public class ProductApiService {
     @Autowired
     private LoadBalancerClient loadBalancer;
 
-    @RequestMapping("/ping")
-    public String getProduct() {
-        return "{\"timestamp\":\"" + new Date() + "\",\"content\":\"Hello from ProductAPi\"}";
-    }
-
-    @RequestMapping("/product/{productId}")
+    @RequestMapping("/{productId}")
     @HystrixCommand(fallbackMethod = "defaultProductComposite")
     public ResponseEntity<String> getProductComposite(
         @PathVariable int productId,
