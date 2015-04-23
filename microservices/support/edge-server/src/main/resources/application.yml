@@ -22,13 +22,8 @@ zuul:
   prefix: /api
   routes:
     productapi: /product/**
-    
-#    productcomposite:
-#      path: /productcomposite/**
-#      stripPrefix: false
 
 logging:
   level:
     ROOT: INFO
     org.springframework.web: INFO
-#    org.springframework.security: DEBUG
