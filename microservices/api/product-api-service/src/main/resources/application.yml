@@ -1,11 +1,6 @@
 server:
   port: 0
 
-# TODO: ML, Did not help
-# endpoints:
-#   health:
-#     sensitive: false
-
 spring:
   oauth2:
     resource:
@@ -19,21 +14,10 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
     metadataMap:
-# TODO: local.server.port doesn't get translated, to be userd when server.port = 0, i.e. dynamic.
-#      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
-#      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${local.server.port}}}
-#      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${MY_UUID}}}
       instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
 
   client:
-#    region: default
     registryFetchIntervalSeconds: 5
-#    availabilityZones:
-#      default: ${APPLICATION_DOMAIN:${DOMAIN:defaultZone}}
-
-#stores:
-#  ribbon:
-#    ServerListRefreshInterval: 1000
 
 logging:
   level:
