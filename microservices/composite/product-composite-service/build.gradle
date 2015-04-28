@@ -35,18 +35,24 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web") {
-        exclude module: 'spring-boot-starter-tomcat'
+//        exclude module: 'spring-boot-starter-tomcat'
     }
-    compile("org.springframework.boot:spring-boot-starter-undertow")
+//    compile("org.springframework.boot:spring-boot-starter-undertow")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-bus-amqp:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-netflix-hystrix-amqp:1.0.0.RELEASE")
 
-    compile("se.callista.microservises.core.product:product-service:0.0.1-SNAPSHOT")
-    compile("se.callista.microservises.core.recommendation:recommendation-service:0.0.1-SNAPSHOT")
-    compile("se.callista.microservises.core.review:review-service:0.0.1-SNAPSHOT")
+    compile("se.callista.microservises.core.product:product-service:0.0.1-SNAPSHOT") {
+        exclude module: 'spring-boot-starter-undertow'
+    }
+    compile("se.callista.microservises.core.recommendation:recommendation-service:0.0.1-SNAPSHOT") {
+        exclude module: 'spring-boot-starter-undertow'
+    }
+    compile("se.callista.microservises.core.review:review-service:0.0.1-SNAPSHOT") {
+        exclude module: 'spring-boot-starter-undertow'
+    }
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

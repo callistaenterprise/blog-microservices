@@ -1,0 +1,43 @@
+---
+memory: 512M
+instances: 1
+applications:
+#- name: auth-server
+#  host: ml-public-auth
+#  path: microservices/support/auth-server/build/libs/auth-server-0.0.1-SNAPSHOT.jar
+#- name: discovery-server
+#  host: ml-public-ds-1
+#  path: microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
+- name: edge-server
+  host: ml-public-edge
+  path: microservices/support/edge-server/build/libs/edge-server-0.0.1-SNAPSHOT.jar
+#- name: monitor-dashboard
+#  host: ml-public-md
+#  path: microservices/support/monitor-dashboard/build/libs/monitor-dashboard-0.0.1-SNAPSHOT.jar
+#  services:
+#  - RabbitMQ
+#- name: turbine
+#  host: ml-private-t
+#  path: microservices/support/turbine/build/libs/turbine-0.0.1-SNAPSHOT.jar
+#  services:
+#  - RabbitMQ
+#- name: product-service
+#  host: ml-private-pro
+#  path: microservices/core/product-service/build/libs/product-service-0.0.1-SNAPSHOT.jar
+#- name: recommendation-service
+#  host: ml-private-rec
+#  path: microservices/core/recommendation-service/build/libs/recommendation-service-0.0.1-SNAPSHOT.jar
+#- name: review-service
+#  host: ml-private-rev
+#  path: microservices/core/review-service/build/libs/review-service-0.0.1-SNAPSHOT.jar
+#- name: product-composite-service
+#  host: ml-private-comp-pro
+#  path: microservices/composite/product-composite-service/build/libs/product-composite-service-0.0.1-SNAPSHOT.jar
+#  services:
+#  - RabbitMQ
+#- name: product-api-service
+#  host: ml-private-api-pro
+#  path: microservices/api/product-api-service/build/libs/product-api-service-0.0.1-SNAPSHOT.jar
+#  services:
+#  - RabbitMQ
+

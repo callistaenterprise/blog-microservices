@@ -56,7 +56,7 @@ public class ProductCompositeService {
                 recommendations = recommendationResult.getBody();
             }
         } catch (Throwable t) {
-            LOG.error("getProduct erro ", t);
+            LOG.error("getProduct error", t);
             throw t;
         }
 

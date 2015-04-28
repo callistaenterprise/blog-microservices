@@ -27,3 +27,18 @@ logging:
   level:
     ROOT: INFO
     org.springframework.web: INFO
+
+---
+spring:
+  profiles: cloud # For deployment in Cloud Foundry
+  oauth2:
+    resource:
+      userInfoUri: http://ml-public-auth.cfapps.io/uaa/user
+
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]:localhost}
+    nonSecurePort: 80
+  client:
+    serviceUrl:
+      defaultZone: http://ml-public-ds-1.cfapps.io/eureka/

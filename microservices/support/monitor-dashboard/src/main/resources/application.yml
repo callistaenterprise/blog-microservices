@@ -35,3 +35,17 @@ eureka:
   instance:
     #Virtual host name by which the clients identifies this service
     virtualHostName: ${spring.application.name}
+
+
+
+---
+spring:
+  profiles: cloud # For deployment in Cloud Foundry
+
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]:localhost}
+    nonSecurePort: 80
+  client:
+    serviceUrl:
+      defaultZone: http://ml-public-ds-1.cfapps.io/eureka/

@@ -36,3 +36,26 @@ eureka:
 #  aggregator:
 #    clusterConfig: CUSTOMERS
 #  appConfig: customers
+
+
+---
+spring:
+  profiles: cloud # For deployment in Cloud Foundry
+
+server:
+  port: 0 # Avoid collisions in the unknown CF djungle...
+
+management:
+  port: 0 # Avoid collisions in the unknown CF djungle...
+
+turbine:
+  amqp:
+    port: 0 # Avoid collisions in the unknown CF djungle...
+
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]:localhost}
+    nonSecurePort: 80
+  client:
+    serviceUrl:
+      defaultZone: http://ml-public-ds-1.cfapps.io/eureka/

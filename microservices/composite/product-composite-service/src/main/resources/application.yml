@@ -4,11 +4,16 @@ server:
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 3
+    hostname: ${vcap.application.uris[0]:localhost}
+    nonSecurePort: 80
     metadataMap:
       instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
   client:
-#    region: default
     registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://ml-host-1.cfapps.io/eureka/,http://localhost:8761/eureka/
+
+#    region: default
 #    availabilityZones:
 #      default: ${APPLICATION_DOMAIN:${DOMAIN:defaultZone}}
 
@@ -19,3 +24,15 @@ eureka:
 logging:
   level:
     se.callista: INFO
+
+---
+spring:
+  profiles: cloud # For deployment in Cloud Foundry
+
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]:localhost}
+    nonSecurePort: 80
+  client:
+    serviceUrl:
+      defaultZone: http://ml-public-ds-1.cfapps.io/eureka/
