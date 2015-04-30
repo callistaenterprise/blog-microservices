@@ -20,7 +20,32 @@ eureka:
 
 logging:
   level:
+    root: INFO
     se.callista: INFO
+    # Set DEBUG level on Hystrix to get an error message when a fallback method is used.
+    com.netflix.hystrix: DEBUG
+
+---
+# For deployment in Docker containers
+spring:
+  profiles: docker
+  oauth2:
+    resource:
+      userInfoUri: http://auth:9999/uaa/user
+
+server:
+  port: 8080
+
+app:
+  rabbitmq:
+    host: rabbitmq
+
+eureka:
+  instance:
+    hostname: api
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
 
 ---
 spring:

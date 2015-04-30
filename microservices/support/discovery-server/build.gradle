@@ -15,6 +15,10 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
+springBoot {
+    requiresUnpack = ['com.netflix.eureka:eureka-core','com.netflix.eureka:eureka-client']
+}
+
 jar {
     baseName = 'discovery-server'
     version = '0.0.1-SNAPSHOT'

@@ -37,10 +37,26 @@ eureka:
 #    clusterConfig: CUSTOMERS
 #  appConfig: customers
 
+---
+# For deployment in Docker containers
+spring:
+  profiles: docker
+
+app:
+  rabbitmq:
+    host: rabbitmq
+
+eureka:
+  instance:
+    hostname: turbine
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
 
 ---
+# For deployment in Cloud Foundry
 spring:
-  profiles: cloud # For deployment in Cloud Foundry
+  profiles: cloud
 
 server:
   port: 0 # Avoid collisions in the unknown CF djungle...

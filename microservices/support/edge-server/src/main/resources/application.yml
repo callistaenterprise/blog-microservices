@@ -27,10 +27,25 @@ logging:
   level:
     ROOT: INFO
     org.springframework.web: INFO
+    # Set DEBUG level on Hystrix to get an error message when a fallback method is used.
+    com.netflix.hystrix: DEBUG
 
 ---
+# For deployment in Docker containers
 spring:
-  profiles: cloud # For deployment in Cloud Foundry
+  profiles: docker
+
+eureka:
+  instance:
+    hostname: edge
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+
+---
+# For deployment in Cloud Foundry
+spring:
+  profiles: cloud
   oauth2:
     resource:
       userInfoUri: http://ml-public-auth.cfapps.io/uaa/user

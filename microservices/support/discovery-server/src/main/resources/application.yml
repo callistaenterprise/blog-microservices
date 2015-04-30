@@ -49,4 +49,29 @@ eureka:
     serviceUrl:
       defaultZone: http://user:${eureka.password}@${PREFIX:}eureka.cfapps.io/eureka/
 
-  
+---
+# Eureka instance 1 when used on Docker
+spring:
+  profiles: docker1
+eureka:
+  instance:
+    hostname: discovery
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://user:${eureka.password}@discovery2:8762/eureka/
+
+---
+# Eureka instance 2 when used on Docker
+spring:
+  profiles: docker2
+server:
+  port: 8762
+eureka:
+  instance:
+    hostname: discovery2
+    nonSecurePort: ${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://user:${eureka.password}@discovery:8761/eureka/

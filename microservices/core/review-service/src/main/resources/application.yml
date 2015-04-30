@@ -15,11 +15,28 @@ eureka:
 
 logging:
   level:
+    root: INFO
     se.callista: INFO
 
 ---
+# For deployment in Docker containers
 spring:
-  profiles: cloud # For deployment in Cloud Foundry
+  profiles: docker
+
+server:
+  port: 8080
+
+eureka:
+  instance:
+    hostname: rev
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+
+---
+# For deployment in Cloud Foundry
+spring:
+  profiles: cloud
 
 eureka:
   instance:

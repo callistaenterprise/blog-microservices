@@ -4,14 +4,10 @@ server:
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 3
-    hostname: ${vcap.application.uris[0]:localhost}
-    nonSecurePort: 80
     metadataMap:
       instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
   client:
     registryFetchIntervalSeconds: 5
-    serviceUrl:
-      defaultZone: http://ml-host-1.cfapps.io/eureka/,http://localhost:8761/eureka/
 
 #    region: default
 #    availabilityZones:
@@ -23,11 +19,33 @@ eureka:
 
 logging:
   level:
+    root: INFO
     se.callista: INFO
+    # Set DEBUG level on Hystrix to get an error message when a fallback method is used.
+    com.netflix.hystrix: DEBUG
+---
+# For deployment in Docker containers
+spring:
+  profiles: docker
+
+server:
+  port: 8080
+
+app:
+  rabbitmq:
+    host: rabbitmq
+
+eureka:
+  instance:
+    hostname: composite
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
 
 ---
+# For deployment in Cloud Foundry
 spring:
-  profiles: cloud # For deployment in Cloud Foundry
+  profiles: cloud
 
 eureka:
   instance:

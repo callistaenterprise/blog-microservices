@@ -1,0 +1,142 @@
+discovery:
+  image: magnus-larsson/spring-boot
+  ports:
+    - "8761:8761"
+  volumes:
+    - $PWD:/data
+  command: java -jar microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
+##
+## DOES NOT WORK, GIVES CIRCULAR DEPENDENCIES...
+##
+#  links:
+#    - discovery2
+#  command: java -jar -Dspring.profiles.active=docker1 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
+#  
+#discovery2:
+#  image: magnus-larsson/spring-boot
+#  ports:
+#    - "8762:8762"
+#  volumes:
+#    - $PWD:/data
+#  links:
+#    - discovery
+#  command: java -jar -Dspring.profiles.active=docker2 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
+  
+rabbitmq:
+  image: rabbitmq:3-management
+  ports:
+    - "5672:5672"
+    - "15672:15672"
+
+auth:
+  image: magnus-larsson/spring-boot
+  ports:
+    - "9999:9999"
+  volumes:
+    - $PWD:/data
+  command: java -jar -Dspring.profiles.active=docker microservices/support/auth-server/build/libs/auth-server-0.0.1-SNAPSHOT.jar
+  
+turbine:
+  image: magnus-larsson/spring-boot
+  volumes:
+    - $PWD:/data
+  links:
+    - rabbitmq
+  command: java -jar -Dspring.profiles.active=docker microservices/support/turbine/build/libs/turbine-0.0.1-SNAPSHOT.jar
+  
+pro:
+  image: magnus-larsson/spring-boot
+  volumes:
+    - $PWD:/data
+  links:
+    - discovery
+  command: java -jar -Dspring.profiles.active=docker microservices/core/product-service/build/libs/product-service-0.0.1-SNAPSHOT.jar
+
+rec:
+  image: magnus-larsson/spring-boot
+  volumes:
+    - $PWD:/data
+  links:
+    - discovery
+  command: java -jar -Dspring.profiles.active=docker microservices/core/recommendation-service/build/libs/recommendation-service-0.0.1-SNAPSHOT.jar
+
+rev:
+  image: magnus-larsson/spring-boot
+  volumes:
+    - $PWD:/data
+  links:
+    - discovery
+  command: java -jar -Dspring.profiles.active=docker microservices/core/review-service/build/libs/review-service-0.0.1-SNAPSHOT.jar
+
+composite:
+  image: magnus-larsson/spring-boot
+  volumes:
+    - $PWD:/data
+  links:
+    - discovery
+    - rabbitmq
+    - pro
+    - rec
+    - rev
+  command: java -jar -Dspring.profiles.active=docker microservices/composite/product-composite-service/build/libs/product-composite-service-0.0.1-SNAPSHOT.jar
+
+api:
+  image: magnus-larsson/spring-boot
+  volumes:
+    - $PWD:/data
+  links:
+    - auth
+    - discovery
+    - rabbitmq
+    - composite
+  command: java -jar -Dspring.profiles.active=docker microservices/api/product-api-service/build/libs/product-api-service-0.0.1-SNAPSHOT.jar
+
+monitor:
+  image: magnus-larsson/spring-boot
+  ports:
+    - "7979:7979"
+  volumes:
+    - $PWD:/data
+  links:
+    - api
+    - composite
+  command: java -jar -Dspring.profiles.active=docker microservices/support/monitor-dashboard/build/libs/monitor-dashboard-0.0.1-SNAPSHOT.jar
+
+edge:
+  image: magnus-larsson/spring-boot
+  ports:
+    - "8765:8765"
+  volumes:
+    - $PWD:/data
+  links:
+    - discovery
+    - api
+  command: java -jar -Dspring.profiles.active=docker microservices/support/edge-server/build/libs/edge-server-0.0.1-SNAPSHOT.jar
+
+
+
+#
+#docker run -d --name edge      -p 8765:8765 -v $PWD:/data --link discovery:discovery --link api-pro:api-pro magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/support/edge-server/build/libs/*.jar
+
+
+
+#docker run -d --name rabbitmq         -p 5672:5672 -p 15672:15672 -e RABBITMQ_NODENAME=my-rabbit rabbitmq:3-management
+#
+#docker run -d --name auth      -p 9999:9999 -v $PWD:/data                                                                 magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/support/auth-server/build/libs/*.jar
+#docker run -d --name discovery -p 8761:8761 -v $PWD:/data                                                                 magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/support/discovery-server/build/libs/*.jar
+#docker run -d --name turbine -v $PWD:/data                                             magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/support/turbine/build/libs/*.jar
+#
+#docker run -d --name core-pro      -v $PWD:/data --link discovery:discovery                                                         magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/core/product-service/build/libs/*.jar
+#docker run -d --name core-rev      -v $PWD:/data --link discovery:discovery                                                         magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/core/review-service/build/libs/*.jar
+#docker run -d --name core-rec      -v $PWD:/data --link discovery:discovery                                                         magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/core/recommendation-service/build/libs/*.jar
+
+
+#docker run -d --name comp-pro -v $PWD:/data --link discovery:discovery --link rabbitmq:rabbitmq --link core-pro:core-pro --link core-rev:core-rev --link core-rec:core-rec                 magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/composite/product-composite-service/build/libs/*.jar
+#docker run -d --name api-pro  -v $PWD:/data --link discovery:discovery --link rabbitmq:rabbitmq --link comp-pro:comp-pro --link auth:auth magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/api/product-api-service/build/libs/*.jar
+#
+#docker run -d --name monitor -p 7979:7979 -v $PWD:/data --link comp-pro:comp-pro                                             magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/support/monitor-dashboard/build/libs/*.jar
+#
+#docker run -d --name edge      -p 8765:8765 -v $PWD:/data --link discovery:discovery --link api-pro:api-pro magnus-larsson/spring-boot java -jar -Dspring.profiles.active=docker microservices/support/edge-server/build/libs/*.jar
+
+
+

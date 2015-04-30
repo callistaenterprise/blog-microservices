@@ -13,7 +13,8 @@ server:
 logging:
   level:
     ROOT: INFO
-    org.springframework.web: DEBUG
+    # Was DEBUG, why???
+    org.springframework.web: INFO
 
 eureka:
   client:
@@ -37,10 +38,22 @@ eureka:
     virtualHostName: ${spring.application.name}
 
 
+---
+# For deployment in Docker containers
+spring:
+  profiles: docker
+
+eureka:
+  instance:
+    hostname: monitor
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
 
 ---
+# For deployment in Cloud Foundry
 spring:
-  profiles: cloud # For deployment in Cloud Foundry
+  profiles: cloud
 
 eureka:
   instance:
