@@ -7,12 +7,12 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservises.core.product.model.Product;
 import se.callista.microservises.core.recommendation.model.Recommendation;
 import se.callista.microservises.core.review.model.Review;
@@ -33,9 +33,10 @@ public class ProductCompositeIntegration {
     private LoadBalancerClient loadBalancer;
 
     @Autowired
-    Util util;
+    ServiceUtils util;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private RestTemplate restTemplate;
 
     // -------- //
     // PRODUCTS //

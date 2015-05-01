@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.callista.microservices.composite.product.model.ProductAggregated;
+import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservises.core.product.model.Product;
 import se.callista.microservises.core.recommendation.model.Recommendation;
 import se.callista.microservises.core.review.model.Review;
@@ -27,7 +28,7 @@ public class ProductCompositeService {
     ProductCompositeIntegration integration;
 
     @Autowired
-    Util util;
+    ServiceUtils util;
 
     @RequestMapping("/")
     public String getProduct() {

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd util;                                              ./gradlew clean publishToMavenLocal; cd -
+
 cd microservices/core/product-service;                ./gradlew clean publishToMavenLocal build; cd -
 cd microservices/core/recommendation-service;         ./gradlew clean publishToMavenLocal build; cd -
 cd microservices/core/review-service;                 ./gradlew clean publishToMavenLocal build; cd -

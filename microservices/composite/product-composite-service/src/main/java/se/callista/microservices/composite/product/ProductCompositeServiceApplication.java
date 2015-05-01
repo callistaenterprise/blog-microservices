@@ -10,10 +10,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableCircuitBreaker
 @EnableDiscoveryClient
+@ComponentScan({"se.callista.microservices.composite.product", "se.callista.microservices.util"})
 public class ProductCompositeServiceApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceApplication.class);

@@ -11,14 +11,17 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableCircuitBreaker
 @EnableDiscoveryClient
 @EnableOAuth2Resource
+@ComponentScan({"se.callista.microservices.api.product", "se.callista.microservices.util"})
 public class ProductApiServiceApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductApiServiceApplication.class);
+
     @Value("${app.rabbitmq.host:localhost}")
     String rabbitMqHost;
 
@@ -28,6 +31,7 @@ public class ProductApiServiceApplication {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitMqHost);
         return connectionFactory;
     }
+
     public static void main(String[] args) {
         SpringApplication.run(ProductApiServiceApplication.class, args);
     }

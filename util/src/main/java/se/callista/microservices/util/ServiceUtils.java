@@ -1,4 +1,4 @@
-package se.callista.microservices.composite.product.service;
+package se.callista.microservices.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +14,11 @@ import java.net.URI;
 /**
  * Created by magnus on 08/03/15.
  *
- * TODO: Extract to a common util-lib
  */
 
 @Component
-public class Util {
-    private static final Logger LOG = LoggerFactory.getLogger(Util.class);
+public class ServiceUtils {
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceUtils.class);
 
     @Autowired
     private LoadBalancerClient loadBalancer;
@@ -69,6 +68,28 @@ public class Util {
 
     public <T> ResponseEntity<T> createOkResponse(T body) {
         return createResponse(body, HttpStatus.OK);
+    }
+
+    /**
+     * Clone an existing result as a new one, filtering out http headers that not should be moved on and so on...
+     *
+     * @param result
+     * @param <T>
+     * @return
+     */
+    public <T> ResponseEntity<T> createResponse(ResponseEntity<T> result) {
+
+        // TODO: How to relay the transfer encoding??? The code below makes the fallback method to kick in...
+        ResponseEntity<T> response = createResponse(result.getBody(), result.getStatusCode());
+//        LOG.info("NEW HEADERS:");
+//        response.getHeaders().entrySet().stream().forEach(e -> LOG.info("{} = {}", e.getKey(), e.getValue()));
+//        String ct = result.getHeaders().getFirst(HTTP.CONTENT_TYPE);
+//        if (ct != null) {
+//            LOG.info("Add without remove {}: {}", HTTP.CONTENT_TYPE, ct);
+////            response.getHeaders().remove(HTTP.CONTENT_TYPE);
+//            response.getHeaders().add(HTTP.CONTENT_TYPE, ct);
+//        }
+        return response;
     }
 
     public <T> ResponseEntity<T> createResponse(T body, HttpStatus httpStatus) {

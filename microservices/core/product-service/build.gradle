@@ -39,6 +39,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven {
         // Can't find spring-cloud-build in maven central...
@@ -56,6 +57,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE")
+
+    compile("se.callista.microservises:util:0.0.1-SNAPSHOT")
+
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }
 

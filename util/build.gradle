@@ -1,0 +1,46 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
+
+jar {
+    baseName = 'util'
+    version = '0.0.1-SNAPSHOT'
+}
+
+// $ gradle publishToMavenLocal
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            // TODO: Where to place these properties?
+            groupId 'se.callista.microservises'
+            artifactId 'util'
+            version '0.0.1-SNAPSHOT'
+
+            from components.java
+        }
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web:1.2.2.RELEASE")
+    compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
+
+    // TODO: Should be changed to provided to minimize cladd load conflicts over time???
+    compile("org.springframework.security:spring-security-core:3.2.6.RELEASE")
+
+    compile("net.logstash.logback:logstash-logback-encoder:4.3")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test:1.2.2.RELEASE")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
