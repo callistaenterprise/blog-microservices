@@ -1,5 +1,6 @@
 package se.callista.microservices.util;
 
+import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,12 @@ public class LogConfiguration {
     String componentName;
 
     @Bean
+    public Filter hystrixFilter() {
+        System.err.println("### v1. Declare my hystrixFilter");
+        return hystrixFilter;
+    }
+
+    @Bean
     public Filter logFilter() {
         System.err.println("### v1. Declare my logFilter");
         return logFilter;
@@ -44,9 +51,21 @@ public class LogConfiguration {
 
     private ClientHttpRequestInterceptor logInterceptor = (HttpRequest request, byte[] body, ClientHttpRequestExecution execution) -> {
         HttpHeaders headers = request.getHeaders();
-        System.err.println("### Add corrId " + MDC.get("corrId") + " to HTTP header X-corrId");
+        System.err.println("### " + tn() + " Add corrId " + MDC.get("corrId") + " to HTTP header X-corrId");
         headers.add("X-corrId", (String) MDC.get("corrId"));
         return execution.execute(request, body);
+    };
+
+    private LambdaServletFilter hystrixFilter = (ServletRequest req, ServletResponse resp, FilterChain chain) -> {
+
+        System.err.println("### " + tn() + " Init Hystrix Context...");
+        HystrixRequestContext ctx = HystrixRequestContext.initializeContext();
+        try {
+            chain.doFilter(req, resp);
+        } finally {
+            System.err.println("### " + tn() + " Shutting down Hystrix Context...");
+            ctx.shutdown();
+        }
     };
 
     private LambdaServletFilter logFilter = (ServletRequest req, ServletResponse resp, FilterChain chain) -> {

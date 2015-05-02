@@ -45,6 +45,8 @@ public class ProductCompositeIntegration {
     @HystrixCommand(fallbackMethod = "defaultProduct")
     public ResponseEntity<Product> getProduct(int productId) {
 
+        LOG.debug("Will call getProduct with Hystrix protection");
+
         URI uri = util.getServiceUrl("product");
 
         String url = uri.toString() + "/product/" + productId;

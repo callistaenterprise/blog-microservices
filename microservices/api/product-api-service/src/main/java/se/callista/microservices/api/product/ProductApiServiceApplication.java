@@ -1,5 +1,6 @@
 package se.callista.microservices.api.product;
 
+import com.netflix.hystrix.strategy.HystrixPlugins;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -12,6 +13,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import se.callista.microservices.util.MDCHystrixConcurrencyStrategy;
 
 @SpringBootApplication
 @EnableCircuitBreaker
@@ -33,6 +35,8 @@ public class ProductApiServiceApplication {
     }
 
     public static void main(String[] args) {
+        LOG.info("Register MDCHystrixConcurrencyStrategy");
+        HystrixPlugins.getInstance().registerConcurrencyStrategy(new MDCHystrixConcurrencyStrategy());
         SpringApplication.run(ProductApiServiceApplication.class, args);
     }
 }
