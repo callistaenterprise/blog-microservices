@@ -1,6 +1,6 @@
 package se.callista.microservices.util;
 
-import org.apache.log4j.MDC;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,27 +53,28 @@ public class LogConfiguration {
 
         HttpServletRequest httpReq = (HttpServletRequest) req;
         String corrId = httpReq.getHeader("X-corrId");
-        System.err.println("### X-corrId = [" + corrId + "]");
+        System.err.println("### " + tn() + " X-corrId = [" + corrId + "]");
 
         if (corrId == null || corrId.length() == 0) {
             corrId = UUID.randomUUID().toString();
-            System.err.println("### Initiate corrId to " + corrId);
+            System.err.println("### " + tn() + " Initiate corrId to " + corrId);
         }
 
         MDC.put("corrId", corrId);
         MDC.put("component", componentName);
-        System.err.println("### MY FILTER SAVE CORR-ID AND COMPONENT:" + MDC.get("corrId") + "/" + MDC.get("component"));
+        System.err.println("### " + tn() + " MY FILTER SAVE CORR-ID AND COMPONENT:" + MDC.get("corrId") + "/" + MDC.get("component"));
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null) {
             MDC.put("user", authentication.getName());
-            System.err.println("### MY FILTER SAVED USER:" + MDC.get("user"));
+            System.err.println("### " + tn() + " MY FILTER SAVED USER:" + MDC.get("user"));
         }
         try {
             chain.doFilter(req, resp);
         } finally {
+            System.err.println("### " + tn() + " MY FILTER SAVE CORR-ID AND COMPONENT:" + MDC.get("corrId") + "/" + MDC.get("component"));
             MDC.remove("corrId");
             MDC.remove("component");
             if (authentication != null) {
@@ -81,5 +82,9 @@ public class LogConfiguration {
             }
         }
     };
+
+    private String tn() {
+        return Thread.currentThread().getName();
+    }
 
 }
