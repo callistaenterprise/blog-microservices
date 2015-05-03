@@ -1,6 +1,32 @@
 server:
   port: 0
 
+hystrix:
+  threadpool:
+    default:
+      # Maximum number of concurrent requests when using thread pools (Default: 10)
+      coreSize: 100
+      # Maximum LinkedBlockingQueue size - -1 for using SynchronousQueue (Default: -1)
+      maxQueueSize: -1
+      # Queue size rejection threshold (Default: 5)
+      queueSizeRejectionThreshold: 5
+  command:
+    default:
+      execution:
+        isolation:
+#          strategy: SEMAPHORE, no thread pool but timeout handling stops to work
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 4000
+
+#ribbon:
+#  ConnectTimeout: 100
+#  ReadTimeout: 3000
+
+app:
+  ConnectTimeout: 100
+  ReadTimeout: 3000
+
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 3

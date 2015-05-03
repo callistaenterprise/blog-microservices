@@ -7,8 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
-import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
@@ -29,6 +28,12 @@ public class LogConfiguration {
     @Value("${spring.application.name}")
     String componentName;
 
+    @Value("${app.ConnectTimeout:-1}")
+    String connectTimeoutStr;
+
+    @Value("${app.ReadTimeout:-1}")
+    String readTimeoutStr;
+
     @Bean
     public Filter hystrixFilter() {
         System.err.println("### v1. Declare my hystrixFilter");
@@ -44,9 +49,37 @@ public class LogConfiguration {
     @Bean
     public RestTemplate restTemplateWithLogInterceptor() {
         System.err.println("### v1. Declare my restTemplate with a logInterceptor");
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
         restTemplate.getInterceptors().add(logInterceptor);
         return restTemplate;
+    }
+
+    private ClientHttpRequestFactory clientHttpRequestFactory() {
+
+        int connectTimeout = toInt(connectTimeoutStr, -1);
+        int readTimeout = toInt(readTimeoutStr, -1);
+
+//        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+
+        if (connectTimeout > 0) {
+            System.err.println("### Set connectTimeout = " + connectTimeout);
+            factory.setConnectTimeout(connectTimeout);
+        }
+        if (readTimeout > 0) {
+            System.err.println("### Set readTimeout = " + readTimeout);
+            factory.setReadTimeout(readTimeout);
+        }
+
+        return factory;
+    }
+
+    private int toInt(String str, int defVal) {
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException nfe) {
+            return defVal;
+        }
     }
 
     private ClientHttpRequestInterceptor logInterceptor = (HttpRequest request, byte[] body, ClientHttpRequestExecution execution) -> {
