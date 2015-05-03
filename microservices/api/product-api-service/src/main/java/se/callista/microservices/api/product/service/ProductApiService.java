@@ -1,5 +1,7 @@
 package se.callista.microservices.api.product.service;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.log4j.MDC;
 import org.slf4j.Logger;
@@ -15,12 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import se.callista.microservices.util.ServiceUtils;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
 import java.net.URI;
 import java.security.Principal;
 
 /**
  * Created by magnus on 04/03/15.
  */
+@Produces(APPLICATION_JSON)
+@Consumes(APPLICATION_JSON)
 @RestController
 public class ProductApiService {
 

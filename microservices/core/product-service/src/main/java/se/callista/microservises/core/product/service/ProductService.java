@@ -7,9 +7,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.callista.microservises.core.product.model.Product;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
 /**
  * Created by magnus on 04/03/15.
  */
+@Produces(APPLICATION_JSON)
+@Consumes(APPLICATION_JSON)
 @RestController
 public class ProductService {
 

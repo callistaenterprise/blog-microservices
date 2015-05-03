@@ -9,12 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 import se.callista.microservises.core.review.model.Review;
 import se.callista.microservises.core.review.service.util.SetProcTimeBean;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * Created by magnus on 04/03/15.
  */
+@Produces(APPLICATION_JSON)
+@Consumes(APPLICATION_JSON)
 @RestController
 public class ReviewService {
 
