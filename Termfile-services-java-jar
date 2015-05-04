@@ -1,0 +1,20 @@
+# Use:
+#  $ termrc start Termfile-services
+
+root:
+  ~/Documents/projects/blogs/git/blog-microservices/microservices
+
+commands:
+  product:           cd core/product-service;                java -jar build/libs/*.jar
+  recommendation:    cd core/recommendation-service;         java -jar build/libs/*.jar
+  review:            cd core/review-service;                 java -jar build/libs/*.jar
+  product-composite: cd composite/product-composite-service; java -jar build/libs/*.jar
+  product-api:       cd api/product-api-service;             java -jar build/libs/*.jar
+
+  webapp:            cd ../webapp/ui;                        java -jar target/*.jar
+
+layout_type: row
+
+layout:
+  - [ product, recommendation, review, product-composite, product-api ]
+#  - [ webapp ]
