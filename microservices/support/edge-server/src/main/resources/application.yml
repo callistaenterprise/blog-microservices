@@ -48,7 +48,7 @@ spring:
 
 eureka:
   instance:
-    hostname: edge
+    preferIpAddress: true
   client:
     serviceUrl:
       defaultZone: http://discovery:8761/eureka/

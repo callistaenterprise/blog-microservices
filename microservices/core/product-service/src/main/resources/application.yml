@@ -27,7 +27,7 @@ server:
 
 eureka:
   instance:
-    hostname: pro
+    preferIpAddress: true
   client:
     serviceUrl:
       defaultZone: http://discovery:8761/eureka/

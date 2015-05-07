@@ -71,7 +71,7 @@ app:
 
 eureka:
   instance:
-    hostname: api
+    preferIpAddress: true
   client:
     serviceUrl:
       defaultZone: http://discovery:8761/eureka/
