@@ -12,6 +12,8 @@ hystrix:
       queueSizeRejectionThreshold: 5
   command:
     default:
+      circuitBreaker:
+        sleepWindowInMilliseconds: 30000
       execution:
         isolation:
 #          strategy: SEMAPHORE, no thread pool but timeout handling stops to work
