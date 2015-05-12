@@ -51,9 +51,9 @@ repositories {
 dependencies {
     // TODO: Added ver no on the three core starter deps to make the maven plugin to work
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
-//        exclude module: 'spring-boot-starter-tomcat'
+        exclude module: 'spring-boot-starter-tomcat'
     }
-//    compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
     compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE")

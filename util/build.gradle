@@ -33,7 +33,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:1.2.2.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
 
-    // TODO: Should be changed to provided to minimize cladd load conflicts over time???
+    // TODO: Should be changed to provided to minimize class load conflicts over time???
     compile("org.springframework.security:spring-security-core:3.2.6.RELEASE")
 
     compile("net.logstash.logback:logstash-logback-encoder:4.3")

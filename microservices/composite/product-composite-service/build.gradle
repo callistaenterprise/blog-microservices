@@ -35,9 +35,9 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web") {
-//        exclude module: 'spring-boot-starter-tomcat'
+        exclude module: 'spring-boot-starter-tomcat'
     }
-//    compile("org.springframework.boot:spring-boot-starter-undertow")
+    compile("org.springframework.boot:spring-boot-starter-undertow")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE")
