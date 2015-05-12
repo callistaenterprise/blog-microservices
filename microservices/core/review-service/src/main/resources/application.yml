@@ -2,8 +2,8 @@ server:
   port: 0
 
 service:
-  defaultMinMs: 100
-  defaultMaxMs: 200
+  defaultMinMs: 0
+  defaultMaxMs: 0
 
 eureka:
   instance:

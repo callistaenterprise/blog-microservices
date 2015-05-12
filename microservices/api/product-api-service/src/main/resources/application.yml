@@ -23,6 +23,7 @@ hystrix:
     default:
       circuitBreaker:
         sleepWindowInMilliseconds: 30000
+        requestVolumeThreshold: 2
       execution:
         isolation:
 #          strategy: SEMAPHORE, no thread pool but timeout handling stops to work
