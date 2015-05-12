@@ -1,10 +1,19 @@
 server:
   port: 0
+  ssl:
+    enabled: false
+    # Problem with trust-store properties?
+    #
+    # Instead use: java -Djavax.net.debug=ssl -Djavax.net.ssl.trustStore=src/main/resources/truststore.jks -Djavax.net.ssl.trustStorePassword=password -jar build/libs/*.jar
+    #
+    # trust-store: classpath:truststore.jks
+    trust-store: src/main/resources/truststore.jks
+    trust-store-password: password
 
 spring:
   oauth2:
     resource:
-      userInfoUri: http://localhost:9999/uaa/user
+      userInfoUri: https://localhost:9999/uaa/user
 
 management:
   security:
@@ -63,7 +72,7 @@ spring:
   profiles: docker
   oauth2:
     resource:
-      userInfoUri: http://auth:9999/uaa/user
+      userInfoUri: https://auth:9999/uaa/user
 
 server:
   port: 8080
@@ -84,7 +93,7 @@ spring:
   profiles: cloud # For deployment in Cloud Foundry
   oauth2:
     resource:
-      userInfoUri: http://ml-public-auth.cfapps.io/uaa/user
+      userInfoUri: https://ml-public-auth.cfapps.io/uaa/user
 
 eureka:
   instance:

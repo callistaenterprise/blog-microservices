@@ -1,7 +1,5 @@
 package se.callista.microservices.api.product.service;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.log4j.MDC;
 import org.slf4j.Logger;
@@ -21,6 +19,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import java.net.URI;
 import java.security.Principal;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * Created by magnus on 04/03/15.
@@ -48,8 +48,8 @@ public class ProductApiService {
         @RequestHeader(value="Authorization") String authorizationHeader,
         Principal currentUser) {
 
-        LOG.info("ProductApi: User={}, Auth={}, called with productId={}", currentUser.getName(), authorizationHeader, productId);
         MDC.put("productId", productId);
+        LOG.info("ProductApi: User={}, Auth={}, called with productId={}", currentUser.getName(), authorizationHeader, productId);
 
         URI uri = loadBalancer.choose("productcomposite").getUri();
         String url = uri.toString() + "/product/" + productId;

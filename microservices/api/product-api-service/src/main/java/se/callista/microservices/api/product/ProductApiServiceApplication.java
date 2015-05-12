@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import se.callista.microservices.util.MDCHystrixConcurrencyStrategy;
 
+import javax.net.ssl.HttpsURLConnection;
+
 @SpringBootApplication
 @EnableCircuitBreaker
 @EnableDiscoveryClient
@@ -23,6 +25,12 @@ import se.callista.microservices.util.MDCHystrixConcurrencyStrategy;
 public class ProductApiServiceApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductApiServiceApplication.class);
+
+    static {
+        // for localhost testing only
+        LOG.warn("Will now disable hostname check in SSL, only to be used during development");
+        HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> true);
+    }
 
     @Value("${app.rabbitmq.host:localhost}")
     String rabbitMqHost;

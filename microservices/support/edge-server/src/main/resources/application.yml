@@ -1,5 +1,9 @@
 server:
   port: 8765
+  ssl:
+    key-store: classpath:server.jks
+    key-store-password: password
+    key-password: password
 
 info:
   component: Zuul Server
@@ -7,7 +11,7 @@ info:
 spring:
   oauth2:
     resource:
-      userInfoUri: http://localhost:9999/uaa/user
+      userInfoUri: https://localhost:9999/uaa/user
 
 eureka:
   instance:
@@ -59,7 +63,7 @@ spring:
   profiles: cloud
   oauth2:
     resource:
-      userInfoUri: http://ml-public-auth.cfapps.io/uaa/user
+      userInfoUri: https://ml-public-auth.cfapps.io/uaa/user
 
 eureka:
   instance:

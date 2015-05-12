@@ -7,7 +7,7 @@ zuul:
   routes:
     user:
       path: /user/**
-      url: http://localhost:9999/uaa/user
+      url: https://localhost:9999/uaa/user
     productapi:
       path: /productapi/**
 
@@ -19,12 +19,12 @@ spring:
         secure: false
         path: /,/**/*.html
     client:
-      accessTokenUri: http://localhost:9999/uaa/oauth/token
-      userAuthorizationUri: http://localhost:9999/uaa/oauth/authorize
+      accessTokenUri: https://localhost:9999/uaa/oauth/token
+      userAuthorizationUri: https://localhost:9999/uaa/oauth/authorize
       clientId: acme
       clientSecret: acmesecret
     resource:
-      userInfoUri: http://localhost:9999/uaa/user
+      userInfoUri: https://localhost:9999/uaa/user
 
 logging:
   level:
