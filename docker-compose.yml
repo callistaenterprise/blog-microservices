@@ -105,7 +105,7 @@ monitor:
 edge:
   image: magnus-larsson/spring-boot
   ports:
-    - "8765:8765"
+    - "443:8765"
   volumes:
     - $PWD:/data
   links:
