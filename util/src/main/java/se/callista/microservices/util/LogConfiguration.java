@@ -1,6 +1,8 @@
 package se.callista.microservices.util;
 
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +30,8 @@ import java.util.UUID;
 @Configuration
 public class LogConfiguration {
 
+    private static final Logger LOG = LoggerFactory.getLogger(LogConfiguration.class);
+
     @Value("${spring.application.name}")
     String componentName;
 
@@ -37,21 +41,33 @@ public class LogConfiguration {
     @Value("${app.ReadTimeout:-1}")
     String readTimeoutStr;
 
+    @Value("${app.http.header.corrId:X-corrId}")
+    String http_header_corrId;
+
+    @Value("${app.mdc.key.corrId:corrId}")
+    String mdc_key_corrId;
+
+    @Value("${app.mdc.key.component:component}")
+    String mdc_key_component;
+
+    @Value("${app.mdc.key.user:user}")
+    String mdc_key_user;
+
     @Bean
     public Filter hystrixFilter() {
-        System.err.println("### v1. Declare my hystrixFilter");
+        LOG.debug("Declare my hystrixFilter");
         return hystrixFilter;
     }
 
     @Bean
     public Filter logFilter() {
-        System.err.println("### v1. Declare my logFilter");
+        LOG.debug("Declare my logFilter");
         return logFilter;
     }
 
     @Bean
     public RestTemplate restTemplateWithLogInterceptor() {
-        System.err.println("### v1. Declare my restTemplate with a logInterceptor");
+        LOG.debug("Declare my restTemplate with a logInterceptor");
         RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
         restTemplate.getInterceptors().add(logInterceptor);
         return restTemplate;
@@ -62,15 +78,16 @@ public class LogConfiguration {
         int connectTimeout = toInt(connectTimeoutStr, -1);
         int readTimeout = toInt(readTimeoutStr, -1);
 
-//        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        // If we need to do some more advanced stuff we beter use Appache HttpClient
+        // HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
 
         if (connectTimeout > 0) {
-            System.err.println("### Set connectTimeout = " + connectTimeout);
+            LOG.debug("Set connectTimeout = {}", connectTimeout);
             factory.setConnectTimeout(connectTimeout);
         }
         if (readTimeout > 0) {
-            System.err.println("### Set readTimeout = " + readTimeout);
+            LOG.debug("Set readTimeout = {}", readTimeout);
             factory.setReadTimeout(readTimeout);
         }
 
@@ -86,20 +103,24 @@ public class LogConfiguration {
     }
 
     private ClientHttpRequestInterceptor logInterceptor = (HttpRequest request, byte[] body, ClientHttpRequestExecution execution) -> {
+
+        String corrId = MDC.get(mdc_key_corrId);
+        LOG.debug("Add {} {} to HTTP header {}", mdc_key_corrId, corrId, http_header_corrId);
         HttpHeaders headers = request.getHeaders();
-        System.err.println("### " + tn() + " Add corrId " + MDC.get("corrId") + " to HTTP header X-corrId");
-        headers.add("X-corrId", (String) MDC.get("corrId"));
+        headers.add(http_header_corrId, corrId);
         return execution.execute(request, body);
     };
 
     private LambdaServletFilter hystrixFilter = (ServletRequest req, ServletResponse resp, FilterChain chain) -> {
 
-        System.err.println("### " + tn() + " Init Hystrix Context...");
+        LOG.debug("Init Hystrix Context...");
         HystrixRequestContext ctx = HystrixRequestContext.initializeContext();
+
         try {
             chain.doFilter(req, resp);
+
         } finally {
-            System.err.println("### " + tn() + " Shutting down Hystrix Context...");
+            LOG.debug("Shutting down Hystrix Context...");
             ctx.shutdown();
         }
     };
@@ -107,39 +128,44 @@ public class LogConfiguration {
     private LambdaServletFilter logFilter = (ServletRequest req, ServletResponse resp, FilterChain chain) -> {
 
         HttpServletRequest httpReq = (HttpServletRequest) req;
-        String corrId = httpReq.getHeader("X-corrId");
-        System.err.println("### " + tn() + " X-corrId = [" + corrId + "]");
+        String corrId = httpReq.getHeader(http_header_corrId);
+        LOG.debug("{} = [{}]", http_header_corrId, corrId);
 
         if (corrId == null || corrId.length() == 0) {
             corrId = UUID.randomUUID().toString();
-            System.err.println("### " + tn() + " Initiate corrId to " + corrId);
+            LOG.debug("Initiate corrId to {}", corrId);
         }
 
-        MDC.put("corrId", corrId);
-        MDC.put("component", componentName);
-        System.err.println("### " + tn() + " MY FILTER SAVE CORR-ID AND COMPONENT:" + MDC.get("corrId") + "/" + MDC.get("component"));
+        LOG.debug("Storing in MDC: {} = {} and {} = {}", mdc_key_corrId, corrId, mdc_key_component, componentName);
+        MDC.put(mdc_key_corrId, corrId);
+        MDC.put(mdc_key_component, componentName);
 
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null) {
-            MDC.put("user", authentication.getName());
-            System.err.println("### " + tn() + " MY FILTER SAVED USER:" + MDC.get("user"));
+            String name = authentication.getName();
+            LOG.debug("Storing in MDC: {} = {}", mdc_key_user, name);
+            MDC.put(mdc_key_user, name);
         }
+
         try {
             chain.doFilter(req, resp);
+
         } finally {
-            System.err.println("### " + tn() + " MY FILTER SAVE CORR-ID AND COMPONENT:" + MDC.get("corrId") + "/" + MDC.get("component"));
-            MDC.remove("corrId");
-            MDC.remove("component");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Remove from MDC: {} = {} and {} = {}",
+                    mdc_key_corrId, MDC.get(mdc_key_corrId),
+                    mdc_key_component, MDC.get(mdc_key_component));
+            }
+            MDC.remove(mdc_key_corrId);
+            MDC.remove(mdc_key_component);
+
             if (authentication != null) {
-                MDC.remove("user");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Remove from MDC: {} = {}", mdc_key_user, MDC.get(mdc_key_user));
+                }
+                MDC.remove(mdc_key_user);
             }
         }
     };
-
-    private String tn() {
-        return Thread.currentThread().getName();
-    }
-
 }

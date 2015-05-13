@@ -12,9 +12,8 @@ server:
 
 logging:
   level:
-    ROOT: INFO
-    # Was DEBUG, why???
-    org.springframework.web: INFO
+    ROOT: WARN
+    org.springframework.web: WARN
 
 eureka:
   client:

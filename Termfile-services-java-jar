@@ -9,8 +9,7 @@ commands:
   recommendation:    cd core/recommendation-service;         java -jar build/libs/*.jar
   review:            cd core/review-service;                 java -jar build/libs/*.jar
   product-composite: cd composite/product-composite-service; java -jar build/libs/*.jar
-  product-api:       cd api/product-api-service;             java -jar build/libs/*.jar
-
+  product-api:       cd api/product-api-service;             java -Djavax.net.ssl.trustStore=src/main/resources/truststore.jks -Djavax.net.ssl.trustStorePassword=password -jar build/libs/*.jar
   webapp:            cd ../webapp/ui;                        java -jar target/*.jar
 
 layout_type: row

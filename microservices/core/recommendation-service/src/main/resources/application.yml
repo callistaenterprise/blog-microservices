@@ -1,6 +1,9 @@
 server:
   port: 0
 
+info:
+  component: Recommendation Core Service
+
 service:
   defaultMinMs: 0
   defaultMaxMs: 0
@@ -18,7 +21,7 @@ eureka:
 
 logging:
   level:
-    root: INFO
+    root: WARN
     se.callista: INFO
 
 ---

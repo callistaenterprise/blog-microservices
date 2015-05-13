@@ -89,7 +89,7 @@ api:
     - discovery
     - rabbitmq
     - composite
-  command: java -jar -Dspring.profiles.active=docker microservices/api/product-api-service/build/libs/product-api-service-0.0.1-SNAPSHOT.jar
+  command: java -jar -Dspring.profiles.active=docker -Djavax.net.ssl.trustStore=microservices/api/product-api-service/src/main/resources/truststore.jks -Djavax.net.ssl.trustStorePassword=password microservices/api/product-api-service/build/libs/product-api-service-0.0.1-SNAPSHOT.jar
 
 monitor:
   image: magnus-larsson/spring-boot

@@ -6,7 +6,7 @@ server:
     key-password: password
 
 info:
-  component: Zuul Server
+  component: Edge Server
 
 spring:
   oauth2:
@@ -40,8 +40,8 @@ zuul:
 
 logging:
   level:
-    ROOT: INFO
-    org.springframework.web: INFO
+    ROOT: WARN
+    org.springframework.web: WARN
     # Set DEBUG level on Hystrix to get an error message when a fallback method is used.
     com.netflix.hystrix: DEBUG
 

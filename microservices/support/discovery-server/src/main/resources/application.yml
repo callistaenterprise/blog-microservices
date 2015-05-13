@@ -1,8 +1,12 @@
 server:
   port: 8761
+
 security:
   user:
     password: ${eureka.password} # Don't use a default password in a real app
+
+info:
+  component: Discovery Server
 
 eureka:
   client:
@@ -11,6 +15,10 @@ eureka:
   server:
     waitTimeInMsWhenSyncEmpty: 0
   password: ${SECURITY_USER_PASSWORD:password}
+
+logging:
+  level:
+    ROOT: WARN
 
 ---
 spring:

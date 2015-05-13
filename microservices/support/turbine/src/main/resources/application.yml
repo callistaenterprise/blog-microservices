@@ -1,3 +1,9 @@
+server:
+  port: 8989
+
+management:
+  port: 8990
+
 info:
   component: Turbine
 
@@ -9,15 +15,9 @@ endpoints:
   shutdown:
     enabled: true
 
-server:
-  port: 8989
-
-management:
-  port: 8990
-
 logging:
   level:
-    root: INFO
+    root: WARN
     com.netflix.discovery: 'OFF'
     # org.springframework.integration: DEBUG
 

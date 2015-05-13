@@ -1,5 +1,7 @@
 package se.callista.microservices.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import java.util.Map;
@@ -10,18 +12,20 @@ import java.util.concurrent.Callable;
  */
 public class MDCHystrixContextCallable<K> implements Callable {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MDCHystrixContextCallable.class);
+
     private final Callable<K> actual;
     private final Map parentMDC;
 
     public MDCHystrixContextCallable(Callable<K> actual) {
-        System.err.println("### " + tn() + " Init MDCHystrixContextCallable...");
+        LOG.debug("Init MDCHystrixContextCallable...");
         this.actual = actual;
         this.parentMDC = MDC.getCopyOfContextMap();
     }
 
     @Override
     public K call() throws Exception {
-        System.err.println("### " + tn() + " Call using MDCHystrixContextCallable...");
+        LOG.debug("Call using MDCHystrixContextCallable...");
         Map childMDC = MDC.getCopyOfContextMap();
 
         try {
@@ -31,9 +35,4 @@ public class MDCHystrixContextCallable<K> implements Callable {
             MDC.setContextMap(childMDC);
         }
     }
-
-    private String tn() {
-        return Thread.currentThread().getName();
-    }
-
 }
