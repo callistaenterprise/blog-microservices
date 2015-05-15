@@ -1,10 +1,3 @@
-discovery:
-  image: magnus-larsson/spring-boot
-  ports:
-    - "8761:8761"
-  volumes:
-    - $PWD:/data
-  command: java -jar microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
 ##
 ## DOES NOT WORK, GIVES CIRCULAR DEPENDENCIES...
 ##
@@ -28,87 +21,77 @@ rabbitmq:
     - "5672:5672"
     - "15672:15672"
 
+discovery:
+  image: callista/discovery-server
+  ports:
+    - "8761:8761"
+
 auth:
-  image: magnus-larsson/spring-boot
+  image: callista/auth-server
   ports:
     - "9999:9999"
-  volumes:
-    - $PWD:/data
-  command: java -jar -Dspring.profiles.active=docker microservices/support/auth-server/build/libs/auth-server-0.0.1-SNAPSHOT.jar
   
-turbine:
-  image: magnus-larsson/spring-boot
-  volumes:
-    - $PWD:/data
-  links:
-    - rabbitmq
-  command: java -jar -Dspring.profiles.active=docker microservices/support/turbine/build/libs/turbine-0.0.1-SNAPSHOT.jar
+#turbine:
+#  image: callista/turbine
+##  volumes:
+##    - $PWD/logs:/data/logs
+#  links:
+#    - rabbitmq
   
 pro:
-  image: magnus-larsson/spring-boot
+  image: callista/product-service
   volumes:
-    - $PWD:/data
+    - $PWD/logs:/data/logs
   links:
     - discovery
-  command: java -jar -Dspring.profiles.active=docker microservices/core/product-service/build/libs/product-service-0.0.1-SNAPSHOT.jar
 
 rec:
-  image: magnus-larsson/spring-boot
+  image: callista/recommendation-service
   volumes:
-    - $PWD:/data
+    - $PWD/logs:/data/logs
   links:
     - discovery
-  command: java -jar -Dspring.profiles.active=docker microservices/core/recommendation-service/build/libs/recommendation-service-0.0.1-SNAPSHOT.jar
 
 rev:
-  image: magnus-larsson/spring-boot
+  image: callista/review-service
   volumes:
-    - $PWD:/data
+    - $PWD/logs:/data/logs
   links:
     - discovery
-  command: java -jar -Dspring.profiles.active=docker microservices/core/review-service/build/libs/review-service-0.0.1-SNAPSHOT.jar
 
 composite:
-  image: magnus-larsson/spring-boot
+  image: callista/product-composite-service
   volumes:
-    - $PWD:/data
+    - $PWD/logs:/data/logs
   links:
     - discovery
     - rabbitmq
-    - pro
-    - rec
-    - rev
-  command: java -jar -Dspring.profiles.active=docker microservices/composite/product-composite-service/build/libs/product-composite-service-0.0.1-SNAPSHOT.jar
+#    - pro
+#    - rec
+#    - rev
 
 api:
-  image: magnus-larsson/spring-boot
+  image: callista/product-api-service
   volumes:
-    - $PWD:/data
+    - $PWD/logs:/data/logs
   links:
     - auth
     - discovery
     - rabbitmq
-    - composite
-  command: java -jar -Dspring.profiles.active=docker -Djavax.net.ssl.trustStore=microservices/api/product-api-service/src/main/resources/truststore.jks -Djavax.net.ssl.trustStorePassword=password microservices/api/product-api-service/build/libs/product-api-service-0.0.1-SNAPSHOT.jar
+#    - composite
 
 monitor:
-  image: magnus-larsson/spring-boot
+  image: callista/monitor-dashboard
   ports:
     - "7979:7979"
-  volumes:
-    - $PWD:/data
   links:
     - api
     - composite
-  command: java -jar -Dspring.profiles.active=docker microservices/support/monitor-dashboard/build/libs/monitor-dashboard-0.0.1-SNAPSHOT.jar
 
 edge:
-  image: magnus-larsson/spring-boot
+  image: callista/edge-server
   ports:
     - "443:8765"
-  volumes:
-    - $PWD:/data
   links:
     - discovery
     - api
-  command: java -jar -Dspring.profiles.active=docker microservices/support/edge-server/build/libs/edge-server-0.0.1-SNAPSHOT.jar

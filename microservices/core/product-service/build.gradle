@@ -4,9 +4,11 @@ buildscript {
     }
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
     }
 }
 
@@ -15,6 +17,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'maven-publish'
+apply plugin: 'docker'
 
 jar {
     baseName = 'product-service'
@@ -37,6 +40,8 @@ publishing {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+group = 'callista'
+mainClassName = 'se.callista.microservises.core.product.ProductServiceApplication'
 
 repositories {
     mavenLocal()
@@ -61,6 +66,16 @@ dependencies {
     compile("se.callista.microservises:util:0.0.1-SNAPSHOT")
 
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+}
+
+distDocker {
+    exposePort 8080
+    setEnvironment 'JAVA_OPTS', '-Dspring.profiles.active=docker'
+}
+
+docker {
+    maintainer = 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
+    baseImage = 'dockerfile/java:oracle-java8'
 }
 
 task wrapper(type: Wrapper) {
