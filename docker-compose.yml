@@ -66,9 +66,6 @@ composite:
   links:
     - discovery
     - rabbitmq
-#    - pro
-#    - rec
-#    - rev
 
 api:
   image: callista/product-api-service
@@ -78,7 +75,6 @@ api:
     - auth
     - discovery
     - rabbitmq
-#    - composite
 
 monitor:
   image: callista/monitor-dashboard
