@@ -34,35 +34,35 @@ auth:
 #turbine:
 #  image: callista/turbine
 ##  volumes:
-##    - $PWD/logs:/data/logs
+##    - $PWD/logs:/logs
 #  links:
 #    - rabbitmq
   
 pro:
   image: callista/product-service
   volumes:
-    - $PWD/logs:/data/logs
+    - $PWD/logs:/logs
   links:
     - discovery
 
 rec:
   image: callista/recommendation-service
   volumes:
-    - $PWD/logs:/data/logs
+    - $PWD/logs:/logs
   links:
     - discovery
 
 rev:
   image: callista/review-service
   volumes:
-    - $PWD/logs:/data/logs
+    - $PWD/logs:/logs
   links:
     - discovery
 
 composite:
   image: callista/product-composite-service
   volumes:
-    - $PWD/logs:/data/logs
+    - $PWD/logs:/logs
   links:
     - discovery
     - rabbitmq
@@ -70,7 +70,7 @@ composite:
 api:
   image: callista/product-api-service
   volumes:
-    - $PWD/logs:/data/logs
+    - $PWD/logs:/logs
   links:
     - auth
     - discovery

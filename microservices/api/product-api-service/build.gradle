@@ -67,7 +67,7 @@ distDocker {
 
 docker {
     maintainer = 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
-    baseImage = 'dockerfile/java:oracle-java8'
+    baseImage = 'java:8'
 }
 
 task wrapper(type: Wrapper) {
