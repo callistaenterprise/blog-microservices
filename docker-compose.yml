@@ -1,20 +1,3 @@
-##
-## DOES NOT WORK, GIVES CIRCULAR DEPENDENCIES...
-##
-#  links:
-#    - discovery2
-#  command: java -jar -Dspring.profiles.active=docker1 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
-#  
-#discovery2:
-#  image: magnus-larsson/spring-boot
-#  ports:
-#    - "8762:8762"
-#  volumes:
-#    - $PWD:/data
-#  links:
-#    - discovery
-#  command: java -jar -Dspring.profiles.active=docker2 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
-  
 rabbitmq:
   image: rabbitmq:3-management
   ports:
@@ -31,46 +14,29 @@ auth:
   ports:
     - "9999:9999"
   
-#turbine:
-#  image: callista/turbine
-##  volumes:
-##    - $PWD/logs:/logs
-#  links:
-#    - rabbitmq
-  
 pro:
   image: callista/product-service
-  volumes:
-    - $PWD/logs:/logs
   links:
     - discovery
 
 rec:
   image: callista/recommendation-service
-  volumes:
-    - $PWD/logs:/logs
   links:
     - discovery
 
 rev:
   image: callista/review-service
-  volumes:
-    - $PWD/logs:/logs
   links:
     - discovery
 
 composite:
   image: callista/product-composite-service
-  volumes:
-    - $PWD/logs:/logs
   links:
     - discovery
     - rabbitmq
 
 api:
   image: callista/product-api-service
-  volumes:
-    - $PWD/logs:/logs
   links:
     - auth
     - discovery
