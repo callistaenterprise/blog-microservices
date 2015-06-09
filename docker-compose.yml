@@ -7,6 +7,7 @@
 #  
 #discovery2:
 #  image: magnus-larsson/spring-boot
+#  restart: always
 #  ports:
 #    - "8762:8762"
 #  volumes:
@@ -17,17 +18,20 @@
   
 rabbitmq:
   image: rabbitmq:3-management
+  restart: always
   ports:
     - "5672:5672"
     - "15672:15672"
 
 discovery:
   image: callista/discovery-server
+  restart: always
   ports:
     - "8761:8761"
 
 auth:
   image: callista/auth-server
+  restart: always
   ports:
     - "9999:9999"
   
@@ -40,6 +44,7 @@ auth:
   
 pro:
   image: callista/product-service
+  restart: always
   volumes:
     - $PWD/logs:/logs
   links:
@@ -47,6 +52,7 @@ pro:
 
 rec:
   image: callista/recommendation-service
+  restart: always
   volumes:
     - $PWD/logs:/logs
   links:
@@ -54,6 +60,7 @@ rec:
 
 rev:
   image: callista/review-service
+  restart: always
   volumes:
     - $PWD/logs:/logs
   links:
@@ -61,6 +68,7 @@ rev:
 
 composite:
   image: callista/product-composite-service
+  restart: always
   volumes:
     - $PWD/logs:/logs
   links:
@@ -69,6 +77,7 @@ composite:
 
 api:
   image: callista/product-api-service
+  restart: always
   volumes:
     - $PWD/logs:/logs
   links:
@@ -78,6 +87,7 @@ api:
 
 monitor:
   image: callista/monitor-dashboard
+  restart: always
   ports:
     - "7979:7979"
   links:
@@ -86,6 +96,7 @@ monitor:
 
 edge:
   image: callista/edge-server
+  restart: always
   ports:
     - "443:8765"
   links:
