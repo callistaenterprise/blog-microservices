@@ -5,3 +5,5 @@ pushd microservices\composite\product-composite-service & call gradlew clean bui
 
 pushd microservices\support\discovery-server &            call gradlew clean build & popd
 pushd microservices\support\edge-server &                 call gradlew clean build & popd
+pushd microservices\support\monitor-dashboard &           call gradlew clean build & popd
+pushd microservices\support\turbine &                     call gradlew clean build & popd
