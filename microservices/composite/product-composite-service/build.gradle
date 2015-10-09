@@ -31,10 +31,6 @@ mainClassName = 'se.callista.microservices.composite.product.ProductCompositeSer
 repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-        // Can't find spring-cloud-build in maven central...
-        url 'http://maven.springframework.org/release'
-    }
 }
 
 

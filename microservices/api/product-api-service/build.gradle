@@ -30,10 +30,6 @@ mainClassName = 'se.callista.microservices.api.product.ProductApiServiceApplicat
 repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-        // Can't find spring-cloud-build in maven central...
-        url 'http://maven.springframework.org/release'
-    }
 }
 
 

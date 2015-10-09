@@ -17,42 +17,27 @@ auth:
   ports:
     - "9999:9999"
   
-#turbine:
-#  image: callista/turbine
-##  volumes:
-##    - $PWD/logs:/logs
-#  links:
-#    - rabbitmq
-  
 pro:
   image: callista/product-service
   restart: always
-  volumes:
-    - $PWD/logs:/logs
   links:
     - discovery
 
 rec:
   image: callista/recommendation-service
   restart: always
-  volumes:
-    - $PWD/logs:/logs
   links:
     - discovery
 
 rev:
   image: callista/review-service
   restart: always
-  volumes:
-    - $PWD/logs:/logs
   links:
     - discovery
 
 composite:
   image: callista/product-composite-service
   restart: always
-  volumes:
-    - $PWD/logs:/logs
   links:
     - discovery
     - rabbitmq
@@ -60,8 +45,6 @@ composite:
 api:
   image: callista/product-api-service
   restart: always
-  volumes:
-    - $PWD/logs:/logs
   links:
     - auth
     - discovery
