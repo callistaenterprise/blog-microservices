@@ -9,23 +9,9 @@
     </encoder>
   </appender>
 
-  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
-    <file>${LOG_FILE}</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <fileNamePattern>${LOG_FILE}.%i</fileNamePattern>
-      <!-- keep log files for 7 days -->
-      <maxHistory>7</maxHistory>
-    </rollingPolicy>
-    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-      <MaxFileSize>10MB</MaxFileSize>
-    </triggeringPolicy>
-  </appender>
-
   <logger name="se.callista" level="INFO"/>
 
   <root level="INFO">
-    <appender-ref ref="FILE"/>
     <appender-ref ref="CONSOLE"/>
   </root>
 </included>
