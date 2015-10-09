@@ -9,13 +9,9 @@ cd microservices/composite/product-composite-service; ./gradlew clean build dist
 cd microservices/api/product-api-service;             ./gradlew clean build distDocker; cd -
 
 cd microservices/support/auth-server;                 ./gradlew clean build distDocker; cd -
-# cd microservices/support/config-server;               ./gradlew clean build distDocker; cd -
-cd microservices/support/config-server;               ./gradlew clean build; cd -
 cd microservices/support/discovery-server;            ./gradlew clean build distDocker; cd -
 cd microservices/support/edge-server;                 ./gradlew clean build distDocker; cd -
 cd microservices/support/monitor-dashboard;           ./gradlew clean build distDocker; cd -
 cd microservices/support/turbine;                     ./gradlew clean build distDocker; cd -
-
-cd webapp/ui;                                         mvn clean package; cd -
 
 find . -name *SNAPSHOT.jar -exec du -h {} \;
