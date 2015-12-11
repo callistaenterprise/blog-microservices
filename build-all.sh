@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 cd util;                                              ./gradlew clean publishToMavenLocal; cd -
 
 cd microservices/core/product-service;                ./gradlew clean publishToMavenLocal build distDocker; cd -
@@ -12,6 +14,8 @@ cd microservices/support/auth-server;                 ./gradlew clean build dist
 cd microservices/support/discovery-server;            ./gradlew clean build distDocker; cd -
 cd microservices/support/edge-server;                 ./gradlew clean build distDocker; cd -
 cd microservices/support/monitor-dashboard;           ./gradlew clean build distDocker; cd -
-cd microservices/support/turbine;                     ./gradlew clean build distDocker; cd -
+
+# FAILS ON: Could not resolve io.reactivex:rxjava:[1.0,1.1).
+# cd microservices/support/turbine;                     ./gradlew clean build distDocker; cd -
 
 find . -name *SNAPSHOT.jar -exec du -h {} \;

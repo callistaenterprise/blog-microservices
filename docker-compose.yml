@@ -15,7 +15,16 @@
 #  links:
 #    - discovery
 #  command: java -jar -Dspring.profiles.active=docker2 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
-  
+
+graphite:
+  image: hopsoft/graphite-statsd
+  restart: always
+  ports:
+    - "80:80"
+    - "2003:2003"
+    - "8125:8125/udp"
+    - "8126:8126"
+
 rabbitmq:
   image: rabbitmq:3-management
   restart: always
@@ -49,6 +58,7 @@ pro:
     - $PWD/logs:/logs
   links:
     - discovery
+    - graphite
 
 rec:
   image: callista/recommendation-service
@@ -57,6 +67,7 @@ rec:
     - $PWD/logs:/logs
   links:
     - discovery
+    - graphite
 
 rev:
   image: callista/review-service
@@ -65,6 +76,7 @@ rev:
     - $PWD/logs:/logs
   links:
     - discovery
+    - graphite
 
 composite:
   image: callista/product-composite-service
@@ -73,6 +85,7 @@ composite:
     - $PWD/logs:/logs
   links:
     - discovery
+    - graphite
     - rabbitmq
 
 api:
@@ -83,6 +96,7 @@ api:
   links:
     - auth
     - discovery
+    - graphite
     - rabbitmq
 
 monitor:

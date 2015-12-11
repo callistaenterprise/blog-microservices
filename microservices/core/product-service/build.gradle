@@ -12,6 +12,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.jfrog.bintray" version "0.4.1"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -45,6 +49,7 @@ mainClassName = 'se.callista.microservises.core.product.ProductServiceApplicatio
 
 repositories {
     mavenLocal()
+    jcenter()
     mavenCentral()
     maven {
         // Can't find spring-cloud-build in maven central...
@@ -60,6 +65,8 @@ dependencies {
     }
     compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile("io.dropwizard.metrics:metrics-core:3.1.0")
+    compile("com.readytalk:metrics3-statsd:4.1.0")
     compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.0.0.RELEASE")
     compile("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE")
 
