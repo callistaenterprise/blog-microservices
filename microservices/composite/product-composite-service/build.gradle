@@ -36,10 +36,6 @@ repositories {
     mavenLocal()
     jcenter()
     mavenCentral()
-    maven {
-        // Can't find spring-cloud-build in maven central...
-        url 'http://maven.springframework.org/release'
-    }
 }
 
 
