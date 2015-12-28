@@ -14,14 +14,38 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
-#deployment:
-#  hub:
-#    branch: master
-#    commands:
-#      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PWD
-#      - docker info
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PWD
+      - docker info
+
 ## Renaming the target-folder for the time being to be compliant with Shippable builds...
 #      - mv target buildoutput
 #      - docker build -t magnuslarsson/az-ip-api-server:master.$CIRCLE_BUILD_NUM .
 #      - mv buildoutput target
-#      - docker push magnuslarsson/az-ip-api-server:master.$CIRCLE_BUILD_NUM
+
+      - docker tag callista/auth-server               magnuslarsson/ms-blog-auth-server
+      - docker tag callista/discovery-server          magnuslarsson/ms-blog-discovery-server
+      - docker tag callista/edge-server               magnuslarsson/ms-blog-edge-server
+      - docker tag callista/monitor-dashboard         magnuslarsson/ms-blog-monitor-dashboard
+      - docker tag callista/turbine                   magnuslarsson/ms-blog-turbine
+
+      - docker tag callista/product-service           magnuslarsson/ms-blog-product-service
+      - docker tag callista/recommendation-service    magnuslarsson/ms-blog-recommendation-service
+      - docker tag callista/review-service            magnuslarsson/ms-blog-review-service
+      - docker tag callista/product-composite-service magnuslarsson/ms-blog-product-composite-service
+      - docker tag callista/product-api-service       magnuslarsson/ms-blog-product-api-service
+
+      - docker push magnuslarsson/ms-blog-auth-server:master.$CIRCLE_BUILD_NUM
+      - docker push magnuslarsson/ms-blog-discovery-server:master.$CIRCLE_BUILD_NUM
+      - docker push magnuslarsson/ms-blog-edge-server:master.$CIRCLE_BUILD_NUM
+      - docker push magnuslarsson/ms-blog-monitor-dashboard:master.$CIRCLE_BUILD_NUM
+      - docker push magnuslarsson/ms-blog-turbine:master.$CIRCLE_BUILD_NUM
+
+      - docker push magnuslarsson/ms-blog-product-service:master.$CIRCLE_BUILD_NUM
+      - docker push magnuslarsson/ms-blog-recommendation-service:master.$CIRCLE_BUILD_NUM
+      - docker push magnuslarsson/ms-blog-review-service:master.$CIRCLE_BUILD_NUM
+      - docker push magnuslarsson/ms-blog-product-composite-service:master.$CIRCLE_BUILD_NUM
+      - docker push magnuslarsson/ms-blog-product-api-service:master.$CIRCLE_BUILD_NUM
