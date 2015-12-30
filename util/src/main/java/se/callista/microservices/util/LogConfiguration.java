@@ -15,6 +15,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.Filter;
@@ -66,7 +67,7 @@ public class LogConfiguration {
     }
 
     @Bean
-    public RestTemplate restTemplateWithLogInterceptor() {
+    public RestOperations restTemplateWithLogInterceptor() {
         LOG.debug("Declare my restTemplate with a logInterceptor");
         RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
         restTemplate.getInterceptors().add(logInterceptor);

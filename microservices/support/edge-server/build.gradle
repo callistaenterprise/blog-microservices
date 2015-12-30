@@ -1,6 +1,7 @@
 buildscript {
      ext {
-          springBootVersion = '1.2.2.RELEASE'
+          springBootVersion = '1.3.1.RELEASE'
+          springCloudVersion = 'Brixton.M4'
      }
      repositories {
           mavenCentral()
@@ -8,7 +9,7 @@ buildscript {
      }
      dependencies {
           classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-          classpath 'se.transmode.gradle:gradle-docker:1.2'
+//          classpath 'se.transmode.gradle:gradle-docker:1.2'
      }
 }
 
@@ -16,7 +17,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'docker'
+//apply plugin: 'docker'
 
 jar {
      baseName = 'edge-server'
@@ -25,12 +26,13 @@ jar {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-group = 'callista'
-mainClassName = 'se.callista.microservises.support.edge.ZuulApplication'
+//group = 'callista'
+//mainClassName = 'se.callista.microservises.support.edge.ZuulApplication'
 
 repositories {
      mavenLocal()
      mavenCentral()
+     maven { url "https://repo.spring.io/milestone" }
 }
 
 dependencies {
@@ -39,24 +41,38 @@ dependencies {
      }
      compile("org.springframework.boot:spring-boot-starter-undertow")
      compile("org.springframework.boot:spring-boot-starter-actuator")
-     compile('org.springframework.cloud:spring-cloud-starter-zuul:1.0.0.RELEASE')
-     compile('org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE')
+
+     compile('org.springframework.cloud:spring-cloud-starter-zuul')
+     compile('org.springframework.cloud:spring-cloud-starter-eureka')
 
      compile("se.callista.microservises:util:0.0.1-SNAPSHOT")
 
      testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
-distDocker {
-     exposePort 8765
-     setEnvironment 'JAVA_OPTS', '-Dspring.profiles.active=docker'
+dependencyManagement {
+     imports {
+          mavenBom "org.springframework.cloud:spring-cloud-starter-parent:${springCloudVersion}"
+     }
 }
 
-docker {
-     maintainer = 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
-     baseImage = 'java:8'
+eclipse {
+     classpath {
+          containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+          containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+     }
 }
+
+//distDocker {
+//     exposePort 8765
+//     setEnvironment 'JAVA_OPTS', '-Dspring.profiles.active=docker'
+//}
+//
+//docker {
+//     maintainer = 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
+//     baseImage = 'java:8'
+//}
 
 task wrapper(type: Wrapper) {
-     gradleVersion = '2.3'
+     gradleVersion = '2.9'
 }

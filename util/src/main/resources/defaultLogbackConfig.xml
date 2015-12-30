@@ -14,8 +14,10 @@
     <file>${LOG_FILE}</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
       <fileNamePattern>${LOG_FILE}.%i</fileNamePattern>
-      <!-- keep log files for 7 days -->
+      <!-- keep log files for 7 days - ->
+      TODO: To be removed? What is the meaning of 7 days for a rolling file policy???
       <maxHistory>7</maxHistory>
+      -->
     </rollingPolicy>
     <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
       <MaxFileSize>10MB</MaxFileSize>

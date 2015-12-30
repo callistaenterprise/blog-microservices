@@ -1,8 +1,8 @@
 package se.callista.microservices.composite.product.model;
 
-import se.callista.microservises.core.product.model.Product;
-import se.callista.microservises.core.recommendation.model.Recommendation;
-import se.callista.microservises.core.review.model.Review;
+import se.callista.microservices.model.Product;
+import se.callista.microservices.model.Recommendation;
+import se.callista.microservices.model.Review;
 
 import java.util.List;
 import java.util.stream.Collectors;

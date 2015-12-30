@@ -1,6 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.2.RELEASE'
+        springBootVersion = '1.3.1.RELEASE'
+        springCloudVersion = 'Brixton.M4'
     }
     repositories {
         mavenCentral()
@@ -8,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath 'se.transmode.gradle:gradle-docker:1.2'
+//        classpath 'se.transmode.gradle:gradle-docker:1.2'
     }
 }
 
@@ -16,7 +17,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'docker'
+//apply plugin: 'docker'
 
 jar {
     baseName = 'auth-server'
@@ -25,11 +26,15 @@ jar {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-group = 'callista'
-mainClassName = 'demo.AuthserverApplication'
+//group = 'callista'
+
+//springBoot {
+//    mainClass = 'demo.AuthserverApplication'
+//}
 
 repositories {
     mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
 }
 
 dependencies {
@@ -38,28 +43,47 @@ dependencies {
     }
     compile("org.springframework.boot:spring-boot-starter-undertow")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.cloud:spring-cloud-starter-oauth2")
+    compile("org.springframework.cloud:spring-cloud-starter-security")
 
-    compile("org.springframework.security.oauth:spring-security-oauth2:2.0.6.RELEASE")
+    // TODO: Is this still required?
+    // compile("org.springframework.boot:spring-boot-starter-security")
+    // compile("org.springframework.security.oauth:spring-security-oauth2:2.0.6.RELEASE")
 
     testCompile("org.springframework.boot:spring-boot-starter-test") {
+        // TODO: Is this still required?
         exclude(module: 'commons-logging')
     }
+    // TODO: Is this still required?
     testCompile('org.apache.httpcomponents:httpclient:4.3.6') {
         exclude(module: 'commons-logging')
     }
 }
 
-distDocker {
-    exposePort 9999
-    setEnvironment 'JAVA_OPTS', '-Dspring.profiles.active=docker'
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-starter-parent:${springCloudVersion}"
+    }
 }
 
-docker {
-    maintainer = 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
-    baseImage = 'java:8'
+eclipse {
+    classpath {
+        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+    }
 }
+
+// TODO: Needs to be replaced!
+//distDocker {
+//    exposePort 9999
+//    setEnvironment 'JAVA_OPTS', '-Dspring.profiles.active=docker'
+//}
+//
+//docker {
+//    maintainer = 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
+//    baseImage = 'java:8'
+//}
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.9'
 }

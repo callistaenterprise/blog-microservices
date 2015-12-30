@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.callista.microservices.composite.product.model.ProductAggregated;
 import se.callista.microservices.util.ServiceUtils;
-import se.callista.microservises.core.product.model.Product;
-import se.callista.microservises.core.recommendation.model.Recommendation;
-import se.callista.microservises.core.review.model.Review;
+import se.callista.microservices.model.Product;
+import se.callista.microservices.model.Recommendation;
+import se.callista.microservices.model.Review;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;

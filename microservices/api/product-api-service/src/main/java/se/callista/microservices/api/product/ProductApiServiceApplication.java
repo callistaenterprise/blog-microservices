@@ -10,9 +10,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import se.callista.microservices.util.MDCHystrixConcurrencyStrategy;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -20,7 +20,7 @@ import javax.net.ssl.HttpsURLConnection;
 @SpringBootApplication
 @EnableCircuitBreaker
 @EnableDiscoveryClient
-@EnableOAuth2Resource
+@EnableResourceServer
 @ComponentScan({"se.callista.microservices.api.product", "se.callista.microservices.util"})
 public class ProductApiServiceApplication {
 

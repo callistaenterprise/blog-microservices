@@ -1,8 +1,8 @@
 package se.callista.microservices.composite.product;
 
-import com.codahale.metrics.MetricRegistry;
+//import com.codahale.metrics.MetricRegistry;
+//import com.readytalk.metrics.StatsDReporter;
 import com.netflix.hystrix.strategy.HystrixPlugins;
-import com.readytalk.metrics.StatsDReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -31,18 +31,18 @@ public class ProductCompositeServiceApplication {
     @Value("${app.rabbitmq.host:localhost}")
     String rabbitMqHost;
 
-    @Inject
-    MetricRegistry registry;
-
-    @PostConstruct
-    public void postInject() {
-        LOG.info("Register a StatsD Metrics Reporter");
-        StatsDReporter.forRegistry(registry)
-            .prefixedWith("composite-service")
-            .build("graphite", 8125)
-            .start(1, TimeUnit.SECONDS);
-        LOG.info("Registration of a StatsD Metrics Reporter done!");
-    }
+//    @Inject
+//    MetricRegistry registry;
+//
+//    @PostConstruct
+//    public void postInject() {
+//        LOG.info("Register a StatsD Metrics Reporter");
+//        StatsDReporter.forRegistry(registry)
+//            .prefixedWith("composite-service")
+//            .build("graphite", 8125)
+//            .start(1, TimeUnit.SECONDS);
+//        LOG.info("Registration of a StatsD Metrics Reporter done!");
+//    }
 
     @Bean
     public ConnectionFactory connectionFactory() {

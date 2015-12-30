@@ -4,7 +4,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.log4j.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestOperations;
 import se.callista.microservices.util.ServiceUtils;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import java.net.URI;
@@ -32,13 +33,14 @@ public class ProductApiService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductApiService.class);
 
-    @Autowired
+    @Inject
     ServiceUtils util;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    @Inject
+    @Qualifier("restTemplateWithLogInterceptor")
+    private RestOperations restTemplate;
 
-    @Autowired
+    @Inject
     private LoadBalancerClient loadBalancer;
 
     @RequestMapping("/{productId}")

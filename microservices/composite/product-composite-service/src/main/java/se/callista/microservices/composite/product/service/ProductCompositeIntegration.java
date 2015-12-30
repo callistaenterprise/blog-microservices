@@ -6,17 +6,18 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestOperations;
 import se.callista.microservices.util.ServiceUtils;
-import se.callista.microservises.core.product.model.Product;
-import se.callista.microservises.core.recommendation.model.Recommendation;
-import se.callista.microservises.core.review.model.Review;
+import se.callista.microservices.model.Product;
+import se.callista.microservices.model.Recommendation;
+import se.callista.microservices.model.Review;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -29,14 +30,16 @@ public class ProductCompositeIntegration {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeIntegration.class);
 
-    @Autowired
+    @Inject
     private LoadBalancerClient loadBalancer;
 
-    @Autowired
+    @Inject
     ServiceUtils util;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    @Inject
+    @Qualifier("restTemplateWithLogInterceptor")
+    private RestOperations restTemplate;
+
 
     // -------- //
     // PRODUCTS //

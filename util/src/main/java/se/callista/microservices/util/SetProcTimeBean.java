@@ -1,4 +1,4 @@
-package se.callista.microservises.core.recommendation.service.util;
+package se.callista.microservices.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,6 @@ public class SetProcTimeBean {
 
     public int calculateProcessingTime() {
         int processingTimeMs = minMs + (int) (Math.random() * (maxMs - minMs));
-        LOG.info("Response time interval: {} - {} ms.", minMs, maxMs);
         LOG.debug("Return calculated processing time: {} ms", processingTimeMs);
         return processingTimeMs;
     }
