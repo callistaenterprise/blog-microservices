@@ -13,7 +13,9 @@ server:
 logging:
   level:
     ROOT: WARN
-    org.springframework.web: WARN
+#    org.springframework.web: WARN
+    # Set INFO to see the allocated port
+    org.springframework.boot.context.embedded: INFO
 
 eureka:
   client:

@@ -41,7 +41,9 @@ zuul:
 logging:
   level:
     ROOT: WARN
-    org.springframework.web: WARN
+#    org.springframework.web: WARN
+    # Set INFO to see the allocated port
+    org.springframework.boot.context.embedded: INFO
     # Set DEBUG level on Hystrix to get an error message when a fallback method is used.
     com.netflix.hystrix: DEBUG
 

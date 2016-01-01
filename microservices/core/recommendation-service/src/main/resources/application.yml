@@ -22,6 +22,8 @@ eureka:
 logging:
   level:
     root: WARN
+    # Set INFO to see the allocated port
+    org.springframework.boot.context.embedded: INFO
     se.callista: INFO
 
 ---

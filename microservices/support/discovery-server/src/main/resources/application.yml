@@ -18,7 +18,9 @@ eureka:
 
 logging:
   level:
-    ROOT: WARN
+    root: WARN
+    # Set INFO to see the allocated port
+    org.springframework.boot.context.embedded: INFO
 
 ---
 spring:

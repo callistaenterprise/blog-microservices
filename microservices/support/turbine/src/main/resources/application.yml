@@ -20,6 +20,8 @@ logging:
     root: WARN
     com.netflix.discovery: 'OFF'
     # org.springframework.integration: DEBUG
+    # Set INFO to see the allocated port
+    org.springframework.boot.context.embedded: INFO
 
 eureka:
   instance:

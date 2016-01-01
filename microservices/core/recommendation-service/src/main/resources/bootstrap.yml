@@ -3,4 +3,9 @@ spring:
     name: recommendation
   cloud:
     config:
-      uri: ${vcap.services.${PREFIX:}configserver.credentials.uri:http://user:password@localhost:8888}
+      discovery:
+        enabled: false
+      uri: http://localhost:8888
+
+#eureka.client.serviceUrl.defaultZone: http://localhost:8761/eureka/
+

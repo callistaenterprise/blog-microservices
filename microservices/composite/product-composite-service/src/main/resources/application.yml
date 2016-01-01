@@ -56,6 +56,8 @@ logging:
   level:
     root: WARN
     se.callista: INFO
+    # Set INFO to see the allocated port
+    org.springframework.boot.context.embedded: INFO
     # Set DEBUG level on Hystrix to get an error message when a fallback method is used.
     com.netflix.hystrix: DEBUG
 ---

@@ -36,10 +36,12 @@ repositories {
 }
 
 dependencies {
-     compile("org.springframework.boot:spring-boot-starter-web") {
-          exclude module: 'spring-boot-starter-tomcat'
-     }
-     compile("org.springframework.boot:spring-boot-starter-undertow")
+     compile("org.springframework.boot:spring-boot-starter-web")
+// TODO: Running with undertow gives the following startup error with springCloudVersion = 'Brixton.M4'
+//     {
+//          exclude module: 'spring-boot-starter-tomcat'
+//     }
+//     compile("org.springframework.boot:spring-boot-starter-undertow")
      compile("org.springframework.boot:spring-boot-starter-actuator")
 
      compile('org.springframework.cloud:spring-cloud-starter-zuul')
