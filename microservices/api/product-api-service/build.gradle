@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-//        classpath 'se.transmode.gradle:gradle-docker:1.2'
+        classpath 'com.bmuschko:gradle-docker-plugin:2.6.3'
     }
 }
 
@@ -17,7 +17,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-//apply plugin: 'docker'
+apply plugin: 'com.bmuschko.docker-remote-api'
 
 jar {
     baseName = 'product-api-service'
@@ -25,15 +25,12 @@ jar {
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-//group = 'callista'
-//mainClassName = 'se.callista.microservices.api.product.ProductApiServiceApplication'
 
 repositories {
     mavenLocal()
     mavenCentral()
     maven { url "https://repo.spring.io/milestone" }
 }
-
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web") {
@@ -50,9 +47,6 @@ dependencies {
 
     compile("org.springframework.cloud:spring-cloud-netflix-hystrix-amqp:1.1.0.M4")
 
-    // TODO: Is this still required?
-    // compile("org.springframework.security.oauth:spring-security-oauth2:2.0.6.RELEASE")
-
     compile("org.apache.httpcomponents:httpclient:4.2.1")
     compile("org.apache.httpcomponents:fluent-hc:4.2.1")
 
@@ -67,23 +61,38 @@ dependencyManagement {
     }
 }
 
+docker {
+    url = 'https://192.168.99.100:2376'
+    certPath = new File(System.properties['user.home'], '.docker/machine/machines/ms')
+}
+
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+task createDockerfile(type: Dockerfile) {
+    destFile = project.file('build/Dockerfile')
+    from 'java:8'
+    maintainer 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
+    exposePort 8080
+    copyFile "libs/${jar.baseName}-${jar.version}.jar", "${jar.baseName}-${jar.version}.jar"
+    copyFile 'resources/main/truststore.jks', 'truststore.jks'
+
+    // Regarding settings of java.security.egd, see http://wiki.apache.org/tomcat/HowTo/FasterStartUp#Entropy_Source
+    entryPoint 'java','-Dspring.profiles.active=docker','-Djavax.net.ssl.trustStore=truststore.jks','-Djavax.net.ssl.trustStorePassword=password','-Djava.security.egd=file:/dev/./urandom','-jar',"${jar.baseName}-${jar.version}.jar"
+}
+
+task buildDockerImage(type: DockerBuildImage) {
+    dependsOn createDockerfile
+    inputDir = createDockerfile.destFile.parentFile
+    tag = "magnuslarsson/ms-blog-${jar.baseName}"
+}
+
 eclipse {
     classpath {
         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
     }
 }
-
-//distDocker {
-//    exposePort 8080
-//    addFile 'src/main/resources/truststore.jks', 'truststore.jks'
-//    setEnvironment 'JAVA_OPTS', '-Dspring.profiles.active=docker -Djavax.net.ssl.trustStore=truststore.jks -Djavax.net.ssl.trustStorePassword=password'
-//}
-//
-//docker {
-//    maintainer = 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
-//    baseImage = 'java:8'
-//}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.9'
