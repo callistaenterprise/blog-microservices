@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import se.callista.microservices.model.Recommendation;
 import se.callista.microservices.util.SetProcTimeBean;
-import se.callista.microservises.core.recommendation.model.Recommendation;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
