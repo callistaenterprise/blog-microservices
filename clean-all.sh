@@ -9,6 +9,7 @@ cd microservices/composite/product-composite-service; ./gradlew clean; cd -
 cd microservices/api/product-api-service;             ./gradlew clean; cd -
 
 cd microservices/support/auth-server;                 ./gradlew clean; cd -
+cd microservices/support/config-server;               ./gradlew clean; cd -
 cd microservices/support/discovery-server;            ./gradlew clean; cd -
 cd microservices/support/edge-server;                 ./gradlew clean; cd -
 cd microservices/support/monitor-dashboard;           ./gradlew clean; cd -

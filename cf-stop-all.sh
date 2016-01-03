@@ -2,6 +2,7 @@
 
 cf stop auth-server
 cf stop discovery-server
+cf stop config-server
 cf stop edge-server
 cf stop monitor-dashboard
 cf stop product-api-service
