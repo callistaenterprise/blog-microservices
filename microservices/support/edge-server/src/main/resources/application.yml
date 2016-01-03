@@ -13,6 +13,27 @@ spring:
     resource:
       userInfoUri: https://localhost:9999/uaa/user
 
+hystrix:
+  threadpool:
+    default:
+      # Maximum number of concurrent requests when using thread pools (Default: 10)
+      coreSize: 100
+      # Maximum LinkedBlockingQueue size - -1 for using SynchronousQueue (Default: -1)
+      maxQueueSize: -1
+      # Queue size rejection threshold (Default: 5)
+      queueSizeRejectionThreshold: 5
+  command:
+    default:
+      circuitBreaker:
+        sleepWindowInMilliseconds: 30000
+        requestVolumeThreshold: 2
+      execution:
+        isolation:
+#          strategy: SEMAPHORE, no thread pool but timeout handling stops to work
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 10000
+
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 3
@@ -42,6 +63,9 @@ logging:
   level:
     ROOT: WARN
 #    org.springframework.web: WARN
+    # Get info regarding connection to the cofig server and retries if required
+    org.springframework.cloud.config.client.ConfigServicePropertySourceLocator: INFO
+    org.springframework.retry.support.RetryTemplate: DEBUG
     # Set INFO to see the allocated port
     org.springframework.boot.context.embedded: INFO
     # Set DEBUG level on Hystrix to get an error message when a fallback method is used.

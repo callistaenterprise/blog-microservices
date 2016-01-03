@@ -1,0 +1,32 @@
+server.port: 8888
+
+#spring.cloud.config.server.git.uri: ${HOME}/Desktop/config-repo
+spring.cloud.config.server.git.uri: https://github.com/callistaenterprise/blog-microservices-config.git
+
+eureka.client.serviceUrl.defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    root: WARN
+    com.example: INFO
+    org.springframework.amqp.rabbit.listener.BlockingQueueConsumer: INFO
+    org.apache.catalina.session.ManagerBase: INFO
+    # Set INFO to see the allocated port
+    org.springframework.boot.context.embedded: INFO
+
+---
+# For deployment in Docker containers
+spring:
+  profiles: docker
+
+app:
+  rabbitmq:
+    host: rabbitmq
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/
+

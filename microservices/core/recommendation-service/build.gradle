@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-//        classpath 'se.transmode.gradle:gradle-docker:1.2'
+        classpath 'com.bmuschko:gradle-docker-plugin:2.6.3'
     }
 }
 
@@ -21,33 +21,15 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'maven-publish'
-//apply plugin: 'docker'
+apply plugin: 'com.bmuschko.docker-remote-api'
 
 jar {
     baseName = 'recommendation-service'
     version = '0.0.1-SNAPSHOT'
 }
 
-// TODO: Is this still required?
-// $ gradle publishToMavenLocal
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            // TODO: Where to place these properties?
-            groupId 'se.callista.microservises.core.recommendation'
-            artifactId 'recommendation-service'
-            version '0.0.1-SNAPSHOT'
-
-            from components.java
-        }
-    }
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-//group = 'callista'
-//mainClassName = 'se.callista.microservises.core.recommendation.RecommendationServiceApplication'
 
 repositories {
     mavenLocal()
@@ -57,13 +39,11 @@ repositories {
 }
 
 dependencies {
-    // TODO: Is this still required?
-    // TODO: Added ver no on the three core starter deps to make the maven plugin to work
-    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
+    compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: 'spring-boot-starter-tomcat'
     }
-    compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
-    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-undertow")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
 
     compile("org.springframework.cloud:spring-cloud-starter-hystrix")
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
@@ -84,22 +64,39 @@ dependencyManagement {
     }
 }
 
+def dockerPort = 8080
+
+docker {
+    url = 'https://192.168.99.100:2376'
+    certPath = new File(System.properties['user.home'], '.docker/machine/machines/ms')
+}
+
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+task createDockerfile(type: Dockerfile) {
+    destFile = project.file('build/Dockerfile')
+    from 'java:8'
+    maintainer 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
+    exposePort dockerPort
+    copyFile "libs/${jar.baseName}-${jar.version}.jar", "${jar.baseName}-${jar.version}.jar"
+
+    // Regarding settings of java.security.egd, see http://wiki.apache.org/tomcat/HowTo/FasterStartUp#Entropy_Source
+    entryPoint 'java','-Dspring.profiles.active=docker','-Djava.security.egd=file:/dev/./urandom','-jar',"${jar.baseName}-${jar.version}.jar"
+}
+
+task buildDockerImage(type: DockerBuildImage) {
+    dependsOn createDockerfile
+    inputDir = createDockerfile.destFile.parentFile
+    tag = "magnuslarsson/ms-blog-${jar.baseName}"
+}
+
 eclipse {
     classpath {
         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
     }
 }
-
-//distDocker {
-//    exposePort 8080
-//    setEnvironment 'JAVA_OPTS', '-Dspring.profiles.active=docker'
-//}
-//
-//docker {
-//    maintainer = 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
-//    baseImage = 'java:8'
-//}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.9'

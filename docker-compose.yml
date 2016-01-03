@@ -33,86 +33,107 @@ rabbitmq:
     - "15672:15672"
 
 discovery:
-  image: callista/discovery-server
+  image: magnuslarsson/ms-blog-discovery-server
   restart: always
   ports:
     - "8761:8761"
 
+config:
+  image: magnuslarsson/ms-blog-config-server
+  restart: always
+  ports:
+    - "8888:8888"
+  links:
+    - discovery
+    - rabbitmq
+
 auth:
-  image: callista/auth-server
+  image: magnuslarsson/ms-blog-auth-server
   restart: always
   ports:
     - "9999:9999"
   
 #turbine:
-#  image: callista/turbine
+#  image: magnuslarsson/ms-blog-turbine
 ##  volumes:
 ##    - $PWD/logs:/logs
 #  links:
 #    - rabbitmq
+#    - config
+
   
 pro:
-  image: callista/product-service
+  image: magnuslarsson/ms-blog-product-service
   restart: always
   volumes:
     - $PWD/logs:/logs
   links:
     - discovery
+    - config
+    - rabbitmq
     - graphite
 
 rec:
-  image: callista/recommendation-service
+  image: magnuslarsson/ms-blog-recommendation-service
   restart: always
   volumes:
     - $PWD/logs:/logs
   links:
     - discovery
+    - config
+    - rabbitmq
     - graphite
 
 rev:
-  image: callista/review-service
+  image: magnuslarsson/ms-blog-review-service
   restart: always
   volumes:
     - $PWD/logs:/logs
   links:
     - discovery
+    - config
+    - rabbitmq
     - graphite
 
 composite:
-  image: callista/product-composite-service
+  image: magnuslarsson/ms-blog-product-composite-service
   restart: always
   volumes:
     - $PWD/logs:/logs
   links:
     - discovery
-    - graphite
+    - config
     - rabbitmq
+    - graphite
 
 api:
-  image: callista/product-api-service
+  image: magnuslarsson/ms-blog-product-api-service
   restart: always
   volumes:
     - $PWD/logs:/logs
   links:
     - auth
+    - config
     - discovery
-    - graphite
     - rabbitmq
+    - graphite
 
 monitor:
-  image: callista/monitor-dashboard
+  image: magnuslarsson/ms-blog-monitor-dashboard
   restart: always
   ports:
     - "7979:7979"
   links:
+    - config
     - api
     - composite
 
 edge:
-  image: callista/edge-server
+  image: magnuslarsson/ms-blog-edge-server
   restart: always
   ports:
     - "443:8765"
   links:
     - discovery
+    - config
     - api

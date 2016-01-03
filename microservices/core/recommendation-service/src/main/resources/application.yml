@@ -22,6 +22,9 @@ eureka:
 logging:
   level:
     root: WARN
+    # Get info regarding connection to the cofig server and retries if required
+    org.springframework.cloud.config.client.ConfigServicePropertySourceLocator: INFO
+    org.springframework.retry.support.RetryTemplate: DEBUG
     # Set INFO to see the allocated port
     org.springframework.boot.context.embedded: INFO
     se.callista: INFO
@@ -34,6 +37,10 @@ spring:
 server:
   port: 8080
 
+app:
+  rabbitmq:
+    host: rabbitmq
+
 eureka:
   instance:
     preferIpAddress: true
@@ -45,6 +52,10 @@ eureka:
 # For deployment in Cloud Foundry
 spring:
   profiles: cloud
+
+app:
+  rabbitmq:
+    host: rabbitmq
 
 eureka:
   instance:

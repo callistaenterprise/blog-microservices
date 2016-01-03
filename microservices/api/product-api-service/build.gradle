@@ -61,6 +61,8 @@ dependencyManagement {
     }
 }
 
+def dockerPort = 8080
+
 docker {
     url = 'https://192.168.99.100:2376'
     certPath = new File(System.properties['user.home'], '.docker/machine/machines/ms')
@@ -73,7 +75,7 @@ task createDockerfile(type: Dockerfile) {
     destFile = project.file('build/Dockerfile')
     from 'java:8'
     maintainer 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
-    exposePort 8080
+    exposePort dockerPort
     copyFile "libs/${jar.baseName}-${jar.version}.jar", "${jar.baseName}-${jar.version}.jar"
     copyFile 'resources/main/truststore.jks', 'truststore.jks'
 
