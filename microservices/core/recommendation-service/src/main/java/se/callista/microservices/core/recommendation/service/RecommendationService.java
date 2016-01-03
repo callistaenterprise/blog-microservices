@@ -1,17 +1,18 @@
-package se.callista.microservises.core.product.service;
+package se.callista.microservices.core.recommendation.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import se.callista.microservices.model.Product;
+import se.callista.microservices.model.Recommendation;
 import se.callista.microservices.util.SetProcTimeBean;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -21,29 +22,46 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Produces(APPLICATION_JSON)
 @Consumes(APPLICATION_JSON)
 @RestController
-public class ProductService {
+public class RecommendationService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProductService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RecommendationService.class);
 
     @Autowired
     private SetProcTimeBean setProcTimeBean;
 
+    /*
+    private int port;
+
+    @Value("local.server.port")
+    public void setPort (int port) {
+        LOG.info("getReviews will be called on port: {}", port);
+        this.port = port;
+    }
+    */
+
     /**
-     * Sample usage: curl $HOST:$PORT/product/1
+     * Sample usage: curl $HOST:$PORT/recommendation?productId=1
      *
      * @param productId
      * @return
      */
-    @RequestMapping("/product/{productId}")
-    public Product getProduct(@PathVariable int productId) {
-        LOG.info("/product called");
+    @RequestMapping("/recommendation")
+    public List<Recommendation> getRecommendations(
+            @RequestParam(value = "productId",  required = true) int productId) {
 
         int pt = setProcTimeBean.calculateProcessingTime();
-        LOG.info("/product called, processing time: {}", pt);
+        LOG.info("/recommendation called, processing time: {}", pt);
 
         sleep(pt);
 
-        return new Product(productId, "name", 123);
+        List<Recommendation> list = new ArrayList<>();
+        list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1"));
+        list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2"));
+        list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3"));
+
+        LOG.info("/recommendation response size: {}", list.size());
+
+        return list;
     }
 
     private void sleep(int pt) {
@@ -64,8 +82,8 @@ public class ProductService {
      */
     @RequestMapping("/set-processing-time")
     public void setProcessingTime(
-            @RequestParam(value = "minMs", required = true) int minMs,
-            @RequestParam(value = "maxMs", required = true) int maxMs) {
+        @RequestParam(value = "minMs", required = true) int minMs,
+        @RequestParam(value = "maxMs", required = true) int maxMs) {
 
         LOG.info("/set-processing-time called: {} - {} ms", minMs, maxMs);
 

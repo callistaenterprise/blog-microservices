@@ -1,4 +1,4 @@
-package se.callista.microservises.core.review;
+package se.callista.microservices.core.review;
 
 //import com.codahale.metrics.MetricRegistry;
 //import com.readytalk.metrics.StatsDReporter;
@@ -12,10 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 @EnableDiscoveryClient

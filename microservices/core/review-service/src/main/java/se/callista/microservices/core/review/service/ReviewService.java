@@ -1,4 +1,4 @@
-package se.callista.microservises.core.review.service;
+package se.callista.microservices.core.review.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
