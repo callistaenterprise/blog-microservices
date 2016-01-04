@@ -76,8 +76,9 @@ docker {
     certPath = new File(System.properties['user.home'], '.docker/machine/machines/ms')
 }
 
-import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 
 task createDockerfile(type: Dockerfile) {
     destFile = project.file('build/Dockerfile')

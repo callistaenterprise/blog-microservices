@@ -2,6 +2,7 @@ package se.callista.microservices.composite.product;
 
 //import com.codahale.metrics.MetricRegistry;
 //import com.readytalk.metrics.StatsDReporter;
+
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +16,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import se.callista.microservices.util.MDCHystrixConcurrencyStrategy;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 @EnableCircuitBreaker

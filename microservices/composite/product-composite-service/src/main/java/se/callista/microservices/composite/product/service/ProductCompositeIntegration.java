@@ -12,10 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
-import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservices.model.Product;
 import se.callista.microservices.model.Recommendation;
 import se.callista.microservices.model.Review;
+import se.callista.microservices.util.ServiceUtils;
 
 import javax.inject.Inject;
 import java.io.IOException;
