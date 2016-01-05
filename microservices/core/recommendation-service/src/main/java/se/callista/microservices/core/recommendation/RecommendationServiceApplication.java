@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan({"se.callista.microservises.core.recommendation", "se.callista.microservices.util"})
+@ComponentScan({"se.callista.microservices.core.recommendation", "se.callista.microservices.util"})
 public class RecommendationServiceApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(RecommendationServiceApplication.class);
