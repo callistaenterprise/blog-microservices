@@ -19,7 +19,6 @@ import se.callista.microservices.util.ServiceUtils;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 
 /**
@@ -37,7 +36,7 @@ public class ProductCompositeIntegration {
     ServiceUtils util;
 
     @Inject
-    @Qualifier("restTemplateWithLogInterceptor")
+    @Qualifier("loadBalancedRestTemplate")
     private RestOperations restTemplate;
 
 
@@ -50,9 +49,7 @@ public class ProductCompositeIntegration {
 
         LOG.debug("Will call getProduct with Hystrix protection");
 
-        URI uri = util.getServiceUrl("product");
-
-        String url = uri.toString() + "/product/" + productId;
+        String url = "http://product-service/product/" + productId;
         LOG.debug("GetProduct from URL: {}", url);
 
         ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
@@ -85,9 +82,7 @@ public class ProductCompositeIntegration {
         try {
             LOG.info("GetRecommendations...");
 
-            URI uri = util.getServiceUrl("recommendation");
-
-            String url = uri.toString() + "/recommendation?productId=" + productId;
+            String url = "http://recommendation-service/recommendation?productId=" + productId;
             LOG.debug("GetRecommendations from URL: {}", url);
 
             ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
@@ -101,7 +96,6 @@ public class ProductCompositeIntegration {
         } catch (Throwable t) {
             LOG.error("getRecommendations error", t);
             throw t;
-//            throw new RuntimeException(t);
         }
     }
 
@@ -126,9 +120,7 @@ public class ProductCompositeIntegration {
     public ResponseEntity<List<Review>> getReviews(int productId) {
         LOG.info("GetReviews...");
 
-        URI uri = util.getServiceUrl("review");
-
-        String url = uri.toString() + "/review?productId=" + productId;
+        String url = "http://review-service/review?productId=" + productId;
         LOG.debug("GetReviews from URL: {}", url);
 
         ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);

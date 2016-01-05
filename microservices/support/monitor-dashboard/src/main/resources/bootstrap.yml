@@ -1,6 +1,6 @@
 spring:
   application:
-    name: hystrixdashboard
+    name: hystrix-dashboard
   cloud:
     config:
       failFast: true

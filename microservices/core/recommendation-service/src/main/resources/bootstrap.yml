@@ -1,6 +1,6 @@
 spring:
   application:
-    name: recommendation
+    name: recommendation-service
   cloud:
     config:
       failFast: true
