@@ -80,7 +80,7 @@ public class ProductCompositeIntegration {
     @HystrixCommand(fallbackMethod = "defaultRecommendations")
     public ResponseEntity<List<Recommendation>> getRecommendations(int productId) {
         try {
-            LOG.info("GetRecommendations...");
+            LOG.debug("Will call getRecommendations with Hystrix protection");
 
             String url = "http://recommendation-service/recommendation?productId=" + productId;
             LOG.debug("GetRecommendations from URL: {}", url);
@@ -118,7 +118,7 @@ public class ProductCompositeIntegration {
 
     @HystrixCommand(fallbackMethod = "defaultReviews")
     public ResponseEntity<List<Review>> getReviews(int productId) {
-        LOG.info("GetReviews...");
+        LOG.debug("Will call getReviews with Hystrix protection");
 
         String url = "http://review-service/review?productId=" + productId;
         LOG.debug("GetReviews from URL: {}", url);

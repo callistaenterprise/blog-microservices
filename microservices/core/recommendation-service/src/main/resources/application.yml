@@ -19,16 +19,6 @@ eureka:
     instanceInfoReplicationIntervalSeconds: 5
     initialInstanceInfoReplicationIntervalSeconds: 5
 
-logging:
-  level:
-    root: WARN
-    # Get info regarding connection to the cofig server and retries if required
-    org.springframework.cloud.config.client.ConfigServicePropertySourceLocator: INFO
-    org.springframework.retry.support.RetryTemplate: DEBUG
-    # Set INFO to see the allocated port
-    org.springframework.boot.context.embedded: INFO
-    se.callista: INFO
-
 ---
 # For deployment in Docker containers
 spring:

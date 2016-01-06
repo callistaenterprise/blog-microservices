@@ -19,8 +19,10 @@ eureka:
 logging:
   level:
     root: WARN
+
     # Set INFO to see the allocated port
-    org.springframework.boot.context.embedded: INFO
+    org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer=INFO
+    org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainer=INFO
 
 ---
 spring:

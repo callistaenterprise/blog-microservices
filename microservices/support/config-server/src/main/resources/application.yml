@@ -8,11 +8,15 @@ eureka.client.serviceUrl.defaultZone: http://localhost:8761/eureka/
 logging:
   level:
     root: WARN
-    com.example: INFO
+    se.callista: INFO
+
     org.springframework.amqp.rabbit.listener.BlockingQueueConsumer: INFO
     org.apache.catalina.session.ManagerBase: INFO
+
     # Set INFO to see the allocated port
-    org.springframework.boot.context.embedded: INFO
+    org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer=INFO
+    org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainer=INFO
+
 
 ---
 # For deployment in Docker containers

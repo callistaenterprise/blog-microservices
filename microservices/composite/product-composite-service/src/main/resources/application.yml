@@ -52,17 +52,6 @@ eureka:
 #  ribbon:
 #    ServerListRefreshInterval: 1000
 
-logging:
-  level:
-    root: WARN
-    se.callista: INFO
-    # Get info regarding connection to the cofig server and retries if required
-    org.springframework.cloud.config.client.ConfigServicePropertySourceLocator: INFO
-    org.springframework.retry.support.RetryTemplate: DEBUG
-    # Set INFO to see the allocated port
-    org.springframework.boot.context.embedded: INFO
-    # Set DEBUG level on Hystrix to get an error message when a fallback method is used.
-    com.netflix.hystrix: DEBUG
 ---
 # For deployment in Docker containers
 spring:
