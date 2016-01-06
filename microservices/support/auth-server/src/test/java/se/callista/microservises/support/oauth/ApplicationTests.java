@@ -1,4 +1,4 @@
-package demo;
+package se.callista.microservises.support.oauth;
 
 import org.junit.Ignore;
 import org.junit.Test;
