@@ -16,6 +16,36 @@
 #    - discovery
 #  command: java -jar -Dspring.profiles.active=docker2 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
 
+
+
+#    docker run -it -d --restart=always --name elastic elasticsearch
+#    docker run -it -d --restart=always --name kibana --link elastic:elasticsearch -p 5601:5601 kibana
+#    docker run -it -d --restart=always --name logstash -v $PWD/logstash:/config -v $PWD/logs:/logs --link elastic:elastic logstash logstash -f /config/logevent-docker-2.conf
+
+# docker stop 5c7d3eb0a239 3f9dc950137b 863faef13f4a def151f15fc9
+
+#elasticsearch:
+#  image: elasticsearch
+#  restart: always
+#
+#kibana:
+#  image: kibana
+#  restart: always
+#  ports:
+#    - "5601:5601"
+#  links:
+#    - elasticsearch
+#
+#logstash:
+#  image: logstash
+#  restart: always
+#  links:
+#    - elasticsearch
+#  volumes:
+#    - $PWD/logstash:/config
+#    - $PWD/logs:/logs
+#  command: logstash -f /config/logevent-docker-2.conf
+
 graphite:
   image: hopsoft/graphite-statsd
   restart: always
@@ -52,7 +82,7 @@ auth:
   restart: always
   ports:
     - "9999:9999"
-  
+
 #turbine:
 #  image: magnuslarsson/ms-blog-turbine
 ##  volumes:
@@ -61,7 +91,7 @@ auth:
 #    - rabbitmq
 #    - config
 
-  
+
 pro:
   image: magnuslarsson/ms-blog-product-service
   restart: always
