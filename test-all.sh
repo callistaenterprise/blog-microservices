@@ -10,7 +10,7 @@ function testUrl() {
           echo "Ok"
           return 0
     else
-          echo "Fail"
+          echo -n "Fail"
           return 1
     fi;
 }
@@ -47,9 +47,12 @@ function waitForServices() {
     waitForService $host:8761/eureka/apps/productapi
 }
 
-echo "Restarting the test environment..."
-docker-compose stop
-docker-compose up -d
+if [[ $@ != *"skip-start"* ]]
+then
+    echo "Restarting the test environment..."
+    docker-compose stop
+    docker-compose up -d
+fi
 
 waitForServices
 
@@ -60,9 +63,12 @@ echo "Got: $TOKEN"
 echo -n "Tries to call the API with the Access Token... "
 curl 'https://docker.me/api/product/123'   -H  "Authorization: Bearer $TOKEN" -ks | jq .
 
-echo "We are done stopping the test environment..."
-docker-compose stop
-docker-compose rm -f
+if [[ $@ != *"skip-stop"* ]]
+then
+    echo "We are done, stopping the test environment..."
+    docker-compose stop
+    docker-compose rm -f
+fi
 
 
 
