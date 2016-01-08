@@ -52,11 +52,16 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
     compile("org.springframework.cloud:spring-cloud-starter-config")
     compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
+    compile("org.springframework.cloud:spring-cloud-starter-oauth2")
+    compile("org.springframework.cloud:spring-cloud-starter-security")
 
     compile("org.springframework.cloud:spring-cloud-netflix-hystrix-amqp:1.1.0.M4")
 
     compile("io.dropwizard.metrics:metrics-core:3.1.0")
     compile("com.readytalk:metrics3-statsd:4.1.0")
+
+    compile("org.apache.httpcomponents:httpclient:4.2.1")
+    compile("org.apache.httpcomponents:fluent-hc:4.2.1")
 
     compile("se.callista.microservises:util:0.0.1-SNAPSHOT")
 

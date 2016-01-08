@@ -14,19 +14,28 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import se.callista.microservices.util.MDCHystrixConcurrencyStrategy;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.net.ssl.HttpsURLConnection;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 @EnableCircuitBreaker
 @EnableDiscoveryClient
+@EnableResourceServer
 @ComponentScan({"se.callista.microservices.composite.product", "se.callista.microservices.util"})
 public class ProductCompositeServiceApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceApplication.class);
+
+    static {
+        // for localhost testing only
+        LOG.warn("Will now disable hostname check in SSL, only to be used during development");
+        HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> true);
+    }
 
     @Value("${app.rabbitmq.host:localhost}")
     String rabbitMqHost;
