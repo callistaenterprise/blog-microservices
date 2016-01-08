@@ -6,9 +6,12 @@ machine:
 
 dependencies:
   post:
+    - whoami
+    - find ~ -name certs
+    - find / -name certs
     - pwd
     - ls -al
-    - ./build-all.sh
+    - #./build-all.sh
 
 # According to https://circleci.com/docs/test-metadata
 test:
