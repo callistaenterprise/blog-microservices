@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+#
+# Sample use of overriding parameters:
+#
+# $ host=localhost ./test-all.sh
+#
+: ${host=docker.me}
 
 set -e
 
@@ -35,7 +41,6 @@ function waitForService() {
 }
 
 function waitForServices() {
-    host=docker.me
     waitForService $host:8761
     waitForService $host:8761/eureka/apps/configserver
     waitForService $host:8761/eureka/apps/edge-server
