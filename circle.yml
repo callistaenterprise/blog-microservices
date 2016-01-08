@@ -4,14 +4,16 @@ machine:
   services:
     - docker
 
+# curl --insecure --cert ~/.docker/machine/machines/ms/cert.pem --key ~/.docker/machine/machines/ms/key.pem https://docker.me:2376/images/json | jq .
 dependencies:
   post:
+    - pwd
+    - ls -al
+    - curl -iv http://localhost:2376/images/json
     - whoami
     - find ~ -name certs
     - find / -name certs
-    - pwd
-    - ls -al
-    - #./build-all.sh
+    - ./build-all.sh
 
 # According to https://circleci.com/docs/test-metadata
 test:
