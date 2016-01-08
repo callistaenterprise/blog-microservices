@@ -27,6 +27,7 @@ deployment:
 #      - mv buildoutput target
 
       - docker tag callista/auth-server               magnuslarsson/ms-blog-auth-server:master.$CIRCLE_BUILD_NUM
+      - docker tag callista/config-server             magnuslarsson/ms-blog-config-server:master.$CIRCLE_BUILD_NUM
       - docker tag callista/discovery-server          magnuslarsson/ms-blog-discovery-server:master.$CIRCLE_BUILD_NUM
       - docker tag callista/edge-server               magnuslarsson/ms-blog-edge-server:master.$CIRCLE_BUILD_NUM
       - docker tag callista/monitor-dashboard         magnuslarsson/ms-blog-monitor-dashboard:master.$CIRCLE_BUILD_NUM
@@ -36,9 +37,9 @@ deployment:
       - docker tag callista/recommendation-service    magnuslarsson/ms-blog-recommendation-service:master.$CIRCLE_BUILD_NUM
       - docker tag callista/review-service            magnuslarsson/ms-blog-review-service:master.$CIRCLE_BUILD_NUM
       - docker tag callista/product-composite-service magnuslarsson/ms-blog-product-composite-service:master.$CIRCLE_BUILD_NUM
-      - docker tag callista/product-api-service       magnuslarsson/ms-blog-product-api-service:master.$CIRCLE_BUILD_NUM
 
       - docker push magnuslarsson/ms-blog-auth-server:master.$CIRCLE_BUILD_NUM
+      - docker push magnuslarsson/ms-blog-config-server:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-discovery-server:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-edge-server:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-monitor-dashboard:master.$CIRCLE_BUILD_NUM
@@ -48,4 +49,3 @@ deployment:
       - docker push magnuslarsson/ms-blog-recommendation-service:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-review-service:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-product-composite-service:master.$CIRCLE_BUILD_NUM
-      - docker push magnuslarsson/ms-blog-product-api-service:master.$CIRCLE_BUILD_NUM

@@ -8,7 +8,6 @@ cd microservices/core/product-service;                ./gradlew dependencies --c
 cd microservices/core/recommendation-service;         ./gradlew dependencies --configuration compile; cd -
 cd microservices/core/review-service;                 ./gradlew dependencies --configuration compile; cd -
 cd microservices/composite/product-composite-service; ./gradlew dependencies --configuration compile; cd -
-cd microservices/api/product-api-service;             ./gradlew dependencies --configuration compile; cd -
 
 cd microservices/support/auth-server;                 ./gradlew dependencies --configuration compile; cd -
 cd microservices/support/config-server;               ./gradlew dependencies --configuration compile; cd -

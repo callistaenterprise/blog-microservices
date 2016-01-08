@@ -91,9 +91,10 @@ task createDockerfile(type: Dockerfile) {
     maintainer 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
     exposePort dockerPort
     copyFile "libs/${jar.baseName}-${jar.version}.jar", "${jar.baseName}-${jar.version}.jar"
+    copyFile 'resources/main/truststore.jks', 'truststore.jks'
 
     // Regarding settings of java.security.egd, see http://wiki.apache.org/tomcat/HowTo/FasterStartUp#Entropy_Source
-    entryPoint 'java','-Dspring.profiles.active=docker','-Djava.security.egd=file:/dev/./urandom','-jar',"${jar.baseName}-${jar.version}.jar"
+    entryPoint 'java','-Dspring.profiles.active=docker','-Djavax.net.ssl.trustStore=truststore.jks','-Djavax.net.ssl.trustStorePassword=password','-Djava.security.egd=file:/dev/./urandom','-jar',"${jar.baseName}-${jar.version}.jar"
 }
 
 task buildDockerImage(type: DockerBuildImage) {

@@ -46,7 +46,7 @@
 #    - $PWD/logs:/logs
 #  command: logstash -f /config/logevent-docker-2.conf
 
-graphite:
+statsd:
   image: hopsoft/graphite-statsd
   restart: always
   ports:
@@ -101,7 +101,7 @@ pro:
     - discovery
     - config
     - rabbitmq
-    - graphite
+    - statsd
 
 rec:
   image: magnuslarsson/ms-blog-recommendation-service
@@ -112,7 +112,7 @@ rec:
     - discovery
     - config
     - rabbitmq
-    - graphite
+    - statsd
 
 rev:
   image: magnuslarsson/ms-blog-review-service
@@ -123,7 +123,7 @@ rev:
     - discovery
     - config
     - rabbitmq
-    - graphite
+    - statsd
 
 composite:
   image: magnuslarsson/ms-blog-product-composite-service
@@ -131,22 +131,23 @@ composite:
   volumes:
     - $PWD/logs:/logs
   links:
-    - discovery
-    - config
-    - rabbitmq
-    - graphite
-
-api:
-  image: magnuslarsson/ms-blog-product-api-service
-  restart: always
-  volumes:
-    - $PWD/logs:/logs
-  links:
     - auth
-    - config
     - discovery
+    - config
     - rabbitmq
-    - graphite
+    - statsd
+
+#api:
+#  image: magnuslarsson/ms-blog-product-api-service
+#  restart: always
+#  volumes:
+#    - $PWD/logs:/logs
+#  links:
+#    - auth
+#    - config
+#    - discovery
+#    - rabbitmq
+#    - statsd
 
 monitor:
   image: magnuslarsson/ms-blog-monitor-dashboard
@@ -155,7 +156,6 @@ monitor:
     - "7979:7979"
   links:
     - config
-    - api
     - composite
 
 edge:
@@ -166,4 +166,4 @@ edge:
   links:
     - discovery
     - config
-    - api
+    - composite

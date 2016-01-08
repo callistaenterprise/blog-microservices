@@ -4,13 +4,12 @@ set -e
 
 function testUrl() {
     url=$@
-    echo -n "Is Up: $url ? "
     if curl $url -s -f -o /dev/null
     then
           echo "Ok"
           return 0
     else
-          echo -n "Fail"
+          echo -n "fail"
           return 1
     fi;
 }
@@ -18,18 +17,18 @@ function testUrl() {
 function waitForService() {
 
     url=$@
+    echo -n "Wait for: $url... "
     n=0
     until testUrl $url
     do
         ((n++))
         if [[ $n == 20 ]]
         then
-            echo "Give up"
+            echo " Give up"
             exit 1
         else
-            echo -n "Call failed, wait before retry... "
             sleep 6
-            echo "Try again, $n"
+            echo -n ", retry #$n "
         fi
     done
 
@@ -40,11 +39,10 @@ function waitForServices() {
     waitForService $host:8761
     waitForService $host:8761/eureka/apps/configserver
     waitForService $host:8761/eureka/apps/edge-server
-    waitForService $host:8761/eureka/apps/product-composite
     waitForService $host:8761/eureka/apps/product-service
     waitForService $host:8761/eureka/apps/review-service
     waitForService $host:8761/eureka/apps/recommendation-service
-    waitForService $host:8761/eureka/apps/productapi
+    waitForService $host:8761/eureka/apps/composite-service
 }
 
 if [[ $@ != *"skip-start"* ]]
@@ -67,7 +65,7 @@ if [[ $@ != *"skip-stop"* ]]
 then
     echo "We are done, stopping the test environment..."
     docker-compose stop
-    docker-compose rm -f
+#    docker-compose rm -f
 fi
 
 

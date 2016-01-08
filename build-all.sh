@@ -8,7 +8,6 @@ cd microservices/core/product-service;                ./gradlew clean build buil
 cd microservices/core/recommendation-service;         ./gradlew clean build buildDockerImage; cd -
 cd microservices/core/review-service;                 ./gradlew clean build buildDockerImage; cd -
 cd microservices/composite/product-composite-service; ./gradlew clean build buildDockerImage; cd -
-cd microservices/api/product-api-service;             ./gradlew clean build buildDockerImage; cd -
 
 cd microservices/support/auth-server;                 ./gradlew clean build buildDockerImage; cd -
 cd microservices/support/config-server;               ./gradlew clean build buildDockerImage; cd -

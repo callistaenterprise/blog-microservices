@@ -5,7 +5,6 @@ cf start discovery-server
 cf start config-server
 cf start edge-server
 cf start monitor-dashboard
-cf start product-api-service
 cf start product-composite-service
 cf start product-service
 cf start recommendation-service
