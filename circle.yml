@@ -24,7 +24,7 @@ test:
     - docker build -t magnuslarsson/ms-blog-review-service            microservices/core/review-service/build
     - docker build -t magnuslarsson/ms-blog-product-composite-service microservices/composite/product-composite-service/build
     - docker images
-    - host=localhost ./test-all.sh
+#    - host=localhost ./test-all.sh
 
 deployment:
   hub:
