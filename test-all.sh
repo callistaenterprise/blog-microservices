@@ -6,7 +6,7 @@
 #
 : ${host=docker.me}
 
-set -e
+# set -e
 
 function testUrl() {
     url=$@
