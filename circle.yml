@@ -23,6 +23,7 @@ test:
     - docker build -t magnuslarsson/ms-blog-recommendation-service:master.$CIRCLE_BUILD_NUM microservices/core/recommendation-service/build
     - docker build -t magnuslarsson/ms-blog-review-service:master.$CIRCLE_BUILD_NUM microservices/core/review-service/build
     - docker build -t magnuslarsson/ms-blog-product-composite-service:master.$CIRCLE_BUILD_NUM microservices/composite/product-composite-service/build
+    - docker images
     - host=localhost ./test-all.sh
 
 deployment:
