@@ -60,11 +60,11 @@ fi
 waitForServices
 
 echo -n "Tries to get an Access Token... "
-TOKEN=`curl -ks https://acme:acmesecret@docker.me:9999/uaa/oauth/token   -d grant_type=password  -d client_id=acme  -d scope=webshop  -d username=user  -d password=password | jq -r .access_token`
+TOKEN=`curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token   -d grant_type=password  -d client_id=acme  -d scope=webshop  -d username=user  -d password=password | jq -r .access_token`
 echo "Got: $TOKEN"
 
 echo -n "Tries to call the API with the Access Token... "
-curl 'https://docker.me/api/product/123'   -H  "Authorization: Bearer $TOKEN" -ks | jq .
+curl https://$host/api/product/123   -H  "Authorization: Bearer $TOKEN" -ks | jq .
 
 if [[ $@ != *"skip-stop"* ]]
 then

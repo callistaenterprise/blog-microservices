@@ -31,13 +31,21 @@ deployment:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PWD
-#      - docker info
-#
-## Renaming the target-folder for the time being to be compliant with Shippable builds...
-#      - mv target buildoutput
-#      - docker build -t magnuslarsson/az-ip-api-server:master.$CIRCLE_BUILD_NUM .
-#      - mv buildoutput target
 
+      # Push latest
+      - docker push magnuslarsson/ms-blog-auth-server
+      - docker push magnuslarsson/ms-blog-config-server
+      - docker push magnuslarsson/ms-blog-discovery-server
+      - docker push magnuslarsson/ms-blog-edge-server
+      - docker push magnuslarsson/ms-blog-monitor-dashboard
+      - docker push magnuslarsson/ms-blog-turbine
+
+      - docker push magnuslarsson/ms-blog-product-service
+      - docker push magnuslarsson/ms-blog-recommendation-service
+      - docker push magnuslarsson/ms-blog-review-service
+      - docker push magnuslarsson/ms-blog-product-composite-service
+
+      # Create buils tag "master.$CIRCLE_BUILD_NUM" and push it
       - docker tag magnuslarsson/ms-blog-auth-server               magnuslarsson/ms-blog-auth-server:master.$CIRCLE_BUILD_NUM
       - docker tag magnuslarsson/ms-blog-config-server             magnuslarsson/ms-blog-config-server:master.$CIRCLE_BUILD_NUM
       - docker tag magnuslarsson/ms-blog-discovery-server          magnuslarsson/ms-blog-discovery-server:master.$CIRCLE_BUILD_NUM
