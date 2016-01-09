@@ -1,3 +1,6 @@
+info:
+  component: Product Composite Service
+
 server:
   port: 0
   ssl:
@@ -15,8 +18,9 @@ security:
     resource:
       userInfoUri: https://localhost:9999/uaa/user
 
-info:
-  component: Product Composite Service
+management:
+  security:
+    enabled: false
 
 hystrix:
   threadpool:

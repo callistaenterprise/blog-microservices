@@ -48,7 +48,7 @@ public class ProductCompositeServiceApplication {
         LOG.info("Register a StatsD Metrics Reporter");
         StatsDReporter.forRegistry(registry)
             .prefixedWith("composite-service")
-            .build("graphite", 8125)
+            .build("statsd", 8125)
             .start(1, TimeUnit.SECONDS);
         LOG.info("Registration of a StatsD Metrics Reporter done!");
     }
