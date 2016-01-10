@@ -50,7 +50,7 @@ function waitForServices() {
     waitForService $host:8761/eureka/apps/composite-service
 }
 
-if [[ $@ != *"skip-start"* ]]
+if [[ $@ == *"start"* ]]
 then
     echo "Restarting the test environment..."
     docker-compose stop
@@ -66,7 +66,7 @@ echo "Got: $TOKEN"
 echo -n "Tries to call the API with the Access Token... "
 curl https://$host/api/product/123   -H  "Authorization: Bearer $TOKEN" -ks | jq .
 
-if [[ $@ != *"skip-stop"* ]]
+if [[ $@ == *"stop"* ]]
 then
     echo "We are done, stopping the test environment..."
     docker-compose stop
