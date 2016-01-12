@@ -1,4 +1,4 @@
 spring:
   application:
-    name: configserver
+    name: config-server
 

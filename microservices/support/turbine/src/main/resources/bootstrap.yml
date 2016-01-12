@@ -10,6 +10,7 @@ spring:
         maxInterval: 5000
         maxAttempts: 20
       discovery:
+        serviceId: config-server
         enabled: false
       uri: http://localhost:8888
 

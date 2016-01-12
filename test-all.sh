@@ -42,7 +42,7 @@ function waitForService() {
 
 function waitForServices() {
     waitForService $host:8761
-    waitForService $host:8761/eureka/apps/configserver
+    waitForService $host:8761/eureka/apps/config-server
     waitForService $host:8761/eureka/apps/edge-server
     waitForService $host:8761/eureka/apps/product-service
     waitForService $host:8761/eureka/apps/review-service
