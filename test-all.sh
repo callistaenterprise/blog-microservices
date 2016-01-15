@@ -90,7 +90,9 @@ function waitForAPI() {
 if [[ $@ == *"start"* ]]
 then
     echo "Restarting the test environment..."
+    echo "$ docker-compose stop"
     docker-compose stop
+    echo "$ docker-compose up -d"
     docker-compose up -d
 fi
 
@@ -101,21 +103,21 @@ echo "Get an OAuth Access Token:"
 echo "$ curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d scope=webshop -d username=user -d password=password | jq ."
 OAUTH_RESPOSE=`curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d scope=webshop -d username=user -d password=password`
 echo $OAUTH_RESPOSE | jq .
-TOKEN=`echo $OAUTH_RESPOSE | jq -r .access_token`
+export TOKEN=`echo $OAUTH_RESPOSE | jq -r .access_token`
 #TOKEN=`curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token   -d grant_type=password  -d client_id=acme  -d scope=webshop  -d username=user  -d password=password | jq -r .access_token`
 echo "ACCESS TOKEN: $TOKEN"
 
 echo ''
 echo "Call API with Access Token... "
 waitForAPI
-echo "$ curl -ks https://$host/api/product/123 -H \"Authorization: Bearer $TOKEN\" | jq ."
+echo "$ curl -ks https://$host/api/product/123 -H \"Authorization: Bearer \$TOKEN\" | jq ."
 curl -ks https://$host/api/product/123 -H  "Authorization: Bearer $TOKEN" | jq .
 
 if [[ $@ == *"stop"* ]]
 then
     echo "We are done, stopping the test environment..."
+    echo "$ docker-compose stop"
     docker-compose stop
-#    docker-compose rm -f
 fi
 
 
