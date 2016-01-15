@@ -50,7 +50,7 @@ dependencyManagement {
 def dockerPort = 8990
 
 docker {
-    url = 'https://192.168.99.102:2376'
+    url = 'https://192.168.99.100:2376'
     certPath = new File(System.properties['user.home'], '.docker/machine/machines/ms')
 }
 
