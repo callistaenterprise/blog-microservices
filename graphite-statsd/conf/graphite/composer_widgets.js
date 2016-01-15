@@ -1013,7 +1013,7 @@ function toggleAutoRefresh(button, pressed) {
     Composer.updateImage();
 
     //var interval = Math.min.apply(null, [context['interval'] for each (context in MetricContexts)] || [0]) || 60;
-    var interval = 60;
+    var interval = 1;
     button.timer = setTimeout(doRefresh, interval * 1000)
   }
 
