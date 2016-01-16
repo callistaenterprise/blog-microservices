@@ -87,6 +87,8 @@ function waitForAPI() {
 
 }
 
+echo "Start:" `date`
+
 if [[ $@ == *"start"* ]]
 then
     echo "Restarting the test environment..."
@@ -120,6 +122,4 @@ then
     docker-compose stop
 fi
 
-
-
-
+echo "End:" `date`
