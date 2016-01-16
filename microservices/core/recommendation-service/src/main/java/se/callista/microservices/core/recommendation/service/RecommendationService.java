@@ -59,7 +59,7 @@ public class RecommendationService {
         list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2"));
         list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3"));
 
-        LOG.info("/recommendation response size: {}", list.size());
+        LOG.debug("/recommendation response size: {}", list.size());
 
         return list;
     }

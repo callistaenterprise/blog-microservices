@@ -19,6 +19,7 @@ import se.callista.microservices.util.ServiceUtils;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -70,6 +71,7 @@ public class ProductCompositeIntegration {
      */
     public ResponseEntity<Product> defaultProduct(int productId) {
         LOG.warn("Using fallback method for product-service");
+        // If we can't get basic product info we better fail!
         return util.createResponse(null, HttpStatus.BAD_GATEWAY);
     }
 
@@ -106,9 +108,12 @@ public class ProductCompositeIntegration {
      * @param productId
      * @return
      */
-    public ResponseEntity<List<Review>> defaultRecommendations(int productId) {
+    public ResponseEntity<List<Recommendation>> defaultRecommendations(int productId) {
         LOG.warn("Using fallback method for recommendation-service");
-        return util.createResponse(null, HttpStatus.BAD_GATEWAY);
+        LOG.debug("GetRecommendations.fallback-cnt {}", 1);
+        return util.createResponse(
+            Arrays.asList(new Recommendation(productId, 1, "Fallback Author 1", 1, "Fallback Content 1")),
+            HttpStatus.OK);
     }
 
 
@@ -142,7 +147,10 @@ public class ProductCompositeIntegration {
      */
     public ResponseEntity<List<Review>> defaultReviews(int productId) {
         LOG.warn("Using fallback method for review-service");
-        return util.createResponse(null, HttpStatus.BAD_GATEWAY);
+        LOG.debug("GetReviews.fallback-cnt {}", 1);
+        return util.createResponse(
+            Arrays.asList(new Review(productId, 1, "Fallback Author 1", "Fallback Subject 1", "Fallback Content 1")),
+            HttpStatus.OK);
     }
 
     // ----- //

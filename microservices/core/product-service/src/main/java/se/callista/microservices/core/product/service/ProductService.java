@@ -36,13 +36,13 @@ public class ProductService {
      */
     @RequestMapping("/product/{productId}")
     public Product getProduct(@PathVariable int productId) {
-        LOG.info("/product called");
 
         int pt = setProcTimeBean.calculateProcessingTime();
         LOG.info("/product called, processing time: {}", pt);
 
         sleep(pt);
 
+        LOG.debug("/product return the found product");
         return new Product(productId, "name", 123);
     }
 
