@@ -46,15 +46,15 @@
 #    - $PWD/logs:/logs
 #  command: logstash -f /config/logevent-docker-2.conf
 
-statsd:
-  image: magnuslarsson/ms-blog-graphite-statsd
-#  image: hopsoft/graphite-statsd
-  restart: always
-  ports:
-    - "80:80"
-    - "2003:2003"
-    - "8125:8125/udp"
-    - "8126:8126"
+#statsd:
+#  image: magnuslarsson/ms-blog-graphite-statsd
+##  image: hopsoft/graphite-statsd
+#  restart: always
+#  ports:
+#    - "80:80"
+#    - "2003:2003"
+#    - "8125:8125/udp"
+#    - "8126:8126"
 
 rabbitmq:
   image: rabbitmq:3-management
@@ -96,47 +96,47 @@ auth:
 pro:
   image: magnuslarsson/ms-blog-product-service
   restart: always
-  volumes:
-    - $PWD/logs:/logs
+#  volumes:
+#    - $PWD/logs:/logs
   links:
     - discovery
     - config
     - rabbitmq
-    - statsd
+#    - statsd
 
 rec:
   image: magnuslarsson/ms-blog-recommendation-service
   restart: always
-  volumes:
-    - $PWD/logs:/logs
+#  volumes:
+#    - $PWD/logs:/logs
   links:
     - discovery
     - config
     - rabbitmq
-    - statsd
+#    - statsd
 
 rev:
   image: magnuslarsson/ms-blog-review-service
   restart: always
-  volumes:
-    - $PWD/logs:/logs
+#  volumes:
+#    - $PWD/logs:/logs
   links:
     - discovery
     - config
     - rabbitmq
-    - statsd
+#    - statsd
 
 composite:
   image: magnuslarsson/ms-blog-product-composite-service
   restart: always
-  volumes:
-    - $PWD/logs:/logs
+#  volumes:
+#    - $PWD/logs:/logs
   links:
     - auth
     - discovery
     - config
     - rabbitmq
-    - statsd
+#    - statsd
 
 #api:
 #  image: magnuslarsson/ms-blog-product-api-service

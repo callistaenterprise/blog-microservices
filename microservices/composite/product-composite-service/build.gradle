@@ -57,8 +57,8 @@ dependencies {
 
     compile("org.springframework.cloud:spring-cloud-netflix-hystrix-amqp:1.1.0.M4")
 
-    compile("io.dropwizard.metrics:metrics-core:3.1.0")
-    compile("com.readytalk:metrics3-statsd:4.1.0")
+//    compile("io.dropwizard.metrics:metrics-core:3.1.0")
+//    compile("com.readytalk:metrics3-statsd:4.1.0")
 
     compile("org.apache.httpcomponents:httpclient:4.2.1")
     compile("org.apache.httpcomponents:fluent-hc:4.2.1")
