@@ -72,7 +72,7 @@ import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 
 task createDockerfile(type: Dockerfile) {
     destFile = project.file('build/Dockerfile')
-    from 'java:8'
+    from 'ofayau/ejre:8-jre'
     maintainer 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
     exposePort dockerPort
     copyFile "libs/${jar.baseName}-${jar.version}.jar", "${jar.baseName}-${jar.version}.jar"
