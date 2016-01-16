@@ -4,10 +4,6 @@ server:
 info:
   component: Review Core Service
 
-service:
-  defaultMinMs: 0
-  defaultMaxMs: 0
-
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 3

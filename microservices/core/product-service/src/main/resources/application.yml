@@ -5,8 +5,28 @@ info:
   component: Product Core Service
 
 service:
-  defaultMinMs: 0
-  defaultMaxMs: 0
+  defaultMinMs: 5
+  defaultMaxMs: 20
+
+logging:
+  level:
+    root: WARN
+
+    # Get info on failed OAuth access token validations
+    org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices: INFO
+
+    # Get info regarding connection to the cofig server and retries if required
+    org.springframework.cloud.config.client.ConfigServicePropertySourceLocator: INFO
+    org.springframework.retry.support.RetryTemplate: DEBUG
+
+    # Set INFO to see the allocated port
+    org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer: INFO
+    org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainer: INFO
+
+    # Set DEBUG level on Hystrix to get an error message when a fallback method is used.
+    com.netflix.hystrix: DEBUG
+    com.netflix.hystrix.strategy.properties.HystrixPropertiesChainedArchaiusProperty: WARN
+    se.callista: INFO
 
 eureka:
   instance:

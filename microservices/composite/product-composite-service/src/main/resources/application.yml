@@ -1,6 +1,3 @@
-info:
-  component: Product Composite Service
-
 server:
   port: 0
   ssl:
@@ -12,6 +9,29 @@ server:
     # trust-store: classpath:truststore.jks
     trust-store: src/main/resources/truststore.jks
     trust-store-password: password
+
+info:
+  component: Product Composite Service
+
+logging:
+  level:
+    root: WARN
+
+    # Get info on failed OAuth access token validations
+    org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices: INFO
+
+    # Get info regarding connection to the cofig server and retries if required
+    org.springframework.cloud.config.client.ConfigServicePropertySourceLocator: INFO
+    org.springframework.retry.support.RetryTemplate: DEBUG
+
+    # Set INFO to see the allocated port
+    org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer: INFO
+    org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainer: INFO
+
+    # Set DEBUG level on Hystrix to get an error message when a fallback method is used.
+    com.netflix.hystrix: DEBUG
+    com.netflix.hystrix.strategy.properties.HystrixPropertiesChainedArchaiusProperty: WARN
+    se.callista: INFO
 
 security:
   oauth2:
@@ -35,7 +55,7 @@ hystrix:
     default:
       circuitBreaker:
         sleepWindowInMilliseconds: 30000
-        requestVolumeThreshold: 2
+        requestVolumeThreshold: 3
       execution:
         isolation:
 #          strategy: SEMAPHORE, no thread pool but timeout handling stops to work
@@ -61,6 +81,7 @@ eureka:
     registryFetchIntervalSeconds: 5
     instanceInfoReplicationIntervalSeconds: 5
     initialInstanceInfoReplicationIntervalSeconds: 5
+
 
 #    region: default
 #    availabilityZones:
