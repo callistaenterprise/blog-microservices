@@ -47,7 +47,7 @@
 #  command: logstash -f /config/logevent-docker-2.conf
 
 statsd:
-  image: magnuslarsson/ms-blog-graphite-statsd:1
+  image: magnuslarsson/ms-blog-graphite-statsd
 #  image: hopsoft/graphite-statsd
   restart: always
   ports:
