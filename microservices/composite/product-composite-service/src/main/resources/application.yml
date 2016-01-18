@@ -63,25 +63,36 @@ hystrix:
           thread:
             timeoutInMilliseconds: 4000
 
-#ribbon:
+
+
+ribbon:
+  # Interval to refresh the server list from the source
+  serverListRefreshInterval: 1000
+#
+#  # Connect timeout used by Apache HttpClient
+#  connectTimeout: 100
+#
+#  # Read timeout used by Apache HttpClient
+#  readTimeout: 10000
+#
 #  ConnectTimeout: 100
 #  ReadTimeout: 3000
 
-app:
-  ConnectTimeout: 100
-  ReadTimeout: 3000
-
 eureka:
   instance:
-    leaseRenewalIntervalInSeconds: 3
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 1
     metadataMap:
       instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
   client:
     # Default values comes from org.springframework.cloud.netflix.eurek.EurekaClientConfigBean
-    registryFetchIntervalSeconds: 5
-    instanceInfoReplicationIntervalSeconds: 5
-    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 1
+    instanceInfoReplicationIntervalSeconds: 1
+    initialInstanceInfoReplicationIntervalSeconds: 1
 
+app:
+  ConnectTimeout: 100
+  ReadTimeout: 3000
 
 #    region: default
 #    availabilityZones:

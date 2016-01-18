@@ -14,6 +14,7 @@ eureka:
     fetchRegistry: false
   server:
     waitTimeInMsWhenSyncEmpty: 0
+    response-cache-update-interval-ms: 1000
   password: ${SECURITY_USER_PASSWORD:password}
 
 logging:
