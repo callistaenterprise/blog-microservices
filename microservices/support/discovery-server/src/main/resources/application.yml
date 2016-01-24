@@ -8,12 +8,29 @@ security:
 info:
   component: Discovery Server
 
+
 eureka:
+  # Configure standalone mode, see http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html#_standalone_mode
   client:
     registerWithEureka: false
     fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  instance:
+    hostname: localhost
   server:
+    # Disable self-preservation during development, see https://github.com/Netflix/eureka/wiki/Understanding-Eureka-Peer-to-Peer-Communication
+    enableSelfPreservation: false
+    # renewalPercentThreshold: 0.49
+    # renewalThresholdUpdateIntervalMs
+
+    # Set this only for this sample service without which starting the instance will by default wait for the default of 5 mins
     waitTimeInMsWhenSyncEmpty: 0
+
+    # for the example, set this to zero as we will not have peers to sync up with.
+    # Do not set in a real environment with multi-node eureka clusters.
+    numberRegistrySyncRetries: 0
+
     response-cache-update-interval-ms: 1000
   password: ${SECURITY_USER_PASSWORD:password}
 

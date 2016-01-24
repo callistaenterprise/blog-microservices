@@ -1,5 +1,6 @@
 package se.callista.microservices.api.product;
 
+import com.netflix.discovery.DiscoveryManager;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,16 @@ public class ProductApiServiceApplication {
     public static void main(String[] args) {
         LOG.info("Register MDCHystrixConcurrencyStrategy");
         HystrixPlugins.getInstance().registerConcurrencyStrategy(new MDCHystrixConcurrencyStrategy());
+
         SpringApplication.run(ProductApiServiceApplication.class, args);
+
+        LOG.info("Register ShutdownHook");
+        Runtime.getRuntime().addShutdownHook(new Thread(){
+            @Override
+            public void run() {
+                LOG.info("Shutting down, unregister from Eureka!");
+                DiscoveryManager.getInstance().shutdownComponent();
+            }
+        });
     }
 }

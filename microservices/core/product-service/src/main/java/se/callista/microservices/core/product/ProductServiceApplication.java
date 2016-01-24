@@ -1,5 +1,6 @@
 package se.callista.microservices.core.product;
 
+import com.netflix.discovery.DiscoveryManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -39,5 +40,14 @@ public class ProductServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ProductServiceApplication.class, args);
+
+        LOG.info("Register ShutdownHook");
+        Runtime.getRuntime().addShutdownHook(new Thread(){
+            @Override
+            public void run() {
+                LOG.info("Shutting down, unregister from Eureka!");
+                DiscoveryManager.getInstance().shutdownComponent();
+            }
+        });
     }
 }
