@@ -21,7 +21,6 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'com.bmuschko.docker-remote-api'
 
 jar {
     baseName = 'product-service'
@@ -63,34 +62,6 @@ dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-starter-parent:${springCloudVersion}"
     }
-}
-
-def dockerPort = 8080
-
-docker {
-    url = 'https://192.168.99.100:2376'
-    certPath = new File(System.properties['user.home'], '.docker/machine/machines/ms')
-}
-
-
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
-import com.bmuschko.gradle.docker.tasks.image.Dockerfile
-
-task createDockerfile(type: Dockerfile) {
-    destFile = project.file('build/Dockerfile')
-    from 'ofayau/ejre:8-jre'
-    maintainer 'Magnus Larsson <magnus.larsson.ml@gmail.com>'
-    exposePort dockerPort
-    copyFile "libs/${jar.baseName}-${jar.version}.jar", "${jar.baseName}-${jar.version}.jar"
-
-    // Regarding settings of java.security.egd, see http://wiki.apache.org/tomcat/HowTo/FasterStartUp#Entropy_Source
-    entryPoint 'java','-Dspring.profiles.active=docker','-Djava.security.egd=file:/dev/./urandom','-jar',"${jar.baseName}-${jar.version}.jar"
-}
-
-task buildDockerImage(type: DockerBuildImage) {
-    dependsOn createDockerfile
-    inputDir = createDockerfile.destFile.parentFile
-    tag = "magnuslarsson/ms-blog-${jar.baseName}"
 }
 
 eclipse {

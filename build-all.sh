@@ -4,16 +4,18 @@ set -e
 
 cd util;                                              ./gradlew clean build publishToMavenLocal; cd -
 
-cd microservices/core/product-service;                ./gradlew clean build buildDockerImage; cd -
-cd microservices/core/recommendation-service;         ./gradlew clean build buildDockerImage; cd -
-cd microservices/core/review-service;                 ./gradlew clean build buildDockerImage; cd -
-cd microservices/composite/product-composite-service; ./gradlew clean build buildDockerImage; cd -
+cd microservices/core/product-service;                ./gradlew clean build; cd -
+cd microservices/core/recommendation-service;         ./gradlew clean build; cd -
+cd microservices/core/review-service;                 ./gradlew clean build; cd -
+cd microservices/composite/product-composite-service; ./gradlew clean build; cd -
 
-cd microservices/support/auth-server;                 ./gradlew clean build buildDockerImage; cd -
-cd microservices/support/config-server;               ./gradlew clean build buildDockerImage; cd -
-cd microservices/support/discovery-server;            ./gradlew clean build buildDockerImage; cd -
-cd microservices/support/edge-server;                 ./gradlew clean build buildDockerImage; cd -
-cd microservices/support/monitor-dashboard;           ./gradlew clean build buildDockerImage; cd -
-cd microservices/support/turbine;                     ./gradlew clean build buildDockerImage; cd -
+cd microservices/support/auth-server;                 ./gradlew clean build; cd -
+cd microservices/support/config-server;               ./gradlew clean build; cd -
+cd microservices/support/discovery-server;            ./gradlew clean build; cd -
+cd microservices/support/edge-server;                 ./gradlew clean build; cd -
+cd microservices/support/monitor-dashboard;           ./gradlew clean build; cd -
+cd microservices/support/turbine;                     ./gradlew clean build; cd -
 
 find . -name *SNAPSHOT.jar -exec du -h {} \;
+
+docker-compose build

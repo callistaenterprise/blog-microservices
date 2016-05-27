@@ -64,13 +64,13 @@ rabbitmq:
     - "15672:15672"
 
 discovery:
-  image: magnuslarsson/ms-blog-discovery-server
+  build: microservices/support/discovery-server
   restart: always
   ports:
     - "8761:8761"
 
 config:
-  image: magnuslarsson/ms-blog-config-server
+  build: microservices/support/config-server
   restart: always
   ports:
     - "8888:8888"
@@ -79,7 +79,7 @@ config:
     - rabbitmq
 
 auth:
-  image: magnuslarsson/ms-blog-auth-server
+  build: microservices/support/auth-server
   restart: always
   ports:
     - "9999:9999"
@@ -94,7 +94,7 @@ auth:
 
 
 pro:
-  image: magnuslarsson/ms-blog-product-service
+  build: microservices/core/product-service
   restart: always
 #  volumes:
 #    - $PWD/logs:/logs
@@ -105,7 +105,7 @@ pro:
 #    - statsd
 
 rec:
-  image: magnuslarsson/ms-blog-recommendation-service
+  build: microservices/core/recommendation-service
   restart: always
 #  volumes:
 #    - $PWD/logs:/logs
@@ -116,7 +116,7 @@ rec:
 #    - statsd
 
 rev:
-  image: magnuslarsson/ms-blog-review-service
+  build: microservices/core/review-service
   restart: always
 #  volumes:
 #    - $PWD/logs:/logs
@@ -127,7 +127,7 @@ rev:
 #    - statsd
 
 composite:
-  image: magnuslarsson/ms-blog-product-composite-service
+  build: microservices/composite/product-composite-service
   restart: always
 #  volumes:
 #    - $PWD/logs:/logs
@@ -138,20 +138,9 @@ composite:
     - rabbitmq
 #    - statsd
 
-#api:
-#  image: magnuslarsson/ms-blog-product-api-service
-#  restart: always
-#  volumes:
-#    - $PWD/logs:/logs
-#  links:
-#    - auth
-#    - config
-#    - discovery
-#    - rabbitmq
-#    - statsd
 
 monitor:
-  image: magnuslarsson/ms-blog-monitor-dashboard
+  build: microservices/support/monitor-dashboard
   restart: always
   ports:
     - "7979:7979"
@@ -160,7 +149,7 @@ monitor:
     - composite
 
 edge:
-  image: magnuslarsson/ms-blog-edge-server
+  build: microservices/support/edge-server
   restart: always
   ports:
     - "443:8765"

@@ -21,13 +21,13 @@ public class SetProcTimeBean {
 
     @Value("${service.defaultMinMs:0}")
     public void setMinMs(int minMs) {
-        LOG.info("Set min response time to {} ms.", this.minMs);
+        LOG.info("Set min response time to {} ms.", minMs);
         this.minMs = minMs;
     }
 
     @Value("${service.defaultMaxMs:0}")
     public void setMaxMs(int maxMs) {
-        LOG.info("Set max response time to {} ms.", this.maxMs);
+        LOG.info("Set max response time to {} ms.", maxMs);
         this.maxMs = maxMs;
     }
 
