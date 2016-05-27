@@ -53,10 +53,8 @@ function waitForServices() {
 
 function testAPI() {
     url=$@
-#    url="https://$host/api/product/123 -H \"Authorization: Bearer $TOKEN\""
-#    echo "Test API: $url"
-#    if curl "$url" -ki -f
-#    if curl $url -ks -f -o /dev/null
+#    echo "Is the API awake?"
+#    echo "$ curl -ks https://$host/api/product/123 -H \"Authorization: Bearer \$TOKEN\" | jq ."
     if curl -ks https://$host/api/product/123 -H "Authorization: Bearer $TOKEN" -f -o /dev/null
     then
           echo "Ok"
@@ -106,7 +104,6 @@ echo "$ curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token -d grant_typ
 OAUTH_RESPOSE=`curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d scope=webshop -d username=user -d password=password`
 echo $OAUTH_RESPOSE | jq .
 export TOKEN=`echo $OAUTH_RESPOSE | jq -r .access_token`
-#TOKEN=`curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token   -d grant_type=password  -d client_id=acme  -d scope=webshop  -d username=user  -d password=password | jq -r .access_token`
 echo "ACCESS TOKEN: $TOKEN"
 
 echo ''

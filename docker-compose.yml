@@ -16,144 +16,66 @@
 #    - discovery
 #  command: java -jar -Dspring.profiles.active=docker2 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
 
+version: '2'
 
+services:
 
-#    docker run -it -d --restart=always --name elastic elasticsearch
-#    docker run -it -d --restart=always --name kibana --link elastic:elasticsearch -p 5601:5601 kibana
-#    docker run -it -d --restart=always --name logstash -v $PWD/logstash:/config -v $PWD/logs:/logs --link elastic:elastic logstash logstash -f /config/logevent-docker-2.conf
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+  #    - "5672:5672"
+      - "15672:15672"
 
-# docker stop 5c7d3eb0a239 3f9dc950137b 863faef13f4a def151f15fc9
+  discovery:
+    build: microservices/support/discovery-server
+    restart: always
+    ports:
+      - "8761:8761"
 
-#elasticsearch:
-#  image: elasticsearch
-#  restart: always
-#
-#kibana:
-#  image: kibana
-#  restart: always
-#  ports:
-#    - "5601:5601"
-#  links:
-#    - elasticsearch
-#
-#logstash:
-#  image: logstash
-#  restart: always
-#  links:
-#    - elasticsearch
-#  volumes:
-#    - $PWD/logstash:/config
-#    - $PWD/logs:/logs
-#  command: logstash -f /config/logevent-docker-2.conf
+  config:
+    build: microservices/support/config-server
+    restart: always
+    ports:
+      - "8888:8888"
+    volumes:
+      - $PWD/../blog-microservices-config:/config-repo
 
-#statsd:
-#  image: magnuslarsson/ms-blog-graphite-statsd
-##  image: hopsoft/graphite-statsd
-#  restart: always
-#  ports:
-#    - "80:80"
-#    - "2003:2003"
-#    - "8125:8125/udp"
-#    - "8126:8126"
+  auth:
+    build: microservices/support/auth-server
+    restart: always
+    ports:
+      - "9999:9999"
 
-rabbitmq:
-  image: rabbitmq:3-management
-  restart: always
-  ports:
-#    - "5672:5672"
-    - "15672:15672"
+  #turbine:
+  #  image: magnuslarsson/ms-blog-turbine
+  ##  volumes:
+  ##    - $PWD/logs:/logs
 
-discovery:
-  build: microservices/support/discovery-server
-  restart: always
-  ports:
-    - "8761:8761"
+  pro:
+    build: microservices/core/product-service
+    restart: always
 
-config:
-  build: microservices/support/config-server
-  restart: always
-  ports:
-    - "8888:8888"
-  links:
-    - discovery
-    - rabbitmq
+  rec:
+    build: microservices/core/recommendation-service
+    restart: always
 
-auth:
-  build: microservices/support/auth-server
-  restart: always
-  ports:
-    - "9999:9999"
+  rev:
+    build: microservices/core/review-service
+    restart: always
 
-#turbine:
-#  image: magnuslarsson/ms-blog-turbine
-##  volumes:
-##    - $PWD/logs:/logs
-#  links:
-#    - rabbitmq
-#    - config
+  composite:
+    build: microservices/composite/product-composite-service
+    restart: always
 
+  monitor:
+    build: microservices/support/monitor-dashboard
+    restart: always
+    ports:
+      - "7979:7979"
 
-pro:
-  build: microservices/core/product-service
-  restart: always
-#  volumes:
-#    - $PWD/logs:/logs
-  links:
-    - discovery
-    - config
-    - rabbitmq
-#    - statsd
-
-rec:
-  build: microservices/core/recommendation-service
-  restart: always
-#  volumes:
-#    - $PWD/logs:/logs
-  links:
-    - discovery
-    - config
-    - rabbitmq
-#    - statsd
-
-rev:
-  build: microservices/core/review-service
-  restart: always
-#  volumes:
-#    - $PWD/logs:/logs
-  links:
-    - discovery
-    - config
-    - rabbitmq
-#    - statsd
-
-composite:
-  build: microservices/composite/product-composite-service
-  restart: always
-#  volumes:
-#    - $PWD/logs:/logs
-  links:
-    - auth
-    - discovery
-    - config
-    - rabbitmq
-#    - statsd
-
-
-monitor:
-  build: microservices/support/monitor-dashboard
-  restart: always
-  ports:
-    - "7979:7979"
-  links:
-    - config
-    - composite
-
-edge:
-  build: microservices/support/edge-server
-  restart: always
-  ports:
-    - "443:8765"
-  links:
-    - discovery
-    - config
-    - composite
+  edge:
+    build: microservices/support/edge-server
+    restart: always
+    ports:
+      - "443:8765"
