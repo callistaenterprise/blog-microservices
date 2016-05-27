@@ -8,8 +8,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.web.client.RestTemplate;
 import se.callista.microservices.util.MDCHystrixConcurrencyStrategy;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -51,6 +54,12 @@ public class ProductCompositeServiceApplication {
 //        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitMqHost);
 //        return connectionFactory;
 //    }
+
+    @Bean
+    @LoadBalanced
+    RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
     public static void main(String[] args) {
         LOG.info("Register MDCHystrixConcurrencyStrategy");
