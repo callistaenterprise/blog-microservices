@@ -16,8 +16,9 @@ public class ProductAggregated {
     private int weight;
     private List<RecommendationSummary> recommendations;
     private List<ReviewSummary> reviews;
+    private List<Vendor> vendors;
 
-    public ProductAggregated(Product product, List<Recommendation> recommendations, List<Review> reviews) {
+    public ProductAggregated(Product product, List<Recommendation> recommendations, List<Review> reviews, List<Vendor> vendorList) {
 
         // 1. Setup product info
         this.productId = product.getProductId();
@@ -35,6 +36,10 @@ public class ProductAggregated {
             this.reviews = reviews.stream()
                 .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject()))
                 .collect(Collectors.toList());
+
+        // 4. Assign summary vendors info, if available
+        if (vendorList != null)
+            this.vendors = vendorList;
     }
 
     public int getProductId() {
@@ -55,5 +60,9 @@ public class ProductAggregated {
 
     public List<ReviewSummary> getReviews() {
         return reviews;
+    }
+
+    public List<Vendor> getVendors() {
+        return vendors;
     }
 }

@@ -25,3 +25,5 @@ target
 logs
 ML-to-do-notes.md
 data
+
+.DS_Store

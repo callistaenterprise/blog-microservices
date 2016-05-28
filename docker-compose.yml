@@ -57,3 +57,8 @@ edge:
   links:
     - discovery
     - api
+    
+vendor:
+  image: vendor
+  links:
+    - discovery

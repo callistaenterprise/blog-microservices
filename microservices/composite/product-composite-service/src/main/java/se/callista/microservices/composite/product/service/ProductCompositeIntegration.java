@@ -1,25 +1,29 @@
 package se.callista.microservices.composite.product.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import java.io.IOException;
+import java.net.URI;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import se.callista.microservices.composite.product.model.Vendor;
 import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservises.core.product.model.Product;
 import se.callista.microservises.core.recommendation.model.Recommendation;
 import se.callista.microservises.core.review.model.Review;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.List;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 /**
  * Created by magnus on 05/03/15.
@@ -36,6 +40,7 @@ public class ProductCompositeIntegration {
     ServiceUtils util;
 
     @Autowired
+    @Qualifier("loadBalancedRestTemplate")
     private RestTemplate restTemplate;
 
     // -------- //
@@ -150,6 +155,42 @@ public class ProductCompositeIntegration {
         return util.createResponse(null, HttpStatus.BAD_GATEWAY);
     }
 
+
+    // ------- //
+    // VENDORS //
+    // ------- //
+
+    @HystrixCommand(fallbackMethod = "defaultVendors")
+    public ResponseEntity<List<Vendor>> getVendors(int productId) {
+        LOG.info("GetVendors...");
+
+        URI uri = util.getServiceUrl("vendor");
+
+        String url = uri.toString() + "/vendors/" + productId;
+        LOG.debug("GetVendors from URL: {}", url);
+
+        ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
+        LOG.debug("GetVendors http-status: {}", resultStr.getStatusCode());
+        LOG.debug("GetVendors body: {}", resultStr.getBody());
+
+        List<Vendor> vendors = response2Vendors(resultStr);
+        LOG.debug("GetVendors.cnt {}", vendors.size());
+
+        return util.createOkResponse(vendors);
+    }
+
+
+    /**
+     * Fallback method for getReviews()
+     *
+     * @param productId
+     * @return
+     */
+    public ResponseEntity<List<Vendor>> defaultVendors(int productId) {
+        LOG.warn("Using fallback method for vendor-service");
+        return util.createResponse(null, HttpStatus.BAD_GATEWAY);
+    }
+
     // ----- //
     // UTILS //
     // ----- //
@@ -207,6 +248,23 @@ public class ProductCompositeIntegration {
             List list = mapper.readValue(response.getBody(), new TypeReference<List<Review>>() {});
             List<Review> reviews = list;
             return reviews;
+
+        } catch (IOException e) {
+            LOG.warn("IO-err. Failed to read JSON", e);
+            throw new RuntimeException(e);
+
+        } catch (RuntimeException re) {
+            LOG.warn("RTE-err. Failed to read JSON", re);
+            throw re;
+        }
+    }
+
+    private List<Vendor> response2Vendors(ResponseEntity<String> response) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            List list = mapper.readValue(response.getBody(), new TypeReference<List<Vendor>>() {});
+            List<Vendor> vendors = list;
+            return vendors;
 
         } catch (IOException e) {
             LOG.warn("IO-err. Failed to read JSON", e);

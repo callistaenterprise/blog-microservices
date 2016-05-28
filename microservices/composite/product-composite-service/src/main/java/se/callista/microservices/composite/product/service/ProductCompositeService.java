@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.callista.microservices.composite.product.model.ProductAggregated;
+import se.callista.microservices.composite.product.model.Vendor;
 import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservises.core.product.model.Product;
 import se.callista.microservises.core.recommendation.model.Recommendation;
@@ -78,6 +79,16 @@ public class ProductCompositeService {
             reviews = reviewsResult.getBody();
         }
 
-        return util.createOkResponse(new ProductAggregated(productResult.getBody(), recommendations, reviews));
+        // 4. Get optional vendors
+        ResponseEntity<List<Vendor>> vendorsResult = integration.getVendors(productId);
+        List<Vendor> vendors = null;
+        if (!vendorsResult.getStatusCode().is2xxSuccessful()) {
+            // Something went wrong with getVendors, simply skip the vendors-information in the response
+            LOG.debug("Call to getVendors failed: {}", vendorsResult.getStatusCode());
+        } else {
+            vendors = vendorsResult.getBody();
+        }
+
+        return util.createOkResponse(new ProductAggregated(productResult.getBody(), recommendations, reviews, vendors));
     }
 }
