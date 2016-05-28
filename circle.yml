@@ -6,7 +6,8 @@ machine:
 
 dependencies:
   post:
-    - ./create-all-dockerfiles.sh
+    # gradle clean build + docker-compose build...
+    - ./build-all.sh
 
 # According to https://circleci.com/docs/test-metadata
 test:
