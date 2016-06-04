@@ -32,7 +32,13 @@ public class MDCHystrixContextCallable<K> implements Callable {
             MDC.setContextMap(parentMDC);
             return actual.call();
         } finally {
-            MDC.setContextMap(childMDC);
+            if (childMDC == null) {
+                LOG.debug("Call done. ChildMDC is null so we clear the MDC.");
+                MDC.clear();
+            } else {
+                LOG.debug("Call done. Reset MDC to the ChildMDC.");
+                MDC.setContextMap(childMDC);
+            }
         }
     }
 }
