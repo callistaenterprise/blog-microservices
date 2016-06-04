@@ -4,6 +4,9 @@ server:
 info:
   component: Review Core Service
 
+spring.rabbitmq:
+  host: localhost
+  port: 5672
 
 ribbon:
   # Interval to refresh the server list from the source
@@ -35,9 +38,7 @@ spring:
 server:
   port: 8080
 
-app:
-  rabbitmq:
-    host: rabbitmq
+spring.rabbitmq.host: rabbitmq
 
 eureka:
   instance:

@@ -42,6 +42,10 @@ management:
   security:
     enabled: false
 
+spring.rabbitmq:
+  host: localhost
+  port: 5672
+
 hystrix:
   threadpool:
     default:
@@ -115,9 +119,7 @@ security:
 server:
   port: 8080
 
-app:
-  rabbitmq:
-    host: rabbitmq
+spring.rabbitmq.host: rabbitmq
 
 eureka:
   instance:

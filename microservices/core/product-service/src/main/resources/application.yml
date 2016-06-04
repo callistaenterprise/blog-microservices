@@ -28,6 +28,9 @@ logging:
     com.netflix.hystrix.strategy.properties.HystrixPropertiesChainedArchaiusProperty: WARN
     se.callista: INFO
 
+spring.rabbitmq:
+  host: localhost
+  port: 5672
 
 
 ribbon:
@@ -60,9 +63,7 @@ spring:
 server:
   port: 8080
 
-app:
-  rabbitmq:
-    host: rabbitmq
+spring.rabbitmq.host: rabbitmq
 
 eureka:
   instance:

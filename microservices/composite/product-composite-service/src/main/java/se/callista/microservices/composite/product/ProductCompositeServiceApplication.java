@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -32,29 +33,6 @@ public class ProductCompositeServiceApplication {
         HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> true);
     }
 
-//    @Inject
-//    MetricRegistry registry;
-//
-//    @PostConstruct
-//    public void postInject() {
-//        LOG.info("Register a StatsD Metrics Reporter");
-//        StatsDReporter.forRegistry(registry)
-//            .prefixedWith("composite-service")
-//            .build("statsd", 8125)
-//            .start(1, TimeUnit.SECONDS);
-//        LOG.info("Registration of a StatsD Metrics Reporter done!");
-//    }
-
-//    @Value("${app.rabbitmq.host:localhost}")
-//    String rabbitMqHost;
-//
-//    @Bean
-//    public ConnectionFactory connectionFactory() {
-//        LOG.info("Create RabbitMqCF for host: {}", rabbitMqHost);
-//        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitMqHost);
-//        return connectionFactory;
-//    }
-
     @Bean
     @LoadBalanced
     RestTemplate restTemplate() {
@@ -65,15 +43,8 @@ public class ProductCompositeServiceApplication {
         LOG.info("Register MDCHystrixConcurrencyStrategy");
         HystrixPlugins.getInstance().registerConcurrencyStrategy(new MDCHystrixConcurrencyStrategy());
 
-        SpringApplication.run(ProductCompositeServiceApplication.class, args);
+        ConfigurableApplicationContext ctx = SpringApplication.run(ProductCompositeServiceApplication.class, args);
 
-        LOG.info("Register ShutdownHook");
-        Runtime.getRuntime().addShutdownHook(new Thread(){
-            @Override
-            public void run() {
-                LOG.info("Shutting down, unregister from Eureka!");
-                DiscoveryManager.getInstance().shutdownComponent();
-            }
-        });
+        LOG.info("Connected to RabbitMQ at: {}", ctx.getEnvironment().getProperty("spring.rabbitmq.host"));
     }
 }

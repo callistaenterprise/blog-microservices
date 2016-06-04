@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.turbine.stream.EnableTurbineStream;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
@@ -18,17 +19,10 @@ public class TurbineApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(TurbineApplication.class);
 
-    @Value("${app.rabbitmq.host:localhost}")
-    String rabbitMqHost;
-
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        LOG.info("Create RabbitMqCF for host: {}", rabbitMqHost);
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitMqHost);
-        return connectionFactory;
-    }
-
     public static void main(String[] args) {
-        new SpringApplicationBuilder(TurbineApplication.class).run(args);
+
+        ConfigurableApplicationContext ctx = new SpringApplicationBuilder(TurbineApplication.class).run(args);
+
+        LOG.info("Connected to RabbitMQ at: {}", ctx.getEnvironment().getProperty("spring.rabbitmq.host"));
     }
 }

@@ -1,11 +1,14 @@
 server.port: 8888
 
-#spring.cloud.config.server.git.uri: ${HOME}/Desktop/config-repo
-#spring.cloud.config.server.git.uri: https://github.com/callistaenterprise/blog-microservices-config.git
-#spring.cloud.config.server.git.uri: /Users/magnus/Documents/projects/microservice-tutorial/workshop/git/microservices-workshop/solution-5/config-repo
-spring.cloud.config.server.git.uri: /config-repo
+# Configuration of a local Git-repo for development locally without Docker
+# note that we are still using git; We just access the git-repo via file: protocol
+spring.cloud.config.server.git.uri: file:///${PWD}/../../../../blog-microservices-config/
 
 eureka.client.serviceUrl.defaultZone: http://localhost:8761/eureka/
+
+spring.rabbitmq:
+  host: localhost
+  port: 5672
 
 logging:
   level:
@@ -25,9 +28,10 @@ logging:
 spring:
   profiles: docker
 
-app:
-  rabbitmq:
-    host: rabbitmq
+spring.rabbitmq.host: rabbitmq
+
+# when running docker locally on a dev pc the config-repo is mounted to a local git-repo in docker-compose file
+spring.cloud.config.server.git.uri: /config-repo
 
 eureka:
   instance:

@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 #
 # Sample use of overriding parameters:
+# - host, name of the host where all microservices are running
+# - port, the port where the API is available
 #
-# $ host=localhost ./test-all.sh
+# $ host=localhost port=8765 ./test-all.sh
 #
 : ${host=docker.me}
+: ${port=443}
 
 # set -e
 
@@ -53,9 +56,9 @@ function waitForServices() {
 
 function testAPI() {
     url=$@
-#    echo "Is the API awake?"
-#    echo "$ curl -ks https://$host/api/product/123 -H \"Authorization: Bearer \$TOKEN\" | jq ."
-    if curl -ks https://$host/api/product/123 -H "Authorization: Bearer $TOKEN" -f -o /dev/null
+    echo "Is the API awake?"
+    echo "$ curl -ks https://$host:$port/api/product/123 -H \"Authorization: Bearer \$TOKEN\" | jq ."
+    if curl -ks https://$host:$port/api/product/123 -H "Authorization: Bearer $TOKEN" -f -o /dev/null
     then
           echo "Ok"
           return 0
@@ -90,8 +93,8 @@ echo "Start:" `date`
 if [[ $@ == *"start"* ]]
 then
     echo "Restarting the test environment..."
-    echo "$ docker-compose stop"
-    docker-compose stop
+    echo "$ docker-compose down"
+    docker-compose down
     echo "$ docker-compose up -d"
     docker-compose up -d
 fi
@@ -109,14 +112,14 @@ echo "ACCESS TOKEN: $TOKEN"
 echo ''
 echo "Call API with Access Token... "
 waitForAPI
-echo "$ curl -ks https://$host/api/product/123 -H \"Authorization: Bearer \$TOKEN\" | jq ."
-curl -ks https://$host/api/product/123 -H  "Authorization: Bearer $TOKEN" | jq .
+echo "$ curl -ks https://$host:$port/api/product/123 -H \"Authorization: Bearer \$TOKEN\" | jq ."
+curl -ks https://$host:$port/api/product/123 -H  "Authorization: Bearer $TOKEN" | jq .
 
 if [[ $@ == *"stop"* ]]
 then
     echo "We are done, stopping the test environment..."
-    echo "$ docker-compose stop"
-    docker-compose stop
+    echo "$ docker-compose down"
+    docker-compose down
 fi
 
 echo "End:" `date`

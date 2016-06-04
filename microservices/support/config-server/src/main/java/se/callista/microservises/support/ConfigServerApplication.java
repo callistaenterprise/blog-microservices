@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.config.server.EnableConfigServer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @EnableConfigServer
@@ -18,17 +19,9 @@ public class ConfigServerApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigServerApplication.class);
 
-    @Value("${app.rabbitmq.host:localhost}")
-    String rabbitMqHost;
-
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        LOG.info("Create RabbitMqCF for host: {}", rabbitMqHost);
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitMqHost);
-        return connectionFactory;
-    }
-
     public static void main(String[] args) {
-        SpringApplication.run(ConfigServerApplication.class, args);
+        ConfigurableApplicationContext ctx = SpringApplication.run(ConfigServerApplication.class, args);
+
+        LOG.info("Connected to RabbitMQ at: {}", ctx.getEnvironment().getProperty("spring.rabbitmq.host"));
     }
 }

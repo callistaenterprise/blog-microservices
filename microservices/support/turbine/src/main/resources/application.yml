@@ -30,6 +30,10 @@ logging:
     org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer: INFO
     org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainer: INFO
 
+spring.rabbitmq:
+  host: localhost
+  port: 5672
+
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
@@ -51,9 +55,7 @@ eureka:
 spring:
   profiles: docker
 
-app:
-  rabbitmq:
-    host: rabbitmq
+spring.rabbitmq.host: rabbitmq
 
 eureka:
   instance:
