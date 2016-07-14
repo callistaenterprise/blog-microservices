@@ -18,7 +18,7 @@ function testUrl() {
           echo "Ok"
           return 0
     else
-          echo -n "fail"
+          echo -n "not yet"
           return 1
     fi;
 }
@@ -63,7 +63,7 @@ function testAPI() {
           echo "Ok"
           return 0
     else
-          echo -n "fail"
+          echo -n "not yet"
           return 1
     fi;
 }
