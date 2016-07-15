@@ -9,7 +9,6 @@ buildscript {
      }
      dependencies {
           classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-          classpath 'com.bmuschko:gradle-docker-plugin:2.6.3'
      }
 }
 
@@ -29,16 +28,14 @@ targetCompatibility = 1.8
 repositories {
      mavenLocal()
      mavenCentral()
-     maven { url "https://repo.spring.io/milestone" }
 }
 
 dependencies {
      compile("org.springframework.boot:spring-boot-starter-web")
-// TODO: Running with undertow gives the following startup error with springCloudVersion = 'Brixton.M4'
-//     {
-//          exclude module: 'spring-boot-starter-tomcat'
-//     }
-//     compile("org.springframework.boot:spring-boot-starter-undertow")
+     {
+          exclude module: 'spring-boot-starter-tomcat'
+     }
+     compile("org.springframework.boot:spring-boot-starter-undertow")
      compile("org.springframework.boot:spring-boot-starter-actuator")
      compile("org.springframework.boot:spring-boot-starter-security")
 
