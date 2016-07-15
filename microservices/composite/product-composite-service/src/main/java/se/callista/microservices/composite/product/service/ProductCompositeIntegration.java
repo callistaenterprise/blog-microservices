@@ -32,9 +32,6 @@ public class ProductCompositeIntegration {
     private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeIntegration.class);
 
     @Inject
-    private LoadBalancerClient loadBalancer;
-
-    @Inject
     ServiceUtils util;
 
     @Inject
@@ -72,8 +69,9 @@ public class ProductCompositeIntegration {
      */
     public ResponseEntity<Product> defaultProduct(int productId) {
         LOG.warn("Using fallback method for product-service");
-        // If we can't get basic product info we better fail!
-        return util.createResponse(null, HttpStatus.BAD_GATEWAY);
+        return util.createResponse(
+            new Product(productId, "Fallback Name", -1),
+            HttpStatus.OK);
     }
 
     // --------------- //
@@ -111,7 +109,6 @@ public class ProductCompositeIntegration {
      */
     public ResponseEntity<List<Recommendation>> defaultRecommendations(int productId) {
         LOG.warn("Using fallback method for recommendation-service");
-        LOG.debug("GetRecommendations.fallback-cnt {}", 1);
         return util.createResponse(
             Arrays.asList(new Recommendation(productId, 1, "Fallback Author 1", 1, "Fallback Content 1")),
             HttpStatus.OK);
@@ -148,7 +145,6 @@ public class ProductCompositeIntegration {
      */
     public ResponseEntity<List<Review>> defaultReviews(int productId) {
         LOG.warn("Using fallback method for review-service");
-        LOG.debug("GetReviews.fallback-cnt {}", 1);
         return util.createResponse(
             Arrays.asList(new Review(productId, 1, "Fallback Author 1", "Fallback Subject 1", "Fallback Content 1")),
             HttpStatus.OK);
