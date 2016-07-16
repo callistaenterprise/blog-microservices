@@ -1,7 +1,5 @@
 package se.callista.microservices.composite.product;
 
-import com.netflix.discovery.DiscoveryManager;
-import com.netflix.hystrix.strategy.HystrixPlugins;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -14,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.client.RestTemplate;
-import se.callista.microservices.util.MDCHystrixConcurrencyStrategy;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -40,8 +37,6 @@ public class ProductCompositeServiceApplication {
     }
 
     public static void main(String[] args) {
-        LOG.info("Register MDCHystrixConcurrencyStrategy");
-        HystrixPlugins.getInstance().registerConcurrencyStrategy(new MDCHystrixConcurrencyStrategy());
 
         ConfigurableApplicationContext ctx = SpringApplication.run(ProductCompositeServiceApplication.class, args);
 
