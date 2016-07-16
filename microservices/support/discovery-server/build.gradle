@@ -45,6 +45,8 @@ dependencies {
         // TODO: Is this still required?
         exclude(module: 'servlet-api') // Drags in an old 2.5 spec...
     }
+    compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+
 //  compile('org.springframework.boot:spring-boot-starter-security')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
