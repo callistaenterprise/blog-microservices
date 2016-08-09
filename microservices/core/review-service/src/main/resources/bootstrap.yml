@@ -1,3 +1,6 @@
+info:
+  component: Review Core Service
+
 spring:
   application:
     name: review-service

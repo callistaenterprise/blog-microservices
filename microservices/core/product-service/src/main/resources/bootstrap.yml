@@ -1,3 +1,6 @@
+info:
+  component: Product Core Service
+
 spring:
   application:
     name: product-service

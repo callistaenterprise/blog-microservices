@@ -102,6 +102,14 @@ fi
 waitForServices
 
 echo ''
+echo "Call /info on each microservice:"
+docker-compose exec composite wget -qO- localhost:8080/info | jq
+docker-compose exec pro wget -qO- localhost:8080/info | jq
+docker-compose exec rev wget -qO- localhost:8080/info | jq
+docker-compose exec rec wget -qO- localhost:8080/info | jq
+
+
+echo ''
 echo "Get an OAuth Access Token:"
 echo "$ curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d scope=webshop -d username=user -d password=password | jq ."
 OAUTH_RESPOSE=`curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d scope=webshop -d username=user -d password=password`

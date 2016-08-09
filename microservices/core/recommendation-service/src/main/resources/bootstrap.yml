@@ -1,3 +1,6 @@
+info:
+  component: Recommendation Core Service
+
 spring:
   application:
     name: recommendation-service

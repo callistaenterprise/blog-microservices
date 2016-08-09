@@ -1,3 +1,6 @@
+info:
+  component: Product Composite Service
+
 spring:
   application:
     name: composite-service
