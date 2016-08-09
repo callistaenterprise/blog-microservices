@@ -4,9 +4,9 @@
 # - host, name of the host where all microservices are running
 # - port, the port where the API is available
 #
-# $ host=localhost port=8765 ./test-all.sh
+# $ host=myhost port=8765 ./test-all.sh
 #
-: ${host=docker.me}
+: ${host=localhost}
 : ${port=443}
 
 # set -e
