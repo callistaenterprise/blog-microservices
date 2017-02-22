@@ -9,10 +9,9 @@ machine:
 dependencies:
   pre:
     - sudo pip install docker-compose
-     
-dependencies:
   post:
     # gradle clean build + docker-compose build...
+    - docker-compose -version
     - docker version
     - docker info
     - ./build-all.sh
