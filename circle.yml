@@ -21,16 +21,16 @@ test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-    - docker build -t magnuslarsson/ms-blog-auth-server               microservices/support/auth-server/build
-    - docker build -t magnuslarsson/ms-blog-config-server             microservices/support/config-server/build
-    - docker build -t magnuslarsson/ms-blog-discovery-server          microservices/support/discovery-server/build
-    - docker build -t magnuslarsson/ms-blog-edge-server               microservices/support/edge-server/build
-    - docker build -t magnuslarsson/ms-blog-monitor-dashboard         microservices/support/monitor-dashboard/build
-    - docker build -t magnuslarsson/ms-blog-turbine                   microservices/support/turbine/build
-    - docker build -t magnuslarsson/ms-blog-product-service           microservices/core/product-service/build
-    - docker build -t magnuslarsson/ms-blog-recommendation-service    microservices/core/recommendation-service/build
-    - docker build -t magnuslarsson/ms-blog-review-service            microservices/core/review-service/build
-    - docker build -t magnuslarsson/ms-blog-product-composite-service microservices/composite/product-composite-service/build
+#    - docker build -t magnuslarsson/ms-blog-auth-server               microservices/support/auth-server/build
+#    - docker build -t magnuslarsson/ms-blog-config-server             microservices/support/config-server/build
+#    - docker build -t magnuslarsson/ms-blog-discovery-server          microservices/support/discovery-server/build
+#    - docker build -t magnuslarsson/ms-blog-edge-server               microservices/support/edge-server/build
+#    - docker build -t magnuslarsson/ms-blog-monitor-dashboard         microservices/support/monitor-dashboard/build
+#    - docker build -t magnuslarsson/ms-blog-turbine                   microservices/support/turbine/build
+#    - docker build -t magnuslarsson/ms-blog-product-service           microservices/core/product-service/build
+#    - docker build -t magnuslarsson/ms-blog-recommendation-service    microservices/core/recommendation-service/build
+#    - docker build -t magnuslarsson/ms-blog-review-service            microservices/core/review-service/build
+#    - docker build -t magnuslarsson/ms-blog-product-composite-service microservices/composite/product-composite-service/build
     - docker images
 #    - host=localhost ./test-all.sh
 
@@ -41,37 +41,37 @@ deployment:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PWD
 
       # Push latest
-      - docker push magnuslarsson/ms-blog-auth-server
-      - docker push magnuslarsson/ms-blog-config-server
-      - docker push magnuslarsson/ms-blog-discovery-server
-      - docker push magnuslarsson/ms-blog-edge-server
-      - docker push magnuslarsson/ms-blog-monitor-dashboard
-      - docker push magnuslarsson/ms-blog-turbine
+#      - docker push magnuslarsson/ms-blog-auth-server
+#      - docker push magnuslarsson/ms-blog-config-server
+#      - docker push magnuslarsson/ms-blog-discovery-server
+#      - docker push magnuslarsson/ms-blog-edge-server
+#      - docker push magnuslarsson/ms-blog-monitor-dashboard
+#      - docker push magnuslarsson/ms-blog-turbine
+#
+#      - docker push magnuslarsson/ms-blog-product-service
+#      - docker push magnuslarsson/ms-blog-recommendation-service
+#      - docker push magnuslarsson/ms-blog-review-service
+#      - docker push magnuslarsson/ms-blog-product-composite-service
 
-      - docker push magnuslarsson/ms-blog-product-service
-      - docker push magnuslarsson/ms-blog-recommendation-service
-      - docker push magnuslarsson/ms-blog-review-service
-      - docker push magnuslarsson/ms-blog-product-composite-service
+      # Create builds tag "master.$CIRCLE_BUILD_NUM" and push it
+      - docker tag blogmicroservices_auth      magnuslarsson/ms-blog-auth-server:master.$CIRCLE_BUILD_NUM
+      - docker tag blogmicroservices_config    magnuslarsson/ms-blog-config-server:master.$CIRCLE_BUILD_NUM
+      - docker tag blogmicroservices_discovery magnuslarsson/ms-blog-discovery-server:master.$CIRCLE_BUILD_NUM
+      - docker tag blogmicroservices_edge      magnuslarsson/ms-blog-edge-server:master.$CIRCLE_BUILD_NUM
+      - docker tag blogmicroservices_monitor   magnuslarsson/ms-blog-monitor-dashboard:master.$CIRCLE_BUILD_NUM
+#      - docker tag magnuslarsson/ms-blog-turbine                   magnuslarsson/ms-blog-turbine:master.$CIRCLE_BUILD_NUM
 
-      # Create buils tag "master.$CIRCLE_BUILD_NUM" and push it
-      - docker tag magnuslarsson/ms-blog-auth-server               magnuslarsson/ms-blog-auth-server:master.$CIRCLE_BUILD_NUM
-      - docker tag magnuslarsson/ms-blog-config-server             magnuslarsson/ms-blog-config-server:master.$CIRCLE_BUILD_NUM
-      - docker tag magnuslarsson/ms-blog-discovery-server          magnuslarsson/ms-blog-discovery-server:master.$CIRCLE_BUILD_NUM
-      - docker tag magnuslarsson/ms-blog-edge-server               magnuslarsson/ms-blog-edge-server:master.$CIRCLE_BUILD_NUM
-      - docker tag magnuslarsson/ms-blog-monitor-dashboard         magnuslarsson/ms-blog-monitor-dashboard:master.$CIRCLE_BUILD_NUM
-      - docker tag magnuslarsson/ms-blog-turbine                   magnuslarsson/ms-blog-turbine:master.$CIRCLE_BUILD_NUM
-
-      - docker tag magnuslarsson/ms-blog-product-service           magnuslarsson/ms-blog-product-service:master.$CIRCLE_BUILD_NUM
-      - docker tag magnuslarsson/ms-blog-recommendation-service    magnuslarsson/ms-blog-recommendation-service:master.$CIRCLE_BUILD_NUM
-      - docker tag magnuslarsson/ms-blog-review-service            magnuslarsson/ms-blog-review-service:master.$CIRCLE_BUILD_NUM
-      - docker tag magnuslarsson/ms-blog-product-composite-service magnuslarsson/ms-blog-product-composite-service:master.$CIRCLE_BUILD_NUM
+      - docker tag blogmicroservices_pro       magnuslarsson/ms-blog-product-service:master.$CIRCLE_BUILD_NUM
+      - docker tag blogmicroservices_rec       magnuslarsson/ms-blog-recommendation-service:master.$CIRCLE_BUILD_NUM
+      - docker tag blogmicroservices_rev       magnuslarsson/ms-blog-review-service:master.$CIRCLE_BUILD_NUM
+      - docker tag blogmicroservices_composite magnuslarsson/ms-blog-product-composite-service:master.$CIRCLE_BUILD_NUM
 
       - docker push magnuslarsson/ms-blog-auth-server:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-config-server:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-discovery-server:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-edge-server:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-monitor-dashboard:master.$CIRCLE_BUILD_NUM
-      - docker push magnuslarsson/ms-blog-turbine:master.$CIRCLE_BUILD_NUM
+#      - docker push magnuslarsson/ms-blog-turbine:master.$CIRCLE_BUILD_NUM
 
       - docker push magnuslarsson/ms-blog-product-service:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-recommendation-service:master.$CIRCLE_BUILD_NUM
