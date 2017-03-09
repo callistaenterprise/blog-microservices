@@ -1,3 +1,10 @@
+# Started with:
+#
+#   docker-compose -f docker-compose-elk.yml up -d
+#   docker-compose -f docker-compose-elk.yml logs -f
+#   docker-compose -f docker-compose-elk.yml exec logstash /bin/bash
+#     ps -eax | more
+#
 version: '2'
 
 services:
@@ -13,7 +20,7 @@ services:
       - "5601:5601"
 
   logstash:
-	  image: docker.elastic.co/logstash/logstash:5.2.2
-		volumes:
-	      - $PWD/elk-config:/elk-config
+    image: docker.elastic.co/logstash/logstash:5.2.2
+    volumes:
+      - $PWD/elk-config:/elk-config
     command: logstash -f /elk-config/logstash.conf
