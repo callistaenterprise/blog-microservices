@@ -1,24 +1,55 @@
-##
-## DOES NOT WORK, GIVES CIRCULAR DEPENDENCIES...
-##
-#  links:
-#    - discovery2
-#  command: java -jar -Dspring.profiles.active=docker1 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
-#  
-#discovery2:
-#  image: magnus-larsson/spring-boot
-#  restart: always
-#  ports:
-#    - "8762:8762"
-#  volumes:
-#    - $PWD:/data
-#  links:
-#    - discovery
-#  command: java -jar -Dspring.profiles.active=docker2 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
+#
+# NOT REQUIRED SINCE WE HARDCODE THE INTERNAL IP ADDRESS OF THE IP HOST!
+#
+# First run the command:
+#
+# export LOGSTASH_ADDRESS=$(docker inspect --format '{{ .NetworkSettings.Networks.blogmicroservices_default.IPAddress }}' blogmicroservices_logstash_1) && echo $LOGSTASH_ADDRESS
+#
 
-version: '2'
+version: '2.1'
 
 services:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
+    ports:
+      - "9200:9200"
+    environment:
+      - "xpack.security.enabled=false"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.2.2
+    ports:
+      - "5601:5601"
+    environment:
+      - "xpack.security.enabled=false"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:5.2.2
+    ports:
+      - "12201:12201"
+      - "27000:27000"
+      - "25826:25826"
+      - "26000:26000"
+    volumes:
+      - $PWD/elk-config:/elk-config
+    command: logstash -f /elk-config/logstash.config
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -29,23 +60,50 @@ services:
 
   discovery:
     build: microservices/support/discovery-server
+#    image: blogmicroservices_discovery:1
     restart: always
     ports:
       - "8761:8761"
+    logging:
+#      driver: gelf
+      driver: syslog
+      options:
+#        gelf-address: "udp://${LOGSTASH_ADDRESS}:12201"
+#        gelf-address: "udp://${LOGSTASH_ADDRESS}:27000"
+        syslog-address: "tcp://localhost:25826"
+    depends_on:
+      logstash:
+        condition: service_healthy
 
   config:
     build: microservices/support/config-server
+#    image: blogmicroservices_config:1
     restart: always
     ports:
       - "8888:8888"
     volumes:
       - $PWD/../blog-microservices-config:/config-repo
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:25826"
+    depends_on:
+      logstash:
+        condition: service_healthy
 
   auth:
     build: microservices/support/auth-server
+#    image: blogmicroservices_auth:1
     restart: always
     ports:
       - "9999:9999"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:25826"
+    depends_on:
+      logstash:
+        condition: service_healthy
 
   #turbine:
   #  image: magnuslarsson/ms-blog-turbine
@@ -54,28 +112,76 @@ services:
 
   pro:
     build: microservices/core/product-service
+#    image: blogmicroservices_pro:1
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:25826"
+    depends_on:
+      logstash:
+        condition: service_healthy
 
   rec:
     build: microservices/core/recommendation-service
+#    image: blogmicroservices_rec:1
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:25826"
+    depends_on:
+      logstash:
+        condition: service_healthy
 
   rev:
     build: microservices/core/review-service
+#    image: blogmicroservices_rev:1
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:25826"
+    depends_on:
+      logstash:
+        condition: service_healthy
 
   composite:
     build: microservices/composite/product-composite-service
+#    image: blogmicroservices_composite:1
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:25826"
+    depends_on:
+      logstash:
+        condition: service_healthy
 
   monitor:
     build: microservices/support/monitor-dashboard
+#    image: blogmicroservices_monitor:1
     restart: always
     ports:
       - "7979:7979"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:25826"
+    depends_on:
+      logstash:
+        condition: service_healthy
 
   edge:
     build: microservices/support/edge-server
+#    image: blogmicroservices_edge:1
     restart: always
     ports:
       - "443:8765"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:25826"
+    depends_on:
+      logstash:
+        condition: service_healthy

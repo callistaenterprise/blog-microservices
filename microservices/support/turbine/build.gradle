@@ -36,6 +36,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-undertow")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile('org.springframework.cloud:spring-cloud-starter-turbine-amqp')
+    compile('org.springframework.cloud:spring-cloud-starter-sleuth')
 }
 
 dependencyManagement {

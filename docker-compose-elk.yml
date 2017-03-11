@@ -11,16 +11,31 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
-    ports: 
+#    image: elasticsearch-custom
+    ports:
       - "9200:9200"
+    environment:
+      - "xpack.security.enabled=false"
+#    command: bin/elasticsearch -Expack.security.enabled=false
 
   kibana:
     image: docker.elastic.co/kibana/kibana:5.2.2
     ports: 
       - "5601:5601"
+    environment:
+      - "xpack.security.enabled=false"
+    depends_on:
+      - elasticsearch
 
   logstash:
     image: docker.elastic.co/logstash/logstash:5.2.2
+    ports:
+      - "12201:12201"
+      - "27000:27000"
+      - "25826:25826"
+      - "26000:26000"
     volumes:
       - $PWD/elk-config:/elk-config
-    command: logstash -f /elk-config/logstash.conf
+    command: logstash -f /elk-config/logstash.config
+    depends_on:
+      - elasticsearch
