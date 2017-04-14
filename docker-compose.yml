@@ -84,6 +84,9 @@ services:
       - "8888:8888"
     volumes:
       - $PWD/../blog-microservices-config:/config-repo
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,native
+      - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:/config-repo
     logging:
       driver: syslog
       options:
