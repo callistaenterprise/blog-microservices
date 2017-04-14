@@ -20,7 +20,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:9200"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 10
 
   kibana:
     image: docker.elastic.co/kibana/kibana:5.2.2
@@ -49,7 +49,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 10
 
   rabbitmq:
     image: rabbitmq:3-management
