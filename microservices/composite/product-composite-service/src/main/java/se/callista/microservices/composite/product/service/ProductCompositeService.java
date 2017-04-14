@@ -50,8 +50,6 @@ public class ProductCompositeService {
     @RequestMapping("/{productId}")
     public ResponseEntity<ProductAggregated> getProduct(@PathVariable int productId) {
 
-        LOG.info("Synch start...");
-
         // 1. First get mandatory product information
         Product product = getBasicProductInfo(productId);
 
@@ -68,7 +66,6 @@ public class ProductCompositeService {
     public ResponseEntity<ProductAggregated> getProductAsync(@PathVariable int productId) {
 
         try {
-            LOG.info("Asynch start...");
             CompletableFuture<Product>              productFuture            = supplyAsync( () -> getBasicProductInfo(productId));
             CompletableFuture<List<Recommendation>> recommendationListFuture = supplyAsync( () -> getRecommendations(productId));
             CompletableFuture<List<Review>>         reviewListFuture         = supplyAsync( () -> getReviews(productId));

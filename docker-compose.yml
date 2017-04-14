@@ -60,7 +60,6 @@ services:
 
   discovery:
     build: microservices/support/discovery-server
-#    image: blogmicroservices_discovery:1
     restart: always
     ports:
       - "8761:8761"
@@ -70,14 +69,16 @@ services:
       options:
 #        gelf-address: "udp://${LOGSTASH_ADDRESS}:12201"
 #        gelf-address: "udp://${LOGSTASH_ADDRESS}:27000"
-        syslog-address: "tcp://localhost:25826"
+#        syslog-address: "tcp://localhost:25826"
+#        syslog-address: "tcp://172.18.0.3:25826"
+        syslog-address: "tcp://127.0.0.1:25826"
+
     depends_on:
       logstash:
         condition: service_healthy
 
   config:
     build: microservices/support/config-server
-#    image: blogmicroservices_config:1
     restart: always
     ports:
       - "8888:8888"
@@ -86,21 +87,20 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://localhost:25826"
+        syslog-address: "tcp://127.0.0.1:25826"
     depends_on:
       logstash:
         condition: service_healthy
 
   auth:
     build: microservices/support/auth-server
-#    image: blogmicroservices_auth:1
     restart: always
     ports:
       - "9999:9999"
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://localhost:25826"
+        syslog-address: "tcp://127.0.0.1:25826"
     depends_on:
       logstash:
         condition: service_healthy
@@ -112,76 +112,70 @@ services:
 
   pro:
     build: microservices/core/product-service
-#    image: blogmicroservices_pro:1
     restart: always
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://localhost:25826"
+        syslog-address: "tcp://127.0.0.1:25826"
     depends_on:
       logstash:
         condition: service_healthy
 
   rec:
     build: microservices/core/recommendation-service
-#    image: blogmicroservices_rec:1
     restart: always
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://localhost:25826"
+        syslog-address: "tcp://127.0.0.1:25826"
     depends_on:
       logstash:
         condition: service_healthy
 
   rev:
     build: microservices/core/review-service
-#    image: blogmicroservices_rev:1
     restart: always
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://localhost:25826"
+        syslog-address: "tcp://127.0.0.1:25826"
     depends_on:
       logstash:
         condition: service_healthy
 
   composite:
     build: microservices/composite/product-composite-service
-#    image: blogmicroservices_composite:1
     restart: always
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://localhost:25826"
+        syslog-address: "tcp://127.0.0.1:25826"
     depends_on:
       logstash:
         condition: service_healthy
 
   monitor:
     build: microservices/support/monitor-dashboard
-#    image: blogmicroservices_monitor:1
     restart: always
     ports:
       - "7979:7979"
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://localhost:25826"
+        syslog-address: "tcp://127.0.0.1:25826"
     depends_on:
       logstash:
         condition: service_healthy
 
   edge:
     build: microservices/support/edge-server
-#    image: blogmicroservices_edge:1
     restart: always
     ports:
       - "443:8765"
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://localhost:25826"
+        syslog-address: "tcp://127.0.0.1:25826"
     depends_on:
       logstash:
         condition: service_healthy

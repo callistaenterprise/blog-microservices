@@ -68,7 +68,7 @@ public class ProductCompositeIntegration {
      * @return
      */
     public ResponseEntity<Product> defaultProduct(int productId) {
-        LOG.warn("Using fallback method for product-service");
+        LOG.warn("Using fallback method for product-service with productId: {}", productId);
         return util.createResponse(
             new Product(productId, "Fallback Name", -1),
             HttpStatus.OK);
@@ -108,7 +108,7 @@ public class ProductCompositeIntegration {
      * @return
      */
     public ResponseEntity<List<Recommendation>> defaultRecommendations(int productId) {
-        LOG.warn("Using fallback method for recommendation-service");
+        LOG.warn("Using fallback method for recommendation-service with productId: {}", productId);
         return util.createResponse(
             Arrays.asList(new Recommendation(productId, 1, "Fallback Author 1", 1, "Fallback Content 1")),
             HttpStatus.OK);
@@ -144,7 +144,7 @@ public class ProductCompositeIntegration {
      * @return
      */
     public ResponseEntity<List<Review>> defaultReviews(int productId) {
-        LOG.warn("Using fallback method for review-service");
+        LOG.warn("Using fallback method for review-service with productId: {}", productId);
         return util.createResponse(
             Arrays.asList(new Review(productId, 1, "Fallback Author 1", "Fallback Subject 1", "Fallback Content 1")),
             HttpStatus.OK);
