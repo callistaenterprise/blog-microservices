@@ -59,6 +59,7 @@ deployment:
       - docker tag blogmicroservices_discovery magnuslarsson/ms-blog-discovery-server:master.$CIRCLE_BUILD_NUM
       - docker tag blogmicroservices_edge      magnuslarsson/ms-blog-edge-server:master.$CIRCLE_BUILD_NUM
       - docker tag blogmicroservices_monitor   magnuslarsson/ms-blog-monitor-dashboard:master.$CIRCLE_BUILD_NUM
+      - docker tag blogmicroservices_zipkin    magnuslarsson/ms-blog-zipkin-server:master.$CIRCLE_BUILD_NUM
 #      - docker tag magnuslarsson/ms-blog-turbine                   magnuslarsson/ms-blog-turbine:master.$CIRCLE_BUILD_NUM
 
       - docker tag blogmicroservices_pro       magnuslarsson/ms-blog-product-service:master.$CIRCLE_BUILD_NUM
@@ -71,6 +72,7 @@ deployment:
       - docker push magnuslarsson/ms-blog-discovery-server:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-edge-server:master.$CIRCLE_BUILD_NUM
       - docker push magnuslarsson/ms-blog-monitor-dashboard:master.$CIRCLE_BUILD_NUM
+      - docker push magnuslarsson/ms-blog-zipkin-server:master.$CIRCLE_BUILD_NUM
 #      - docker push magnuslarsson/ms-blog-turbine:master.$CIRCLE_BUILD_NUM
 
       - docker push magnuslarsson/ms-blog-product-service:master.$CIRCLE_BUILD_NUM

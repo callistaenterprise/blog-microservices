@@ -13,3 +13,4 @@ cd microservices/support/discovery-server;            ./gradlew clean; cd -
 cd microservices/support/edge-server;                 ./gradlew clean; cd -
 cd microservices/support/monitor-dashboard;           ./gradlew clean; cd -
 cd microservices/support/turbine;                     ./gradlew clean; cd -
+cd microservices/support/zipkin-server;               ./gradlew clean; cd -

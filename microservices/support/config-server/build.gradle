@@ -38,6 +38,7 @@ dependencies {
     compile('org.springframework.cloud:spring-cloud-config-monitor')
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
     compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+    compile('org.springframework.cloud:spring-cloud-sleuth-stream')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }

@@ -182,3 +182,16 @@ services:
     depends_on:
       logstash:
         condition: service_healthy
+
+  zipkin:
+    build: microservices/support/zipkin-server
+    restart: always
+    ports:
+      - "9411:9411"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://127.0.0.1:25826"
+    depends_on:
+      logstash:
+        condition: service_healthy
