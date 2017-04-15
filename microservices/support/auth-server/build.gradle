@@ -35,6 +35,7 @@ dependencies {
     }
     compile("org.springframework.boot:spring-boot-starter-undertow")
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.cloud:spring-cloud-starter-config")
     compile('org.springframework.cloud:spring-cloud-starter-bus-amqp')
     compile("org.springframework.cloud:spring-cloud-starter-oauth2")
     compile("org.springframework.cloud:spring-cloud-starter-security")
