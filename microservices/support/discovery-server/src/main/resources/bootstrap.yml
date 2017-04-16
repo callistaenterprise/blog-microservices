@@ -1,6 +1,6 @@
 spring:
   application:
-    name: eureka
+    name: discovery-server
 #  cloud:
 #    config:
 #      failFast: true
