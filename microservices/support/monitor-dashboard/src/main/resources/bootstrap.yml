@@ -1,6 +1,9 @@
+info:
+  component: Hystrix Dashboard
+
 spring:
   application:
-    name: hystrix-dashboard
+    name: monitor-dashboard
   cloud:
     config:
       failFast: true
