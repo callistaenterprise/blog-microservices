@@ -9,16 +9,18 @@ public class Recommendation {
     private String author;
     private int rate;
     private String content;
+    private String serviceAddress;
 
     public Recommendation() {
     }
 
-    public Recommendation(int productId, int recommendationId, String author, int rate, String content) {
+    public Recommendation(int productId, int recommendationId, String author, int rate, String content, String serviceAddress) {
         this.productId = productId;
         this.recommendationId = recommendationId;
         this.author = author;
         this.rate = rate;
         this.content = content;
+        this.serviceAddress = serviceAddress;
     }
 
     public int getProductId() {
@@ -59,5 +61,9 @@ public class Recommendation {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getServiceAddress() {
+        return serviceAddress;
     }
 }

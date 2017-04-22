@@ -9,16 +9,18 @@ public class Review {
     private String author;
     private String subject;
     private String content;
+    private String serviceAddress;
 
     public Review() {
     }
 
-    public Review(int productId, int reviewId, String author, String subject, String content) {
+    public Review(int productId, int reviewId, String author, String subject, String content, String serviceAddress) {
         this.productId = productId;
         this.reviewId = reviewId;
         this.author = author;
         this.subject = subject;
         this.content = content;
+        this.serviceAddress = serviceAddress;
     }
 
     public int getProductId() {
@@ -59,5 +61,9 @@ public class Review {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getServiceAddress() {
+        return serviceAddress;
     }
 }

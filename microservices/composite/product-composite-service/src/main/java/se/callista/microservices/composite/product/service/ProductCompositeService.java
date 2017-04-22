@@ -59,7 +59,7 @@ public class ProductCompositeService {
         // 3. Get optional reviews
         List<Review> reviews = getReviews(productId);
 
-        return util.createOkResponse(new ProductAggregated(product, recommendations, reviews));
+        return util.createOkResponse(new ProductAggregated(product, recommendations, reviews, util.getServiceAddress()));
     }
 
 //    @RequestMapping("/{productId}")
@@ -75,7 +75,7 @@ public class ProductCompositeService {
 
 
             LOG.info("Asynch, create result and return...");
-            return util.createOkResponse(new ProductAggregated(productFuture.get(), recommendationListFuture.get(), reviewListFuture.get()));
+            return util.createOkResponse(new ProductAggregated(productFuture.get(), recommendationListFuture.get(), reviewListFuture.get(), util.getServiceAddress()));
 
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("getProductAsync error", e);

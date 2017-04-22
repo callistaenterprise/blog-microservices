@@ -16,8 +16,9 @@ public class ProductAggregated {
     private int weight;
     private List<RecommendationSummary> recommendations;
     private List<ReviewSummary> reviews;
+    private ServiceAddresses serviceAddresses;
 
-    public ProductAggregated(Product product, List<Recommendation> recommendations, List<Review> reviews) {
+    public ProductAggregated(Product product, List<Recommendation> recommendations, List<Review> reviews, String serviceAddress) {
 
         // 1. Setup product info
         this.productId = product.getProductId();
@@ -35,6 +36,12 @@ public class ProductAggregated {
             this.reviews = reviews.stream()
                 .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject()))
                 .collect(Collectors.toList());
+
+        // 4. Create info regarding the involved microservices addresses
+        String productAddress = product.getServiceAddress();
+        String reviewAddress = (reviews != null && reviews.size() > 0) ? reviews.get(0).getServiceAddress() : "";
+        String recommendationAddress = (recommendations != null && recommendations.size() > 0) ? recommendations.get(0).getServiceAddress() : "";
+        serviceAddresses = new ServiceAddresses(serviceAddress, productAddress, reviewAddress, recommendationAddress);
     }
 
     public int getProductId() {
@@ -55,5 +62,9 @@ public class ProductAggregated {
 
     public List<ReviewSummary> getReviews() {
         return reviews;
+    }
+
+    public ServiceAddresses getServiceAddresses() {
+        return serviceAddresses;
     }
 }

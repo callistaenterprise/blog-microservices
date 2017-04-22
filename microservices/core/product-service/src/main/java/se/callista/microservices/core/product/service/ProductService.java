@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.callista.microservices.model.Product;
+import se.callista.microservices.util.CpuCruncherBean;
+import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservices.util.SetProcTimeBean;
 
 import javax.ws.rs.Consumes;
@@ -28,6 +30,12 @@ public class ProductService {
     @Autowired
     private SetProcTimeBean setProcTimeBean;
 
+    @Autowired
+    private CpuCruncherBean cpuCruncher;
+
+    @Autowired
+    private ServiceUtils util;
+
     /**
      * Sample usage: curl $HOST:$PORT/product/1
      *
@@ -42,8 +50,10 @@ public class ProductService {
 
         sleep(pt);
 
+        cpuCruncher.exec();
+
         LOG.debug("/product return the found product");
-        return new Product(productId, "name", 123);
+        return new Product(productId, "name", 123, util.getServiceAddress());
     }
 
     private void sleep(int pt) {

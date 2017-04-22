@@ -37,7 +37,7 @@ public class AsyncCallTests {
     public void beforeTest() {
 
         when(mock.getProduct(any(Integer.class))).
-            thenAnswer(invocation -> util.createOkResponse(new Product(getProductId(invocation), NAME, WEIGHT)));
+            thenAnswer(invocation -> util.createOkResponse(new Product(getProductId(invocation), NAME, WEIGHT, "")));
 
         when(mock.getRecommendations(any(Integer.class))).
             thenReturn(util.createOkResponse(new ArrayList<>()));

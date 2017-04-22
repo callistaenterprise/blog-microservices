@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.callista.microservices.model.Recommendation;
+import se.callista.microservices.util.CpuCruncherBean;
+import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservices.util.SetProcTimeBean;
 
 import javax.ws.rs.Consumes;
@@ -28,6 +30,12 @@ public class RecommendationService {
 
     @Autowired
     private SetProcTimeBean setProcTimeBean;
+
+    @Autowired
+    private CpuCruncherBean cpuCruncher;
+
+    @Autowired
+    private ServiceUtils util;
 
     /*
     private int port;
@@ -54,10 +62,12 @@ public class RecommendationService {
 
         sleep(pt);
 
+        cpuCruncher.exec();
+
         List<Recommendation> list = new ArrayList<>();
-        list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1"));
-        list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2"));
-        list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3"));
+        list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1", util.getServiceAddress()));
+        list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2", util.getServiceAddress()));
+        list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3", util.getServiceAddress()));
 
         LOG.debug("/recommendation response size: {}", list.size());
 

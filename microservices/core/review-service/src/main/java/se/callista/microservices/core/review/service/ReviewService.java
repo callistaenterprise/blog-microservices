@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.callista.microservices.model.Review;
+import se.callista.microservices.util.CpuCruncherBean;
+import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservices.util.SetProcTimeBean;
 
 import javax.ws.rs.Consumes;
@@ -28,6 +30,12 @@ public class ReviewService {
 
     @Autowired
     private SetProcTimeBean setProcTimeBean;
+
+    @Autowired
+    private CpuCruncherBean cpuCruncher;
+
+    @Autowired
+    private ServiceUtils util;
 
     /*
     private int port;
@@ -54,10 +62,12 @@ public class ReviewService {
 
         sleep(pt);
 
+        cpuCruncher.exec();
+
         List<Review> list = new ArrayList<>();
-        list.add(new Review(productId, 1, "Author 1", "Subject 1", "Content 1"));
-        list.add(new Review(productId, 2, "Author 2", "Subject 2", "Content 2"));
-        list.add(new Review(productId, 3, "Author 3", "Subject 3", "Content 3"));
+        list.add(new Review(productId, 1, "Author 1", "Subject 1", "Content 1", util.getServiceAddress()));
+        list.add(new Review(productId, 2, "Author 2", "Subject 2", "Content 2", util.getServiceAddress()));
+        list.add(new Review(productId, 3, "Author 3", "Subject 3", "Content 3", util.getServiceAddress()));
 
         LOG.debug("/reviews response size: {}", list.size());
 
