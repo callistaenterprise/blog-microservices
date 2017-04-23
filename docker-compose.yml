@@ -1,11 +1,3 @@
-#
-# NOT REQUIRED SINCE WE HARDCODE THE INTERNAL IP ADDRESS OF THE IP HOST!
-#
-# First run the command:
-#
-# export LOGSTASH_ADDRESS=$(docker inspect --format '{{ .NetworkSettings.Networks.blogmicroservices_default.IPAddress }}' blogmicroservices_logstash_1) && echo $LOGSTASH_ADDRESS
-#
-
 version: '2.1'
 
 services:
@@ -16,6 +8,7 @@ services:
       - "9200:9200"
     environment:
       - "xpack.security.enabled=false"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200"]
       interval: 10s
@@ -63,6 +56,8 @@ services:
     restart: always
     ports:
       - "8761:8761"
+    environment:
+      - "JAVA_TOOL_OPTIONS=-Xmx256m"
     logging:
 #      driver: gelf
       driver: syslog
@@ -87,6 +82,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker,native
       - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:/config-repo
+      - "JAVA_TOOL_OPTIONS=-Xmx256m"
     logging:
       driver: syslog
       options:
@@ -100,6 +96,8 @@ services:
     restart: always
     ports:
       - "9999:9999"
+    environment:
+      - "JAVA_TOOL_OPTIONS=-Xmx256m"
     logging:
       driver: syslog
       options:
@@ -116,6 +114,8 @@ services:
   pro:
     build: microservices/core/product-service
     restart: always
+    environment:
+      - "JAVA_TOOL_OPTIONS=-Xmx256m"
     logging:
       driver: syslog
       options:
@@ -127,6 +127,8 @@ services:
   rec:
     build: microservices/core/recommendation-service
     restart: always
+    environment:
+      - "JAVA_TOOL_OPTIONS=-Xmx256m"
     logging:
       driver: syslog
       options:
@@ -138,6 +140,8 @@ services:
   rev:
     build: microservices/core/review-service
     restart: always
+    environment:
+      - "JAVA_TOOL_OPTIONS=-Xmx256m"
     logging:
       driver: syslog
       options:
@@ -149,6 +153,8 @@ services:
   composite:
     build: microservices/composite/product-composite-service
     restart: always
+    environment:
+      - "JAVA_TOOL_OPTIONS=-Xmx256m"
     logging:
       driver: syslog
       options:
@@ -162,6 +168,8 @@ services:
     restart: always
     ports:
       - "7979:7979"
+    environment:
+      - "JAVA_TOOL_OPTIONS=-Xmx256m"
     logging:
       driver: syslog
       options:
@@ -175,6 +183,8 @@ services:
     restart: always
     ports:
       - "443:8765"
+    environment:
+      - "JAVA_TOOL_OPTIONS=-Xmx256m"
     logging:
       driver: syslog
       options:
@@ -188,6 +198,8 @@ services:
     restart: always
     ports:
       - "9411:9411"
+    environment:
+      - "JAVA_TOOL_OPTIONS=-Xmx256m"
     logging:
       driver: syslog
       options:

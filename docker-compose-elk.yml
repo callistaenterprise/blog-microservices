@@ -5,6 +5,12 @@
 #   docker-compose -f docker-compose-elk.yml exec logstash /bin/bash
 #     ps -eax | more
 #
+# NO LONGER REQUIRED SINCE WE HARDCODE THE INTERNAL IP ADDRESS OF THE IP HOST!
+# First run the command:
+#
+# export LOGSTASH_ADDRESS=$(docker inspect --format '{{ .NetworkSettings.Networks.blogmicroservices_default.IPAddress }}' blogmicroservices_logstash_1) && echo $LOGSTASH_ADDRESS
+#
+
 version: '2.1'
 
 services:
@@ -20,12 +26,12 @@ services:
       - "9200:9200"
     environment:
       - "xpack.security.enabled=false"
-#    command: bin/elasticsearch -Expack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 10
 
   kibana:
     image: docker.elastic.co/kibana/kibana:5.2.2
@@ -54,4 +60,4 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 10
