@@ -3,6 +3,7 @@ package se.callista.microservices.core.review.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +38,9 @@ public class ReviewService {
     @Autowired
     private ServiceUtils util;
 
+    @Value("${my-secret-property:UNKNOWN}")
+    private String mySecretProperty;
+
     /*
     private int port;
 
@@ -59,6 +63,8 @@ public class ReviewService {
 
         int pt = setProcTimeBean.calculateProcessingTime();
         LOG.info("/reviews called, processing time: {}", pt);
+
+        LOG.debug("mySecretProperty: {}", mySecretProperty);
 
         sleep(pt);
 
