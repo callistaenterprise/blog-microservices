@@ -96,6 +96,7 @@ then
     echo "$ docker-compose down"
     docker-compose down
     echo "$ docker-compose up -d"
+    ./setup-env.sh
     docker-compose up -d
 fi
 

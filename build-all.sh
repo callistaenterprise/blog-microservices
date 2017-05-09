@@ -26,4 +26,5 @@ cd microservices/support/zipkin-server;               note "Building zipkin...";
 
 find . -name *SNAPSHOT.jar -exec du -h {} \;
 
+./setup-env.sh
 docker-compose build

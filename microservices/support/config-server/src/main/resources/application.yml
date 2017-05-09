@@ -1,4 +1,9 @@
-server.port: 8888
+server:
+  port: 8888
+  ssl:
+    key-store: classpath:server.jks
+    key-store-password: password
+    key-password: password
 
 security.basic.enabled: false
 
