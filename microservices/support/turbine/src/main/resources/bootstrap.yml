@@ -24,6 +24,6 @@ spring:
     config:
       discovery:
         enabled: false
-      uri: http://config:8888
+      uri: http://${MY_CONFIG_USER}:${MY_CONFIG_PWD}@config:8888
 
 #eureka.client.serviceUrl.defaultZone: http://discovery:8761/eureka/

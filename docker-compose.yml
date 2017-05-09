@@ -57,7 +57,7 @@ services:
     ports:
       - "8761:8761"
     environment:
-      - "JAVA_TOOL_OPTIONS=-Xmx256m"
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
 #      driver: gelf
       driver: syslog
@@ -82,7 +82,9 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker,native
       - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:/config-repo
-      - "JAVA_TOOL_OPTIONS=-Xmx256m"
+      - SECURITY_USER_NAME=${MY_CONFIG_USER}
+      - SECURITY_USER_PASSWORD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
       driver: syslog
       options:
@@ -97,7 +99,9 @@ services:
     ports:
       - "9999:9999"
     environment:
-      - "JAVA_TOOL_OPTIONS=-Xmx256m"
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
       driver: syslog
       options:
@@ -115,7 +119,9 @@ services:
     build: microservices/core/product-service
     restart: always
     environment:
-      - "JAVA_TOOL_OPTIONS=-Xmx256m"
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
       driver: syslog
       options:
@@ -128,7 +134,9 @@ services:
     build: microservices/core/recommendation-service
     restart: always
     environment:
-      - "JAVA_TOOL_OPTIONS=-Xmx256m"
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
       driver: syslog
       options:
@@ -141,7 +149,9 @@ services:
     build: microservices/core/review-service
     restart: always
     environment:
-      - "JAVA_TOOL_OPTIONS=-Xmx256m"
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
       driver: syslog
       options:
@@ -154,7 +164,9 @@ services:
     build: microservices/composite/product-composite-service
     restart: always
     environment:
-      - "JAVA_TOOL_OPTIONS=-Xmx256m"
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
       driver: syslog
       options:
@@ -169,7 +181,9 @@ services:
     ports:
       - "7979:7979"
     environment:
-      - "JAVA_TOOL_OPTIONS=-Xmx256m"
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
       driver: syslog
       options:
@@ -184,7 +198,9 @@ services:
     ports:
       - "443:8765"
     environment:
-      - "JAVA_TOOL_OPTIONS=-Xmx256m"
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
       driver: syslog
       options:
@@ -199,7 +215,9 @@ services:
     ports:
       - "9411:9411"
     environment:
-      - "JAVA_TOOL_OPTIONS=-Xmx256m"
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
       driver: syslog
       options:
