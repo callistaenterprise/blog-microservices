@@ -1,4 +1,4 @@
 spring.application.name: config-server
 
-encrypt.key: my-very-secret-encryption-key
+encrypt.key: ${MY_CONFIG_ENCRYPT_KEY}
 

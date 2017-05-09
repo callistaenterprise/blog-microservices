@@ -85,6 +85,7 @@ services:
       - SECURITY_USER_NAME=${MY_CONFIG_USER}
       - SECURITY_USER_PASSWORD=${MY_CONFIG_PWD}
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+      - MY_CONFIG_ENCRYPT_KEY=${MY_CONFIG_ENCRYPT_KEY}
     logging:
       driver: syslog
       options:
