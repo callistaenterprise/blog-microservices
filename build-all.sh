@@ -9,6 +9,8 @@ function note() {
 
 set -e
 
+./setup-env.sh
+
 cd util;                                              note "Building util...";            ./gradlew clean build publishToMavenLocal; cd -
 
 cd microservices/core/product-service;                note "Building product...";         ./gradlew clean build; cd -
@@ -26,5 +28,4 @@ cd microservices/support/zipkin-server;               note "Building zipkin...";
 
 find . -name *SNAPSHOT.jar -exec du -h {} \;
 
-./setup-env.sh
 docker-compose build
