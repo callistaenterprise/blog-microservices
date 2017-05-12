@@ -90,13 +90,14 @@ function waitForAPI() {
 
 echo "Start:" `date`
 
+. ./setup-env.sh
+
 if [[ $@ == *"start"* ]]
 then
     echo "Restarting the test environment..."
     echo "$ docker-compose down"
     docker-compose down
     echo "$ docker-compose up -d"
-    ./setup-env.sh
     docker-compose up -d
 fi
 
