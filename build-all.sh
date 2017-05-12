@@ -9,7 +9,7 @@ function note() {
 
 set -e
 
-./setup-env.sh
+. ./setup-env.sh
 
 cd util;                                              note "Building util...";            ./gradlew clean build publishToMavenLocal; cd -
 
