@@ -2,48 +2,6 @@ version: '2.1'
 
 services:
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
-    ports:
-      - "9200:9200"
-    environment:
-      - "xpack.security.enabled=false"
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:5.2.2
-    ports:
-      - "5601:5601"
-    environment:
-      - "xpack.security.enabled=false"
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash:5.2.2
-    ports:
-      - "12201:12201"
-      - "27000:27000"
-      - "25826:25826"
-      - "26000:26000"
-    volumes:
-      - $PWD/elk-config:/elk-config
-    command: logstash -f /elk-config/logstash.config
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-
   rabbitmq:
     image: rabbitmq:3-management
     restart: always
@@ -58,19 +16,6 @@ services:
       - "8761:8761"
     environment:
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
-    logging:
-#      driver: gelf
-      driver: syslog
-      options:
-#        gelf-address: "udp://${LOGSTASH_ADDRESS}:12201"
-#        gelf-address: "udp://${LOGSTASH_ADDRESS}:27000"
-#        syslog-address: "tcp://localhost:25826"
-#        syslog-address: "tcp://172.18.0.3:25826"
-        syslog-address: "tcp://127.0.0.1:25826"
-
-    depends_on:
-      logstash:
-        condition: service_healthy
 
   config:
     build: microservices/support/config-server
@@ -86,13 +31,6 @@ services:
       - SECURITY_USER_PASSWORD=${MY_CONFIG_PWD}
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
       - MY_CONFIG_ENCRYPT_KEY=${MY_CONFIG_ENCRYPT_KEY}
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://127.0.0.1:25826"
-    depends_on:
-      logstash:
-        condition: service_healthy
 
   auth:
     build: microservices/support/auth-server
@@ -103,13 +41,6 @@ services:
       - MY_CONFIG_USER=${MY_CONFIG_USER}
       - MY_CONFIG_PWD=${MY_CONFIG_PWD}
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://127.0.0.1:25826"
-    depends_on:
-      logstash:
-        condition: service_healthy
 
   #turbine:
   #  image: magnuslarsson/ms-blog-turbine
@@ -123,13 +54,6 @@ services:
       - MY_CONFIG_USER=${MY_CONFIG_USER}
       - MY_CONFIG_PWD=${MY_CONFIG_PWD}
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://127.0.0.1:25826"
-    depends_on:
-      logstash:
-        condition: service_healthy
 
   rec:
     build: microservices/core/recommendation-service
@@ -138,13 +62,6 @@ services:
       - MY_CONFIG_USER=${MY_CONFIG_USER}
       - MY_CONFIG_PWD=${MY_CONFIG_PWD}
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://127.0.0.1:25826"
-    depends_on:
-      logstash:
-        condition: service_healthy
 
   rev:
     build: microservices/core/review-service
@@ -153,13 +70,6 @@ services:
       - MY_CONFIG_USER=${MY_CONFIG_USER}
       - MY_CONFIG_PWD=${MY_CONFIG_PWD}
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://127.0.0.1:25826"
-    depends_on:
-      logstash:
-        condition: service_healthy
 
   composite:
     build: microservices/composite/product-composite-service
@@ -168,13 +78,6 @@ services:
       - MY_CONFIG_USER=${MY_CONFIG_USER}
       - MY_CONFIG_PWD=${MY_CONFIG_PWD}
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://127.0.0.1:25826"
-    depends_on:
-      logstash:
-        condition: service_healthy
 
   monitor:
     build: microservices/support/monitor-dashboard
@@ -185,13 +88,6 @@ services:
       - MY_CONFIG_USER=${MY_CONFIG_USER}
       - MY_CONFIG_PWD=${MY_CONFIG_PWD}
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://127.0.0.1:25826"
-    depends_on:
-      logstash:
-        condition: service_healthy
 
   edge:
     build: microservices/support/edge-server
@@ -202,27 +98,3 @@ services:
       - MY_CONFIG_USER=${MY_CONFIG_USER}
       - MY_CONFIG_PWD=${MY_CONFIG_PWD}
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://127.0.0.1:25826"
-    depends_on:
-      logstash:
-        condition: service_healthy
-
-  zipkin:
-    build: microservices/support/zipkin-server
-    restart: always
-    ports:
-      - "9411:9411"
-    environment:
-      - MY_CONFIG_USER=${MY_CONFIG_USER}
-      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
-      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://127.0.0.1:25826"
-    depends_on:
-      logstash:
-        condition: service_healthy

@@ -24,7 +24,6 @@ cd microservices/support/discovery-server;            note "Building discovery..
 cd microservices/support/edge-server;                 note "Building edge...";            ./gradlew clean build; cd -
 cd microservices/support/monitor-dashboard;           note "Building monitor...";         ./gradlew clean build; cd -
 cd microservices/support/turbine;                     note "Building turbine...";         ./gradlew clean build; cd -
-cd microservices/support/zipkin-server;               note "Building zipkin...";          ./gradlew clean build; cd -
 
 find . -name *SNAPSHOT.jar -exec du -h {} \;
 

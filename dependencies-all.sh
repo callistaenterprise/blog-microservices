@@ -15,5 +15,4 @@ cd microservices/support/discovery-server;            ./gradlew dependencies --c
 cd microservices/support/edge-server;                 ./gradlew dependencies --configuration compile; cd -
 cd microservices/support/monitor-dashboard;           ./gradlew dependencies --configuration compile; cd -
 cd microservices/support/turbine;                     ./gradlew dependencies --configuration compile; cd -
-cd microservices/support/zipkin-server;               ./gradlew dependencies --configuration compile; cd -
 
