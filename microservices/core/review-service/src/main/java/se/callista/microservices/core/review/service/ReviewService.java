@@ -64,7 +64,7 @@ public class ReviewService {
         int pt = setProcTimeBean.calculateProcessingTime();
         LOG.info("/reviews called, processing time: {}", pt);
 
-        LOG.debug("mySecretProperty: {}", mySecretProperty);
+        LOG.info("mySecretProperty: {}", mySecretProperty);
 
         sleep(pt);
 
