@@ -23,13 +23,19 @@ import java.net.UnknownHostException;
 public class ServiceUtils {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceUtils.class);
 
-    @Autowired
-    private LoadBalancerClient loadBalancer;
-
-    @Value("${server.port}")
-    private String port;
+    private final LoadBalancerClient loadBalancer;
+    private final String port;
 
     private String serviceAddress = null;
+
+    @Autowired
+    public ServiceUtils(
+        @Value("${server.port}") String port,
+        LoadBalancerClient loadBalancer) {
+
+        this.port = port;
+        this.loadBalancer = loadBalancer;
+    }
 
     /**
      *

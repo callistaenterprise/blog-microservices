@@ -2,7 +2,6 @@ package se.callista.microservices.core.review.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +11,7 @@ import se.callista.microservices.util.CpuCruncherBean;
 import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservices.util.SetProcTimeBean;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import java.util.ArrayList;
@@ -29,17 +29,21 @@ public class ReviewService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReviewService.class);
 
-    @Autowired
-    private SetProcTimeBean setProcTimeBean;
+    private final SetProcTimeBean setProcTimeBean;
+    private final CpuCruncherBean cpuCruncher;
+    private final ServiceUtils util;
+    private final String mySecretProperty;
 
-    @Autowired
-    private CpuCruncherBean cpuCruncher;
+    @Inject
+    public ReviewService(
+        @Value("${my-secret-property:UNKNOWN}") String mySecretProperty,
+        SetProcTimeBean setProcTimeBean, CpuCruncherBean cpuCruncher, ServiceUtils util) {
 
-    @Autowired
-    private ServiceUtils util;
-
-    @Value("${my-secret-property:UNKNOWN}")
-    private String mySecretProperty;
+        this.mySecretProperty = mySecretProperty;
+        this.setProcTimeBean = setProcTimeBean;
+        this.cpuCruncher = cpuCruncher;
+        this.util = util;
+    }
 
     /*
     private int port;

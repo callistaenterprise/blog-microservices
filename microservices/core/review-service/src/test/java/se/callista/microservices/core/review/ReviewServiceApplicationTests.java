@@ -11,7 +11,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @SpringApplicationConfiguration(classes = ReviewServiceApplication.class)
 @WebAppConfiguration
 // Instruct embedded Tomcat to run on a random free port and skip talking to the Config, Bus and Discovery server
-@IntegrationTest({"server.port=0", "spring.cloud.config.enabled=false", "spring.cloud.bus.enabled=false", "spring.cloud.discovery.enabled=false"})
+@IntegrationTest({
+	"server.port=0",
+	"spring.cloud.config.enabled=false",
+	"spring.cloud.bus.enabled=false",
+	"spring.cloud.discovery.enabled=false",
+	"my-secret-property=my-secret-test-property"
+})
 public class ReviewServiceApplicationTests {
 
 	@Test
