@@ -2,6 +2,7 @@ package se.callista.microservices.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,28 +14,32 @@ public class CpuCruncherBean {
     
     private static final Logger LOG = LoggerFactory.getLogger(CpuCruncherBean.class);
 
-    private int minStrength = 0;
-    private int maxStrength = 0;
+    private final int minStrength;
+    private final int maxStrength;
 
-    @Value("${service.minStrength:0}")
-    public void setMinStrength(int minStrength) {
+    @Autowired
+    public CpuCruncherBean(
+        @Value("${service.minStrength:0}") int minStrength,
+        @Value("${service.maxStrength:0}") int maxStrength) {
 
         if (minStrength < 0) {
+            LOG.info("The min strength was set to a negative number, min strength now set 0, was: {}.", minStrength);
             minStrength = 0;
         }
 
-        LOG.info("Set min strength to {}.", minStrength);
-        this.minStrength = minStrength;
-    }
-
-    @Value("${service.maxStrength:0}")
-    public void setMaxStrength(int maxStrength) {
-
         if (maxStrength < 0) {
+            LOG.info("The max strength was set to a negative number, max strength now set 0, was: {}.", maxStrength);
             maxStrength = 0;
         }
 
-        LOG.info("Set max strength time to {}.", maxStrength);
+        if (maxStrength < minStrength) {
+            maxStrength = minStrength;
+            LOG.info("The max strength was set lower then the min strength, max strength now set equal to the min strength: {}.", minStrength);
+        }
+
+        LOG.info("Set min and max strength to {} - {}.", minStrength, maxStrength);
+
+        this.minStrength = minStrength;
         this.maxStrength = maxStrength;
     }
 
@@ -50,15 +55,9 @@ public class CpuCruncherBean {
 
         LOG.debug("Encrypted quote: '" + encryptedQuote + "'");
         LOG.debug("Delivered quote: '" + quoteText + "'");
-
     }
 
     public int calculateStrength() {
-
-        if (maxStrength < minStrength) {
-            maxStrength = minStrength;
-            LOG.info("The max strength was set lower then the min strength, max strength now set equal to the min strength: {}.", minStrength);
-        }
 
         int strength = minStrength + (int) (Math.random() * (maxStrength - minStrength));
         LOG.debug("Calculated strength: {}", strength);

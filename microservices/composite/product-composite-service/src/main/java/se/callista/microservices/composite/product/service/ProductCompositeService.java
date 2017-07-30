@@ -2,8 +2,6 @@ package se.callista.microservices.composite.product.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +12,7 @@ import se.callista.microservices.model.Recommendation;
 import se.callista.microservices.model.Review;
 import se.callista.microservices.util.ServiceUtils;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import java.util.Date;
@@ -24,7 +23,6 @@ import java.util.concurrent.ExecutionException;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.concurrent.CompletableFuture.allOf;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.bouncycastle.asn1.x509.X509ObjectIdentifiers.id;
 
 /**
  * Created by magnus on 04/03/15.
@@ -36,11 +34,15 @@ public class ProductCompositeService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeService.class);
 
-    @Autowired
-    ProductCompositeIntegration integration;
+    private final ProductCompositeIntegration integration;
+    private final ServiceUtils util;
 
-    @Autowired
-    ServiceUtils util;
+    @Inject
+    public ProductCompositeService(ProductCompositeIntegration integration, ServiceUtils util) {
+        this.integration = integration;
+        this.util = util;
+    }
+
 
     @RequestMapping("/")
     public String getProduct() {

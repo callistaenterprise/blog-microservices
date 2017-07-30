@@ -2,7 +2,6 @@ package se.callista.microservices.core.product.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +11,7 @@ import se.callista.microservices.util.CpuCruncherBean;
 import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservices.util.SetProcTimeBean;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 
@@ -27,14 +27,16 @@ public class ProductService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductService.class);
 
-    @Autowired
-    private SetProcTimeBean setProcTimeBean;
+    private final SetProcTimeBean setProcTimeBean;
+    private final CpuCruncherBean cpuCruncher;
+    private final ServiceUtils util;
 
-    @Autowired
-    private CpuCruncherBean cpuCruncher;
-
-    @Autowired
-    private ServiceUtils util;
+    @Inject
+    public ProductService(SetProcTimeBean setProcTimeBean, CpuCruncherBean cpuCruncher, ServiceUtils util) {
+        this.setProcTimeBean = setProcTimeBean;
+        this.cpuCruncher = cpuCruncher;
+        this.util = util;
+    }
 
     /**
      * Sample usage: curl $HOST:$PORT/product/1
