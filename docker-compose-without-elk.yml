@@ -1,0 +1,110 @@
+version: '2.1'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+  #    - "5672:5672"
+      - "15672:15672"
+
+  discovery:
+    build: microservices/support/discovery-server
+    restart: always
+    ports:
+      - "8761:8761"
+    environment:
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  config:
+    build: microservices/support/config-server
+    restart: always
+    ports:
+      - "8888:8888"
+    volumes:
+      - $PWD/../blog-microservices-config:/config-repo
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,native
+      - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:/config-repo
+      - SECURITY_USER_NAME=${MY_CONFIG_USER}
+      - SECURITY_USER_PASSWORD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+      - MY_CONFIG_ENCRYPT_KEY=${MY_CONFIG_ENCRYPT_KEY}
+
+  auth:
+    build: microservices/support/auth-server
+    restart: always
+    ports:
+      - "9999:9999"
+    environment:
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  #turbine:
+  #  image: magnuslarsson/ms-blog-turbine
+  ##  volumes:
+  ##    - $PWD/logs:/logs
+
+  pro:
+    build: microservices/core/product-service
+    restart: always
+    environment:
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  rec:
+    build: microservices/core/recommendation-service
+    restart: always
+    environment:
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  rev:
+    build: microservices/core/review-service
+    restart: always
+    environment:
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  composite:
+    build: microservices/composite/product-composite-service
+    restart: always
+    environment:
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  monitor:
+    build: microservices/support/monitor-dashboard
+    restart: always
+    ports:
+      - "7979:7979"
+    environment:
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  edge:
+    build: microservices/support/edge-server
+    restart: always
+    ports:
+      - "443:8765"
+    environment:
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  zipkin:
+    build: microservices/support/zipkin-server
+    restart: always
+    ports:
+      - "9411:9411"
+    environment:
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
