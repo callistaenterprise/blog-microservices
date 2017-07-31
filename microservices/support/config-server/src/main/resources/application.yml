@@ -9,7 +9,8 @@ security.basic.enabled: false
 
 # Configuration of a local Git-repo for development locally without Docker
 # note that we are still using git; We just access the git-repo via file: protocol
-spring.cloud.config.server.git.uri: file:///${PWD}/../../../../blog-microservices-config/
+#spring.cloud.config.server.git.uri: file:///${PWD}/../../../../blog-microservices-config/
+spring.cloud.config.server.git.uri: file:///${PWD}/../blog-microservices-config/
 
 eureka.client.serviceUrl.defaultZone: http://localhost:8761/eureka/
 
