@@ -28,10 +28,7 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:5.2.2
     ports:
-      - "12201:12201"
-      - "27000:27000"
       - "25826:25826"
-      - "26000:26000"
     volumes:
       - $PWD/elk-config:/elk-config
     command: logstash -f /elk-config/logstash.config
@@ -59,13 +56,8 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
     logging:
-#      driver: gelf
       driver: syslog
       options:
-#        gelf-address: "udp://${LOGSTASH_ADDRESS}:12201"
-#        gelf-address: "udp://${LOGSTASH_ADDRESS}:27000"
-#        syslog-address: "tcp://localhost:25826"
-#        syslog-address: "tcp://172.18.0.3:25826"
         syslog-address: "tcp://127.0.0.1:25826"
 
     depends_on:
