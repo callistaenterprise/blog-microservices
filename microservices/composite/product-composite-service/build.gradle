@@ -1,11 +1,12 @@
 buildscript {
     ext {
-        springBootVersion = '1.3.7.RELEASE'
-        springCloudVersion = 'Brixton.SR5'
+        springBootVersion = '2.0.0.M2'
+        springCloudVersion = 'Finchley.M1'
     }
     repositories {
         mavenCentral()
         jcenter()
+        maven { url "https://repo.spring.io/milestone" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -19,7 +20,8 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 jar {
     baseName = 'product-composite-service'
@@ -33,6 +35,7 @@ repositories {
     mavenLocal()
     jcenter()
     mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
 }
 
 dependencies {
@@ -53,7 +56,6 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-oauth2")
     compile("org.springframework.cloud:spring-cloud-starter-security")
 
-    compile("org.apache.httpcomponents:httpclient:4.2.1")
     compile("org.apache.httpcomponents:fluent-hc:4.2.1")
 
     compile("se.callista.microservises:util:0.0.1-SNAPSHOT")
@@ -75,5 +77,5 @@ eclipse {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.9'
+    gradleVersion = '3.5.1'
 }

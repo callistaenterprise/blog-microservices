@@ -1,10 +1,11 @@
 buildscript {
 	ext {
-		springBootVersion = '1.3.7.RELEASE'
-		springCloudVersion = 'Brixton.SR5'
+		springBootVersion = '2.0.0.M2'
+		springCloudVersion = 'Finchley.M1'
 	}
 	repositories {
 		mavenCentral()
+		maven { url "https://repo.spring.io/milestone" }
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -13,7 +14,8 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 jar {
 	baseName = 'zipkin-server'
@@ -24,6 +26,7 @@ targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+	maven { url "https://repo.spring.io/milestone" }
 }
 
 
@@ -50,5 +53,5 @@ eclipse {
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '2.9'
+	gradleVersion = '3.5.1'
 }

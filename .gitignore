@@ -30,4 +30,3 @@ incubator
 build-all-fast.sh
 gradlew
 gradlew.bat
-gradle
