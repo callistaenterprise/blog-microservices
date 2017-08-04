@@ -1,0 +1,27 @@
+---
+# For development
+spring:
+  profiles: development
+
+  cloud.discovery.enabled: false
+
+  rabbitmq.host: localhost
+
+# 1.0 means 100%, see http://cloud.spring.io/spring-cloud-sleuth/spring-cloud-sleuth.html#_sampling
+spring.sleuth.sampler.percentage: 1.0
+
+logging:
+  level:
+    root: INFO
+    se.callista: DEBUG
+
+server.port: 8084
+
+security.ignored: /*
+
+ribbon.eureka.enabled: false
+
+product-service.ribbon.listOfServers: localhost:8081
+recommendation-service.ribbon.listOfServers: localhost:8082
+review-service.ribbon.listOfServers: localhost:8083
+

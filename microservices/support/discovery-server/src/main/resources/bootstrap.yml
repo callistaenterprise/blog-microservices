@@ -12,9 +12,19 @@ spring:
 #      discovery:
 #        serviceId: config-server
 #        enabled: false
-#      uri: https://localhost:8888
+#      uri: https://${MY_CONFIG_USER}:${MY_CONFIG_PWD}@localhost:8888
 #
 ##eureka.client.serviceUrl.defaultZone: http://localhost:8761/eureka/
+#
+#---
+## For development
+#spring:
+#  profiles: development
+#
+#  cloud.config.enabled: false
+#
+#MY_CONFIG_USER: u
+#MY_CONFIG_PWD: p
 #
 #---
 ## For deployment in Docker containers
