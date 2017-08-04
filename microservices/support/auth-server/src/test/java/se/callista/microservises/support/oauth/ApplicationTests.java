@@ -17,7 +17,11 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 // Instruct embedded Tomcat to run on a random free port and skip talking to the Config, Bus and Discovery server
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes=AuthserverApplication.class, webEnvironment=RANDOM_PORT)
+@SpringBootTest(classes=AuthserverApplication.class, webEnvironment=RANDOM_PORT, properties = {
+		"spring.cloud.config.enabled=false",
+		"spring.cloud.bus.enabled=false",
+		"spring.cloud.discovery.enabled=false"
+})
 public class ApplicationTests {
 
 	@Value("${local.server.port}")
@@ -25,7 +29,6 @@ public class ApplicationTests {
 
 	private TestRestTemplate template = new TestRestTemplate();
 
-	@Ignore
 	@Test
 	public void homePageProtected() {
 		ResponseEntity<String> response = template.getForEntity("http://localhost:"
@@ -35,7 +38,6 @@ public class ApplicationTests {
 		assertTrue("Wrong header: " + auth, auth.startsWith("Bearer realm=\""));
 	}
 
-	@Ignore
 	@Test
 	public void userEndpointProtected() {
 		ResponseEntity<String> response = template.getForEntity("http://localhost:"
