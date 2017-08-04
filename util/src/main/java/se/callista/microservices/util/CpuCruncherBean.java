@@ -47,6 +47,12 @@ public class CpuCruncherBean {
 
         int strength = calculateStrength();
 
+        // Min allowed strength by bcrypt is 4, skip encryption if less
+        if (strength < 4) {
+            LOG.debug("Strength set lower then min value (4): {}, skip encryption)", strength);
+            return;
+        }
+
         LOG.debug("Will encrypt quote using BCrypt with {} log rounds (i.e. strength)", strength);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(strength);
 

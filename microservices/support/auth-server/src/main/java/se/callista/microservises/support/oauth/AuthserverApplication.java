@@ -32,6 +32,8 @@ public class AuthserverApplication {
 	}
 
 	public static void main(String[] args) {
+		LOG.info("### STARTING ###");
 		SpringApplication.run(AuthserverApplication.class, args);
+		LOG.info("### STARTED ###");
 	}
 }

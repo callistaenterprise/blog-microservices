@@ -60,7 +60,7 @@ public class RecommendationService {
             @RequestParam(value = "productId",  required = true) int productId) {
 
         int pt = setProcTimeBean.calculateProcessingTime();
-        LOG.info("/recommendation called, processing time: {}", pt);
+        LOG.info("/recommendation?productId={} called, processing time: {}",productId, pt);
 
         sleep(pt);
 

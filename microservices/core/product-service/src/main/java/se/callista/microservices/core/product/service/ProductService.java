@@ -48,7 +48,7 @@ public class ProductService {
     public Product getProduct(@PathVariable int productId) {
 
         int pt = setProcTimeBean.calculateProcessingTime();
-        LOG.info("/product called, processing time: {}", pt);
+        LOG.info("/product/{} called, processing time: {}", productId, pt);
 
         sleep(pt);
 

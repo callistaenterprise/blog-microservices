@@ -66,7 +66,7 @@ public class ReviewService {
             @RequestParam(value = "productId",  required = true) int productId) {
 
         int pt = setProcTimeBean.calculateProcessingTime();
-        LOG.info("/reviews called, processing time: {}", pt);
+        LOG.info("/reviews?productId={} called, processing time: {}",productId, pt);
 
         LOG.info("mySecretProperty: {}", mySecretProperty);
 
