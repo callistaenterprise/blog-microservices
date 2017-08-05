@@ -10,9 +10,11 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 // Instruct embedded Tomcat to run on a random free port and skip talking to the Config, Bus and Discovery server
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=ProductCompositeServiceApplication.class, webEnvironment=RANDOM_PORT, properties = {
-		"spring.cloud.config.enabled=false",
-		"spring.cloud.bus.enabled=false",
-		"spring.cloud.discovery.enabled=false"
+	"spring.cloud.config.enabled=false",
+	"spring.cloud.bus.enabled=false",
+	"spring.cloud.discovery.enabled=false",
+	"MY_CONFIG_USER=u",
+	"MY_CONFIG_PWD=p"
 })
 public class ProductCompositeServiceApplicationTests {
 

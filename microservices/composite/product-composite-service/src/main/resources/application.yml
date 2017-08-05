@@ -17,7 +17,7 @@ logging:
 
 server.port: 8084
 
-security.ignored: /*
+security.ignored: /**
 
 ribbon.eureka.enabled: false
 

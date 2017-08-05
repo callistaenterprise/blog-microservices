@@ -2,10 +2,15 @@ package se.callista.microservices.composite.product.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import se.callista.microservices.composite.product.model.ProductAggregated;
 import se.callista.microservices.model.Product;
 import se.callista.microservices.model.Recommendation;
@@ -15,6 +20,7 @@ import se.callista.microservices.util.ServiceUtils;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -50,7 +56,7 @@ public class ProductCompositeService {
     }
 
     @RequestMapping("/{productId}")
-    public ResponseEntity<ProductAggregated> getProduct(@PathVariable int productId) {
+    public ResponseEntity<ProductAggregated> getProductAggregatedSync(@PathVariable int productId) {
 
         // 1. First get mandatory product information
         Product product = getBasicProductInfo(productId);
@@ -64,25 +70,16 @@ public class ProductCompositeService {
         return util.createOkResponse(new ProductAggregated(product, recommendations, reviews, util.getServiceAddress()));
     }
 
-//    @RequestMapping("/{productId}")
-    public ResponseEntity<ProductAggregated> getProductAsync(@PathVariable int productId) {
+    @GetMapping(path = "async/{productId}")
+    public Mono<ProductAggregated> getProductAggregatedAsync(@PathVariable("productId") int id) {
 
-        try {
-            CompletableFuture<Product>              productFuture            = supplyAsync( () -> getBasicProductInfo(productId));
-            CompletableFuture<List<Recommendation>> recommendationListFuture = supplyAsync( () -> getRecommendations(productId));
-            CompletableFuture<List<Review>>         reviewListFuture         = supplyAsync( () -> getReviews(productId));
+        LOG.debug("1. Will aggregate productId " + id + " from three sources using Mono.zip...");
 
-            LOG.info("Asynch, allOf.join...");
-            allOf(productFuture, recommendationListFuture, reviewListFuture).join();
-
-
-            LOG.info("Asynch, create result and return...");
-            return util.createOkResponse(new ProductAggregated(productFuture.get(), recommendationListFuture.get(), reviewListFuture.get(), util.getServiceAddress()));
-
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.error("getProductAsync error", e);
-            throw new RuntimeException(e);
-        }
+        return Mono.zip(
+            values -> new ProductAggregated((Product)values[0], (List<Recommendation>)values[1], (List<Review>)values[2], util.getServiceAddress()),
+            integration.getProductAsync(id),
+            integration.getRecommendationsAsync(id).collectList(),
+            integration.getReviewsAsync(id).collectList());
     }
 
     private Product getBasicProductInfo(@PathVariable int productId) {

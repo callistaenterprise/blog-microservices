@@ -6,8 +6,12 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import se.callista.microservices.composite.product.model.ProductAggregated;
 import se.callista.microservices.model.Product;
+import se.callista.microservices.model.Review;
 import se.callista.microservices.util.ServiceUtils;
 
 import java.util.ArrayList;
@@ -36,8 +40,26 @@ public class AsyncCallTests {
     @Before
     public void beforeTest() {
 
+        // ------------ //
+        // ASYNCH MOCKS //
+        // ------------ //
+        when(mock.getProductAsync(any(Integer.class))).
+            thenReturn(Mono.just(new Product(ID, NAME, WEIGHT, "")));
+
+        when(mock.getRecommendationsAsync(any(Integer.class))).
+            thenReturn(Flux.empty());
+
+        when(mock.getReviewsAsync(any(Integer.class))).
+            thenReturn(Flux.empty());
+
+        // ----------- //
+        // SYNCH MOCKS //
+        // ----------- //
         when(mock.getProduct(any(Integer.class))).
-            thenAnswer(invocation -> util.createOkResponse(new Product(getProductId(invocation), NAME, WEIGHT, "")));
+            thenAnswer(invocation -> {
+                Product product = new Product(getProductId(invocation), NAME, WEIGHT, "");
+                return util.createOkResponse(product);
+            });
 
         when(mock.getRecommendations(any(Integer.class))).
             thenReturn(util.createOkResponse(new ArrayList<>()));
@@ -51,16 +73,16 @@ public class AsyncCallTests {
 
     @Test
     public void testSync() {
-        ResponseEntity<ProductAggregated> response = service.getProduct(ID);
+        ResponseEntity<ProductAggregated> response = service.getProductAggregatedSync(ID);
 
         assertResponse(response);
     }
 
     @Test
     public void testAsync() {
-        ResponseEntity<ProductAggregated> response = service.getProductAsync(ID);
+        ProductAggregated response = service.getProductAggregatedAsync(ID).block();
 
-        assertResponse(response);
+        assertResponseBody(response);
     }
 
     private int getProductId(InvocationOnMock invocation) {
@@ -69,16 +91,16 @@ public class AsyncCallTests {
 
     private void assertResponse(ResponseEntity<ProductAggregated> response) {
         assertNotNull(response);
+        assertEquals(OK, response.getStatusCode());
+        assertResponseBody(response.getBody());
+    }
 
-        HttpStatus code = response.getStatusCode();
-        ProductAggregated body = response.getBody();
+    private void assertResponseBody(ProductAggregated body) {
 
-        assertEquals(OK,     code);
         assertEquals(ID,     body.getProductId());
         assertEquals(NAME,   body.getName());
         assertEquals(WEIGHT, body.getWeight());
         assertEquals(0,      body.getRecommendations().size());
         assertEquals(0,      body.getReviews().size());
     }
-
 }

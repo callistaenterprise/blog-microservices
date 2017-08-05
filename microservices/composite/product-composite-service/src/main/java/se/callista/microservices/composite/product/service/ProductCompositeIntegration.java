@@ -8,9 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import se.callista.microservices.model.Product;
 import se.callista.microservices.model.Recommendation;
 import se.callista.microservices.model.Review;
@@ -31,16 +35,43 @@ public class ProductCompositeIntegration {
 
     private final ServiceUtils util;
     private final RestOperations restTemplate;
+    private final WebClient webClient;
 
     @Inject
-    public ProductCompositeIntegration(ServiceUtils util, RestOperations restTemplate) {
+    public ProductCompositeIntegration(ServiceUtils util, RestOperations restTemplate, WebClient webClient) {
         this.util = util;
         this.restTemplate = restTemplate;
+        this.webClient = webClient;
     }
 
-    // -------- //
-    // PRODUCTS //
-    // -------- //
+    // ---------------- //
+    // ASYNCH NIO CALLS //
+    // ---------------- //
+
+    public Mono<Product> getProductAsync(int productId) {
+        return webClient.get().uri("http://localhost:8081/product/" + productId)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .flatMap(cr -> cr.bodyToMono(Product.class));
+    }
+
+    public Flux<Recommendation> getRecommendationsAsync(int productId) {
+        return webClient.get().uri("http://localhost:8082/recommendation?productId=" + productId)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .flatMapMany(cr -> cr.bodyToFlux(Recommendation.class));
+    }
+
+    public Flux<Review> getReviewsAsync(int productId) {
+        return webClient.get().uri("http://localhost:8083/review?productId=890" + productId)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .flatMapMany(cr -> cr.bodyToFlux(Review.class));
+    }
+
+    // -------------- //
+    // SYNCH PRODUCTS //
+    // -------------- //
 
     @HystrixCommand(fallbackMethod = "defaultProduct")
     public ResponseEntity<Product> getProduct(int productId) {
@@ -73,9 +104,9 @@ public class ProductCompositeIntegration {
             HttpStatus.OK);
     }
 
-    // --------------- //
-    // RECOMMENDATIONS //
-    // --------------- //
+    // --------------------- //
+    // SYNCH RECOMMENDATIONS //
+    // --------------------- //
 
     @HystrixCommand(fallbackMethod = "defaultRecommendations")
     public ResponseEntity<List<Recommendation>> getRecommendations(int productId) {
@@ -114,9 +145,9 @@ public class ProductCompositeIntegration {
     }
 
 
-    // ------- //
-    // REVIEWS //
-    // ------- //
+    // ------------- //
+    // SYNCH REVIEWS //
+    // ------------- //
 
     @HystrixCommand(fallbackMethod = "defaultReviews")
     public ResponseEntity<List<Review>> getReviews(int productId) {
