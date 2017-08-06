@@ -13,7 +13,9 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 	"spring.cloud.config.enabled=false",
 	"spring.cloud.bus.enabled=false",
 	"spring.cloud.discovery.enabled=false",
-	"my-secret-property=my-secret-test-property"
+	"my-secret-property=my-secret-test-property",
+	"MY_CONFIG_USER=u",
+	"MY_CONFIG_PWD=p"
 })
 
 public class ReviewServiceApplicationTests {

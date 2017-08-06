@@ -39,12 +39,15 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    {
-        exclude module: 'spring-boot-starter-tomcat'
-    }
-    compile("org.springframework.boot:spring-boot-starter-undertow")
+    compile("org.springframework.boot:spring-boot-devtools")
+    compile('org.springframework.boot:spring-boot-starter-webflux')
     compile("org.springframework.boot:spring-boot-starter-actuator")
+
+    compile ('org.springframework.boot:spring-boot-starter-data-jpa') {
+        exclude group: 'org.hibernate', module: 'hibernate-entitymanager'
+    }
+    compile 'org.hibernate:hibernate-core'
+    compile 'org.hsqldb:hsqldb'
 
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
     compile("org.springframework.cloud:spring-cloud-starter-config")

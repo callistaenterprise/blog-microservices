@@ -63,7 +63,7 @@ public class ProductCompositeIntegration {
     }
 
     public Flux<Review> getReviewsAsync(int productId) {
-        return webClient.get().uri("http://localhost:8083/review?productId=890" + productId)
+        return webClient.get().uri("http://localhost:8083/review-async?productId=" + productId)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .flatMapMany(cr -> cr.bodyToFlux(Review.class));
