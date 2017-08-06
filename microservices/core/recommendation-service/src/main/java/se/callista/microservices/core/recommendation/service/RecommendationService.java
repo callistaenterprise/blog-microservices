@@ -2,10 +2,18 @@ package se.callista.microservices.core.recommendation.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import se.callista.microservices.core.recommendation.persistence.entity.RecommendationEntity;
+import se.callista.microservices.core.recommendation.persistence.repository.RecommendationRepository;
 import se.callista.microservices.model.Recommendation;
+import se.callista.microservices.model.Review;
 import se.callista.microservices.util.CpuCruncherBean;
 import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservices.util.SetProcTimeBean;
@@ -15,6 +23,9 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -31,12 +42,14 @@ public class RecommendationService {
     private final SetProcTimeBean setProcTimeBean;
     private final CpuCruncherBean cpuCruncher;
     private final ServiceUtils util;
+    private final RecommendationRepository repository;
 
     @Inject
-    public RecommendationService(SetProcTimeBean setProcTimeBean, CpuCruncherBean cpuCruncher, ServiceUtils util) {
+    public RecommendationService(SetProcTimeBean setProcTimeBean, CpuCruncherBean cpuCruncher, ServiceUtils util, RecommendationRepository repository) {
         this.setProcTimeBean = setProcTimeBean;
         this.cpuCruncher = cpuCruncher;
         this.util = util;
+        this.repository = repository;
     }
 
     /*
@@ -66,22 +79,27 @@ public class RecommendationService {
 
         cpuCruncher.exec();
 
-        List<Recommendation> list = new ArrayList<>();
-        list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1", util.getServiceAddress()));
-        list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2", util.getServiceAddress()));
-        list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3", util.getServiceAddress()));
+//        List<Recommendation> list = new ArrayList<>();
+//        list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1", util.getServiceAddress()));
+//        list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2", util.getServiceAddress()));
+//        list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3", util.getServiceAddress()));
+
+        List<Recommendation> list = repository.findByProductId(productId).map(e -> toApi(e)).collectList().block();
 
         LOG.debug("/recommendation response size: {}", list.size());
 
         return list;
     }
 
-    private void sleep(int pt) {
-        try {
-            Thread.sleep(pt);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    @GetMapping(path = "/recommendation-async")
+    public Flux<Recommendation> getRecommendationsAsync(
+        @RequestParam(value = "productId",  required = true) int productId) {
+
+        LOG.debug("recommendation-async START");
+        return repository.findByProductId(productId)
+            .map(e -> toApi(e))
+            .doOnError(ex -> LOG.debug("recommendation-async DONE WITH ERROR: " + ex))
+            .doOnComplete(() -> LOG.debug("recommendation-async DONE"));
     }
 
     /**
@@ -94,11 +112,23 @@ public class RecommendationService {
      */
     @RequestMapping("/set-processing-time")
     public void setProcessingTime(
-        @RequestParam(value = "minMs", required = true) int minMs,
-        @RequestParam(value = "maxMs", required = true) int maxMs) {
+            @RequestParam(value = "minMs", required = true) int minMs,
+            @RequestParam(value = "maxMs", required = true) int maxMs) {
 
         LOG.info("/set-processing-time called: {} - {} ms", minMs, maxMs);
 
         setProcTimeBean.setDefaultProcessingTime(minMs, maxMs);
+    }
+
+    private Recommendation toApi(RecommendationEntity e) {
+        return new Recommendation(e.getProductId(), e.getRecommendationId(), e.getAuthor(), e.getRate(), e.getContent(), util.getServiceAddress());
+    }
+
+    private void sleep(int pt) {
+        try {
+            Thread.sleep(pt);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
