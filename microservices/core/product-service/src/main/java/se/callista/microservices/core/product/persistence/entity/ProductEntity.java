@@ -1,22 +1,32 @@
-package se.callista.microservices.model;
+package se.callista.microservices.core.product.persistence.entity;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by magnus on 04/03/15.
  */
-public class Product {
+@Document
+public class ProductEntity {
+
+    @Id
+    private String id;
+
+    @Version
+    private int version;
+
     private int productId;
     private String name;
     private int weight;
-    private String serviceAddress;
 
-    public Product() {
+    public ProductEntity() {
     }
 
-    public Product(int productId, String name, int weight, String serviceAddress) {
+    public ProductEntity(int productId, String name, int weight) {
         this.productId = productId;
         this.name = name;
         this.weight = weight;
-        this.serviceAddress = serviceAddress;
     }
 
     public int getProductId() {
@@ -43,14 +53,11 @@ public class Product {
         this.weight = weight;
     }
 
-    public String getServiceAddress() {
-        return serviceAddress;
-    }
-
     @Override
     public String toString() {
         return String.format(
-            "Product[%d, '%s', %d, '%s']",
-            productId, name, weight, serviceAddress);
+            "ProductEntity['%s'.%d: %d, '%s', %d]",
+            id, version, productId, name, weight);
     }
+
 }

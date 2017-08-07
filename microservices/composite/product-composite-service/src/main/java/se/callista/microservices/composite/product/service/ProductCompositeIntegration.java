@@ -49,7 +49,7 @@ public class ProductCompositeIntegration {
     // ---------------- //
 
     public Mono<Product> getProductAsync(int productId) {
-        return webClient.get().uri("http://localhost:8081/product/" + productId)
+        return webClient.get().uri("http://localhost:8081/product-async/" + productId)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .flatMap(cr -> cr.bodyToMono(Product.class));

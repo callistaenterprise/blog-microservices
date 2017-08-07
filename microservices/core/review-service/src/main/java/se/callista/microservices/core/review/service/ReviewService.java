@@ -88,12 +88,6 @@ public class ReviewService {
 
         cpuCruncher.exec();
 
-//        List<Review> list = new ArrayList<>();
-//
-//        list.add(new Review(productId, 1, "Author 1", "Subject 1", "Content 1", util.getServiceAddress()));
-//        list.add(new Review(productId, 2, "Author 2", "Subject 2", "Content 2", util.getServiceAddress()));
-//        list.add(new Review(productId, 3, "Author 3", "Subject 3", "Content 3", util.getServiceAddress()));
-
         List<Review> list = repository.findByProductId(productId).stream().map(e -> toApi(e)).collect(Collectors.toList());
 
         LOG.debug("/reviews response size: {}", list.size());
@@ -103,14 +97,13 @@ public class ReviewService {
 
     @GetMapping(path = "/review-async")
     public Flux<Review> getReviewsAsync(
-        @RequestParam(value = "productId",  required = true) int productId) {
+        @RequestParam(value = "productId",  required = true) int id) {
 
-        LOG.debug("review-async START");
-        return asyncFlux(repository.findByProductId(productId).stream().map(e -> toApi(e)))
-//            .doOnNext(e -> LOG.debug("review-async NEXT"))
-//            .doOnEach(e -> LOG.debug("review-async EACH"))
-            .doOnError(ex -> LOG.debug("review-async DONE WITH ERROR: " + ex))
-            .doOnComplete(() -> LOG.debug("review-async DONE"));
+        return asyncFlux(repository.findByProductId(id))
+            .map(e -> toApi(e))
+            .doOnSubscribe(s  -> LOG.debug("review-async START, productId: {}", id))
+            .doOnError    (ex -> LOG.warn ("review-async ERROR", ex))
+            .doOnComplete (() -> LOG.debug("review-async DONE"));
     }
 
     /**

@@ -77,7 +77,7 @@ public class ReviewEntity {
     @Override
     public String toString() {
         return String.format(
-            "Review[%d, %d, '%s', '%s', '%s']",
+            "ReviewEntity[%d, %d, '%s', '%s', '%s']",
             productId, reviewId, author, subject, content);
     }
 }

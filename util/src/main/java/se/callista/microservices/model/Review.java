@@ -66,4 +66,11 @@ public class Review {
     public String getServiceAddress() {
         return serviceAddress;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "Review[%d, %d, '%s', '%s', '%s', '%s']",
+            productId, reviewId, author, subject, content, serviceAddress);
+    }
 }

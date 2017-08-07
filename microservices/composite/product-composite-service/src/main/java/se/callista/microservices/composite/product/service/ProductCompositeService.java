@@ -73,13 +73,19 @@ public class ProductCompositeService {
     @GetMapping(path = "async/{productId}")
     public Mono<ProductAggregated> getProductAggregatedAsync(@PathVariable("productId") int id) {
 
-        LOG.debug("1. Will aggregate productId " + id + " from three sources using Mono.zip...");
-
         return Mono.zip(
-            values -> new ProductAggregated((Product)values[0], (List<Recommendation>)values[1], (List<Review>)values[2], util.getServiceAddress()),
+            values -> new ProductAggregated(
+                (Product)values[0],
+                (List<Recommendation>)values[1],
+                (List<Review>)values[2],
+                util.getServiceAddress()),
             integration.getProductAsync(id),
             integration.getRecommendationsAsync(id).collectList(),
-            integration.getReviewsAsync(id).collectList());
+            integration.getReviewsAsync(id).collectList())
+
+            .doOnSubscribe(s  -> LOG.debug("composite-async START, productId: {}", id))
+            .doOnError    (ex -> LOG.warn ("composite-async ERROR", ex))
+            .doOnSuccess  (p  -> LOG.debug("composite-async DONE"));
     }
 
     private Product getBasicProductInfo(@PathVariable int productId) {

@@ -84,7 +84,7 @@ public class RecommendationEntity {
     @Override
     public String toString() {
         return String.format(
-            "Recommendation['%s'.%d: %d, %d, '%s', %d, '%s']",
+            "RecommendationEntity['%s'.%d: %d, %d, '%s', %d, '%s']",
             id, version, productId, recommendationId, author, rate, content);
     }
 }

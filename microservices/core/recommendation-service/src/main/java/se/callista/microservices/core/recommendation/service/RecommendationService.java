@@ -79,11 +79,6 @@ public class RecommendationService {
 
         cpuCruncher.exec();
 
-//        List<Recommendation> list = new ArrayList<>();
-//        list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1", util.getServiceAddress()));
-//        list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2", util.getServiceAddress()));
-//        list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3", util.getServiceAddress()));
-
         List<Recommendation> list = repository.findByProductId(productId).map(e -> toApi(e)).collectList().block();
 
         LOG.debug("/recommendation response size: {}", list.size());
@@ -93,13 +88,13 @@ public class RecommendationService {
 
     @GetMapping(path = "/recommendation-async")
     public Flux<Recommendation> getRecommendationsAsync(
-        @RequestParam(value = "productId",  required = true) int productId) {
+        @RequestParam(value = "productId",  required = true) int id) {
 
-        LOG.debug("recommendation-async START");
-        return repository.findByProductId(productId)
+        return repository.findByProductId(id)
             .map(e -> toApi(e))
-            .doOnError(ex -> LOG.debug("recommendation-async DONE WITH ERROR: " + ex))
-            .doOnComplete(() -> LOG.debug("recommendation-async DONE"));
+            .doOnSubscribe(s  -> LOG.debug("recommendation-async START, productId: {}", id))
+            .doOnError    (ex -> LOG.debug("recommendation-async ERROR", ex))
+            .doOnComplete (() -> LOG.debug("recommendation-async DONE"));
     }
 
     /**

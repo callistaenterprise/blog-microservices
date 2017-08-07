@@ -66,4 +66,11 @@ public class Recommendation {
     public String getServiceAddress() {
         return serviceAddress;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "Recommendation[%d, %d, '%s', %d, '%s', '%s']",
+            productId, recommendationId, author, rate, content, serviceAddress);
+    }
 }
