@@ -2,14 +2,11 @@ package se.callista.microservices.composite.product.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import se.callista.microservices.composite.product.model.ProductAggregated;
 import se.callista.microservices.model.Product;
@@ -20,14 +17,10 @@ import se.callista.microservices.util.ServiceUtils;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static java.util.concurrent.CompletableFuture.supplyAsync;
-import static java.util.concurrent.CompletableFuture.allOf;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
@@ -42,6 +35,10 @@ public class ProductCompositeService {
 
     private final ProductCompositeIntegration integration;
     private final ServiceUtils util;
+
+    private final AtomicInteger noOfRequestsProcessed = new AtomicInteger(0);
+    private final AtomicInteger noOfConcurrentRequests = new AtomicInteger(0);
+    private final AtomicInteger noOfRequestsFailed = new AtomicInteger(0);
 
     @Inject
     public ProductCompositeService(ProductCompositeIntegration integration, ServiceUtils util) {
@@ -82,10 +79,34 @@ public class ProductCompositeService {
             integration.getProductAsync(id),
             integration.getRecommendationsAsync(id).collectList(),
             integration.getReviewsAsync(id).collectList())
+            .doOnSubscribe(s  -> logStartRequest())
+            .doOnError    (ex -> logEndRequestWithError(ex))
+            .doOnSuccess  (p  -> logEndRequest());
+    }
 
-            .doOnSubscribe(s  -> LOG.debug("composite-async START, productId: {}", id))
-            .doOnError    (ex -> LOG.warn ("composite-async ERROR", ex))
-            .doOnSuccess  (p  -> LOG.debug("composite-async DONE"));
+    /*
+     * ASYNCH HELPERS
+     */
+
+    private void logEndRequest() {
+        int current = noOfConcurrentRequests.decrementAndGet();
+        int total   = noOfRequestsProcessed.incrementAndGet();
+        int failed  = noOfRequestsFailed.get();
+        LOG.debug("composite-async DONE  ({}/{}/{})", current, total, failed);
+    }
+
+    private void logEndRequestWithError(Throwable ex) {
+        int current = noOfConcurrentRequests.decrementAndGet();
+        int total   = noOfRequestsProcessed.incrementAndGet();
+        int failed  = noOfRequestsFailed.get();
+        LOG.warn ("composite-async ERROR: {} ({}/{}/{})", ex.toString(), current, total, failed);
+    }
+
+    private void logStartRequest() {
+        int current = noOfConcurrentRequests.incrementAndGet();
+        int total   = noOfRequestsProcessed.get();
+        int failed  = noOfRequestsFailed.get();
+        LOG.debug("composite-async START ({}/{}/{})", current, total, failed);
     }
 
     private Product getBasicProductInfo(@PathVariable int productId) {
@@ -99,6 +120,10 @@ public class ProductCompositeService {
         }
         return product;
     }
+
+    /*
+     * SYNCH HELPERS
+     */
 
     private List<Review> getReviews(@PathVariable int productId) {
         ResponseEntity<List<Review>> reviewsResult = integration.getReviews(productId);

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,7 @@ import se.callista.microservices.util.ServiceUtils;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,6 +36,8 @@ public class ProductCompositeIntegration {
     private final ServiceUtils util;
     private final RestOperations restTemplate;
     private final WebClient webClient;
+
+    private final int timeoutSec = 20;
 
     @Inject
     public ProductCompositeIntegration(ServiceUtils util, RestOperations restTemplate, WebClient webClient) {
@@ -52,6 +54,7 @@ public class ProductCompositeIntegration {
         return webClient.get().uri("http://localhost:8081/product-async/" + productId)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
+            .timeout(Duration.ofSeconds(timeoutSec))
             .flatMap(cr -> cr.bodyToMono(Product.class));
     }
 
@@ -59,6 +62,7 @@ public class ProductCompositeIntegration {
         return webClient.get().uri("http://localhost:8082/recommendation-async?productId=" + productId)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
+            .timeout(Duration.ofSeconds(timeoutSec))
             .flatMapMany(cr -> cr.bodyToFlux(Recommendation.class));
     }
 
@@ -66,6 +70,7 @@ public class ProductCompositeIntegration {
         return webClient.get().uri("http://localhost:8083/review-async?productId=" + productId)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
+            .timeout(Duration.ofSeconds(timeoutSec))
             .flatMapMany(cr -> cr.bodyToFlux(Review.class));
     }
 
