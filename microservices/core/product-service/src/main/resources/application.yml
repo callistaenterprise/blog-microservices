@@ -14,6 +14,7 @@ logging:
   level:
     root: INFO
     se.callista: DEBUG
+    org.springframework.data: DEBUG
 
 server.port: 8081
 

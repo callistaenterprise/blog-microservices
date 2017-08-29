@@ -55,7 +55,9 @@ public class ProductCompositeIntegration {
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .timeout(Duration.ofSeconds(timeoutSec))
-            .flatMap(cr -> cr.bodyToMono(Product.class));
+            .flatMap(cr -> cr.bodyToMono(Product.class))
+            .doOnSubscribe(s -> logStartRequest("product"))
+            .doOnSuccess  (p -> logEndRequest("product"));
     }
 
     public Flux<Recommendation> getRecommendationsAsync(int productId) {
@@ -63,7 +65,9 @@ public class ProductCompositeIntegration {
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .timeout(Duration.ofSeconds(timeoutSec))
-            .flatMapMany(cr -> cr.bodyToFlux(Recommendation.class));
+            .flatMapMany(cr -> cr.bodyToFlux(Recommendation.class))
+            .doOnSubscribe(s -> logStartRequest("recommendations"))
+            .doOnComplete (() -> logEndRequest("recommendations"));
     }
 
     public Flux<Review> getReviewsAsync(int productId) {
@@ -71,7 +75,16 @@ public class ProductCompositeIntegration {
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .timeout(Duration.ofSeconds(timeoutSec))
-            .flatMapMany(cr -> cr.bodyToFlux(Review.class));
+            .flatMapMany(cr -> cr.bodyToFlux(Review.class))
+            .doOnSubscribe(s -> logStartRequest("reviews"))
+            .doOnComplete (() -> logEndRequest("reviews"));
+    }
+
+    private void logStartRequest(String component) {
+        LOG.debug("Call to {} START", component);
+    }
+    private void logEndRequest(String component) {
+        LOG.debug("Call to {} DONE", component);
     }
 
     // -------------- //
