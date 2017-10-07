@@ -2,6 +2,7 @@ buildscript {
     ext {
         springBootVersion = '1.3.7.RELEASE'
         springCloudVersion = 'Brixton.SR5'
+        swaggerVersion = '2.7.0'
     }
     repositories {
         mavenCentral()
@@ -57,6 +58,9 @@ dependencies {
     compile("org.apache.httpcomponents:fluent-hc:4.2.1")
 
     compile("se.callista.microservises:util:0.0.1-SNAPSHOT")
+
+    compile("io.springfox:springfox-swagger-ui:${swaggerVersion}")
+    compile("io.springfox:springfox-swagger2:${swaggerVersion}")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

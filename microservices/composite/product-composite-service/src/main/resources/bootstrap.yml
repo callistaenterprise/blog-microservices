@@ -1,6 +1,17 @@
 info:
   component: Product Composite Service
 
+server.port: 8080
+#	"spring.data.mongodb.host=localhost",
+#	"spring.data.mongodb.port=0",
+spring.cloud.bus.enabled: false
+spring.cloud.discovery.enabled: false
+spring.cloud.config.enabled: false
+security.ignored: /**
+spring.security.enabled: false
+management.security.enabled: false
+security.basic.enabled: false
+
 spring:
   application:
     name: composite-service

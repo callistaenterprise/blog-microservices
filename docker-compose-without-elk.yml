@@ -74,6 +74,8 @@ services:
   composite:
     build: microservices/composite/product-composite-service
     restart: always
+    ports:
+      - "8080:8080"
     environment:
       - MY_CONFIG_USER=${MY_CONFIG_USER}
       - MY_CONFIG_PWD=${MY_CONFIG_PWD}
