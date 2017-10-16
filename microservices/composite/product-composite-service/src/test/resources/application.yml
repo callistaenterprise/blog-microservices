@@ -1,0 +1,4 @@
+product-service.ribbon.listOfServers: localhost:8081
+recommendation-service.ribbon.listOfServers: localhost:8082
+review-service.ribbon.listOfServers: localhost:8083
+

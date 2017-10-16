@@ -90,6 +90,8 @@ public class RecommendationService {
     public Flux<Recommendation> getRecommendationsAsync(
         @RequestParam(value = "productId",  required = true) int id) {
 
+        LOG.trace("### Called: /recommendation-async/?productId={}", id);
+
         return repository.findByProductId(id)
             .map(e -> toApi(e))
             .doOnSubscribe(s  -> LOG.debug("recommendation-async START, productId: {}", id))

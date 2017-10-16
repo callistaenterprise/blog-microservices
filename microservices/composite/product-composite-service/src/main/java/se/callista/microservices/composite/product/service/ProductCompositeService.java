@@ -70,6 +70,8 @@ public class ProductCompositeService {
     @GetMapping(path = "async/{productId}")
     public Mono<ProductAggregated> getProductAggregatedAsync(@PathVariable("productId") int id) {
 
+        LOG.trace("### Called: /async/{}", id);
+
         return Mono.zip(
             values -> new ProductAggregated(
                 (Product)values[0],

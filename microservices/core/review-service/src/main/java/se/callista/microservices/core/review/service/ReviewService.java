@@ -99,6 +99,8 @@ public class ReviewService {
     public Flux<Review> getReviewsAsync(
         @RequestParam(value = "productId",  required = true) int id) {
 
+        LOG.trace("### Called: /review-async/?productId={}", id);
+
         return asyncFlux(repository.findByProductId(id))
             .map(e -> toApi(e))
             .doOnSubscribe(s  -> LOG.debug("review-async START, productId: {}", id))

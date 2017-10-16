@@ -70,6 +70,8 @@ public class ProductService {
     @GetMapping(path = "/product-async/{productId}")
     public Mono<Product> getProductAsync(@PathVariable(value = "productId") int id) {
 
+        LOG.trace("### Called: /product-async/{}", id);
+
         return repository.findByProductId(id)
             .map(e -> toApi(e))
             .doOnSubscribe(s  -> LOG.debug("product-async START, productId: {}", id))

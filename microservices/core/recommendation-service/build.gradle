@@ -55,7 +55,7 @@ dependencies {
     compile("se.callista.microservises:util:0.0.1-SNAPSHOT")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    runtime("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
+    testCompile("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
 }
 
 dependencyManagement {

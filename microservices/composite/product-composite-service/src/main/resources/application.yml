@@ -1,4 +1,17 @@
 ---
+# For deployment in Docker containers
+spring:
+  profiles: docker
+
+  rabbitmq.host: rabbitmq
+
+server.port: 8080
+
+product-service.ribbon.listOfServers: pro:8080
+recommendation-service.ribbon.listOfServers: rec:8080
+review-service.ribbon.listOfServers: rev:8080
+
+---
 # For development
 spring:
   profiles: development

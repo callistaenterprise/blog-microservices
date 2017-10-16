@@ -1,0 +1,55 @@
+version: '2.1'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  mongodb:
+    image: mongo:3.2.4
+    restart: always
+    ports:
+      - "27017:27017"
+    command: mongod --smallfiles
+
+  pro:
+    build: microservices/core/product-service
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=development,docker
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  rec:
+    build: microservices/core/recommendation-service
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=development,docker
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  rev:
+    build: microservices/core/review-service
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=development,docker
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
+  composite:
+    build: microservices/composite/product-composite-service
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=development,docker
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}

@@ -1,4 +1,15 @@
 ---
+# For deployment in Docker containers
+spring:
+  profiles: docker
+
+  rabbitmq.host: rabbitmq
+
+  data.mongodb.uri: mongodb://mongodb:27017/product-db
+
+server.port: 8080
+
+---
 # For development
 spring:
   profiles: development

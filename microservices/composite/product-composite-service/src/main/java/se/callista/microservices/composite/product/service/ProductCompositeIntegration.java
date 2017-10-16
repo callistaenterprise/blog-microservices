@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +36,10 @@ public class ProductCompositeIntegration {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeIntegration.class);
 
+    private final String productService;
+    private final String recommendationService;
+    private final String reviewService;
+
     private final ServiceUtils util;
     private final RestOperations restTemplate;
     private final WebClient webClient;
@@ -40,7 +47,16 @@ public class ProductCompositeIntegration {
     private final int timeoutSec = 20;
 
     @Inject
-    public ProductCompositeIntegration(ServiceUtils util, RestOperations restTemplate, WebClient webClient) {
+    public ProductCompositeIntegration(
+        @Value("${product-service.ribbon.listOfServers}") String productService,
+        @Value("${recommendation-service.ribbon.listOfServers}") String recommendationService,
+        @Value("${review-service.ribbon.listOfServers}") String reviewService,
+        ServiceUtils util, RestOperations restTemplate, WebClient webClient) {
+
+        this.productService = productService;
+        this.recommendationService = recommendationService;
+        this.reviewService = reviewService;
+
         this.util = util;
         this.restTemplate = restTemplate;
         this.webClient = webClient;
@@ -51,37 +67,40 @@ public class ProductCompositeIntegration {
     // ---------------- //
 
     public Mono<Product> getProductAsync(int productId) {
-        return webClient.get().uri("http://localhost:8081/product-async/" + productId)
+        final String url = "http://" + productService + "/product-async/" + productId;
+        return webClient.get().uri(url)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .timeout(Duration.ofSeconds(timeoutSec))
             .flatMap(cr -> cr.bodyToMono(Product.class))
-            .doOnSubscribe(s -> logStartRequest("product"))
+            .doOnSubscribe(s -> logStartRequest("product", url))
             .doOnSuccess  (p -> logEndRequest("product"));
     }
 
     public Flux<Recommendation> getRecommendationsAsync(int productId) {
-        return webClient.get().uri("http://localhost:8082/recommendation-async?productId=" + productId)
+        final String url = "http://" + recommendationService + "/recommendation-async?productId=" + productId;
+        return webClient.get().uri(url)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .timeout(Duration.ofSeconds(timeoutSec))
             .flatMapMany(cr -> cr.bodyToFlux(Recommendation.class))
-            .doOnSubscribe(s -> logStartRequest("recommendations"))
+            .doOnSubscribe(s -> logStartRequest("recommendations", url))
             .doOnComplete (() -> logEndRequest("recommendations"));
     }
 
     public Flux<Review> getReviewsAsync(int productId) {
-        return webClient.get().uri("http://localhost:8083/review-async?productId=" + productId)
+        final String url = "http://" + reviewService + "/review-async?productId=" + productId;
+        return webClient.get().uri(url)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .timeout(Duration.ofSeconds(timeoutSec))
             .flatMapMany(cr -> cr.bodyToFlux(Review.class))
-            .doOnSubscribe(s -> logStartRequest("reviews"))
+            .doOnSubscribe(s -> logStartRequest("reviews", url))
             .doOnComplete (() -> logEndRequest("reviews"));
     }
 
-    private void logStartRequest(String component) {
-        LOG.debug("Call to {} START", component);
+    private void logStartRequest(String component, String url) {
+        LOG.debug("Call to {} START, URL: {}", component, url);
     }
     private void logEndRequest(String component) {
         LOG.debug("Call to {} DONE", component);

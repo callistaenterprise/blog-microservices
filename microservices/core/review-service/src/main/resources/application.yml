@@ -1,4 +1,13 @@
 ---
+# For deployment in Docker containers
+spring:
+  profiles: docker
+
+  rabbitmq.host: rabbitmq
+
+server.port: 8080
+
+---
 # For development
 spring:
   profiles: development
