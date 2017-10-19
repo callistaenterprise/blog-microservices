@@ -44,7 +44,8 @@ public class ProductCompositeIntegration {
     private final RestOperations restTemplate;
     private final WebClient webClient;
 
-    private final int timeoutSec = 20;
+    private final int retryCount = 3;
+    private final int timeoutSec = 10;
 
     @Inject
     public ProductCompositeIntegration(
@@ -71,6 +72,7 @@ public class ProductCompositeIntegration {
         return webClient.get().uri(url)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
+            .retry(retryCount)
             .timeout(Duration.ofSeconds(timeoutSec))
             .flatMap(cr -> cr.bodyToMono(Product.class))
             .doOnSubscribe(s -> logStartRequest("product", url))
@@ -82,6 +84,7 @@ public class ProductCompositeIntegration {
         return webClient.get().uri(url)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
+            .retry(retryCount)
             .timeout(Duration.ofSeconds(timeoutSec))
             .flatMapMany(cr -> cr.bodyToFlux(Recommendation.class))
             .doOnSubscribe(s -> logStartRequest("recommendations", url))
@@ -93,6 +96,7 @@ public class ProductCompositeIntegration {
         return webClient.get().uri(url)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
+            .retry(retryCount)
             .timeout(Duration.ofSeconds(timeoutSec))
             .flatMapMany(cr -> cr.bodyToFlux(Review.class))
             .doOnSubscribe(s -> logStartRequest("reviews", url))
@@ -113,19 +117,26 @@ public class ProductCompositeIntegration {
     @HystrixCommand(fallbackMethod = "defaultProduct")
     public ResponseEntity<Product> getProduct(int productId) {
 
-        LOG.debug("Will call getProduct with Hystrix protection");
+        try {
+            LOG.debug("Will call getProduct with Hystrix protection");
 
-        String url = "http://product-service/product/" + productId;
-        LOG.debug("GetProduct from URL: {}", url);
+            String url = "http://" + productService + "/product/" + productId;
+            LOG.debug("GetProduct from URL: {}", url);
 
-        ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
-        LOG.debug("GetProduct http-status: {}", resultStr.getStatusCode());
-        LOG.debug("GetProduct body: {}", resultStr.getBody());
+            ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
+            LOG.debug("GetProduct http-status: {}", resultStr.getStatusCode());
+            LOG.debug("GetProduct body: {}", resultStr.getBody());
 
-        Product product = response2Product(resultStr);
-        LOG.debug("GetProduct.id: {}", product.getProductId());
+            Product product = response2Product(resultStr);
+            LOG.debug("GetProduct.id: {}", product.getProductId());
 
-        return util.createOkResponse(product);
+            return util.createOkResponse(product);
+
+        } catch (RuntimeException ex) {
+            LOG.warn("getProduct ERROR", ex);
+            throw ex;
+        }
+
     }
 
     /**
@@ -150,7 +161,7 @@ public class ProductCompositeIntegration {
         try {
             LOG.debug("Will call getRecommendations with Hystrix protection");
 
-            String url = "http://recommendation-service/recommendation?productId=" + productId;
+            String url = "http://" + recommendationService + "/recommendation?productId=" + productId;
             LOG.debug("GetRecommendations from URL: {}", url);
 
             ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
@@ -161,9 +172,10 @@ public class ProductCompositeIntegration {
             LOG.debug("GetRecommendations.cnt {}", recommendations.size());
 
             return util.createOkResponse(recommendations);
-        } catch (Throwable t) {
-            LOG.error("getRecommendations error", t);
-            throw t;
+
+        } catch (RuntimeException ex) {
+            LOG.error("getRecommendations error", ex);
+            throw ex;
         }
     }
 
@@ -188,19 +200,26 @@ public class ProductCompositeIntegration {
 
     @HystrixCommand(fallbackMethod = "defaultReviews")
     public ResponseEntity<List<Review>> getReviews(int productId) {
-        LOG.debug("Will call getReviews with Hystrix protection");
 
-        String url = "http://review-service/review?productId=" + productId;
-        LOG.debug("GetReviews from URL: {}", url);
+        try {
+            LOG.debug("Will call getReviews with Hystrix protection");
 
-        ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
-        LOG.debug("GetReviews http-status: {}", resultStr.getStatusCode());
-        LOG.debug("GetReviews body: {}", resultStr.getBody());
+            String url = "http://" + reviewService + "/review?productId=" + productId;
+            LOG.debug("GetReviews from URL: {}", url);
 
-        List<Review> reviews = response2Reviews(resultStr);
-        LOG.debug("GetReviews.cnt {}", reviews.size());
+            ResponseEntity<String> resultStr = restTemplate.getForEntity(url, String.class);
+            LOG.debug("GetReviews http-status: {}", resultStr.getStatusCode());
+            LOG.debug("GetReviews body: {}", resultStr.getBody());
 
-        return util.createOkResponse(reviews);
+            List<Review> reviews = response2Reviews(resultStr);
+            LOG.debug("GetReviews.cnt {}", reviews.size());
+
+            return util.createOkResponse(reviews);
+
+        } catch (RuntimeException ex) {
+            LOG.error("getReviews error", ex);
+            throw ex;
+        }
     }
 
 

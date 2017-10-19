@@ -77,22 +77,28 @@ public class ReviewService {
      */
     @RequestMapping("/review")
     public List<Review> getReviews(
-            @RequestParam(value = "productId",  required = true) int productId) {
+        @RequestParam(value = "productId",  required = true) int productId) {
 
-        int pt = setProcTimeBean.calculateProcessingTime();
-        LOG.info("/reviews?productId={} called, processing time: {}",productId, pt);
+        try {
+            int pt = setProcTimeBean.calculateProcessingTime();
+            LOG.info("/reviews?productId={} called, processing time: {}",productId, pt);
 
-        LOG.info("mySecretProperty: {}", mySecretProperty);
+            LOG.info("mySecretProperty: {}", mySecretProperty);
 
-        sleep(pt);
+            sleep(pt);
 
-        cpuCruncher.exec();
+            cpuCruncher.exec();
 
-        List<Review> list = repository.findByProductId(productId).stream().map(e -> toApi(e)).collect(Collectors.toList());
+            List<Review> list = repository.findByProductId(productId).stream().map(e -> toApi(e)).collect(Collectors.toList());
 
-        LOG.debug("/reviews response size: {}", list.size());
+            LOG.debug("/reviews response size: {}", list.size());
 
-        return list;
+            return list;
+
+        } catch (RuntimeException ex) {
+            LOG.warn("review ERROR", ex);
+            throw ex;
+        }
     }
 
     @GetMapping(path = "/review-async")

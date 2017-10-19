@@ -70,20 +70,26 @@ public class RecommendationService {
      */
     @RequestMapping("/recommendation")
     public List<Recommendation> getRecommendations(
-            @RequestParam(value = "productId",  required = true) int productId) {
+        @RequestParam(value = "productId",  required = true) int productId) {
 
-        int pt = setProcTimeBean.calculateProcessingTime();
-        LOG.info("/recommendation?productId={} called, processing time: {}",productId, pt);
+        try {
+            int pt = setProcTimeBean.calculateProcessingTime();
+            LOG.info("/recommendation?productId={} called, processing time: {}", productId, pt);
 
-        sleep(pt);
+            sleep(pt);
 
-        cpuCruncher.exec();
+            cpuCruncher.exec();
 
-        List<Recommendation> list = repository.findByProductId(productId).map(e -> toApi(e)).collectList().block();
+            List<Recommendation> list = repository.findByProductId(productId).map(e -> toApi(e)).collectList().block();
 
-        LOG.debug("/recommendation response size: {}", list.size());
+            LOG.debug("/recommendation response size: {}", list.size());
 
-        return list;
+            return list;
+
+        } catch (RuntimeException ex) {
+            LOG.warn("recommendation ERROR", ex);
+            throw ex;
+        }
     }
 
     @GetMapping(path = "/recommendation-async")
@@ -95,7 +101,7 @@ public class RecommendationService {
         return repository.findByProductId(id)
             .map(e -> toApi(e))
             .doOnSubscribe(s  -> LOG.debug("recommendation-async START, productId: {}", id))
-            .doOnError    (ex -> LOG.debug("recommendation-async ERROR", ex))
+            .doOnError    (ex -> LOG.warn("recommendation-async ERROR", ex))
             .doOnComplete (() -> LOG.debug("recommendation-async DONE"));
     }
 

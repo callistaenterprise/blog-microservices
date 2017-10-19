@@ -54,17 +54,23 @@ public class ProductService {
     @RequestMapping("/product/{productId}")
     public Product getProduct(@PathVariable int productId) {
 
-        int pt = setProcTimeBean.calculateProcessingTime();
-        LOG.info("/product/{} called, processing time: {}", productId, pt);
+        try {
+            int pt = setProcTimeBean.calculateProcessingTime();
+            LOG.info("/product/{} called, processing time: {}", productId, pt);
 
-        sleep(pt);
+            sleep(pt);
 
-        cpuCruncher.exec();
+            cpuCruncher.exec();
 
-        return repository.findByProductId(productId)
-            .map(e -> toApi(e))
-            .doOnNext(p -> LOG.debug("/product returns the product: {}", p))
-            .block();
+            return repository.findByProductId(productId)
+                .map(e -> toApi(e))
+                .doOnNext(p -> LOG.debug("/product returns the product: {}", p))
+                .block();
+
+        } catch (RuntimeException ex) {
+            LOG.warn("product ERROR", ex);
+            throw ex;
+        }
     }
 
     @GetMapping(path = "/product-async/{productId}")
