@@ -61,4 +61,4 @@ hystrix:
 #          strategy: SEMAPHORE, no thread pool but timeout handling stops to work
           strategy: THREAD
           thread:
-            timeoutInMilliseconds: 4000
+            timeoutInMilliseconds: 10000

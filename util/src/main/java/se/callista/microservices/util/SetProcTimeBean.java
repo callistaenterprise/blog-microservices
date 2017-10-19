@@ -35,7 +35,7 @@ public class SetProcTimeBean {
 
         this.minMs = minMs;
         this.maxMs = maxMs;
-        LOG.info("Set response time to {} - {} ms.", this.minMs, this.maxMs);
+        LOG.warn("Set response time to {} - {} ms.", this.minMs, this.maxMs);
     }
 
     public int calculateProcessingTime() {
