@@ -1,0 +1,19 @@
+#
+# Installation:
+#
+#    $ npm install -g mert
+#
+#
+# Start:
+#
+#    $ mert start
+#
+
+root: "."
+layout:
+  -
+    - cd microservices/core/product-service;                java -Dspring.profiles.active=development -jar build/libs/*.jar
+    - cd microservices/core/recommendation-service;         java -Dspring.profiles.active=development -jar build/libs/*.jar
+    - cd microservices/core/review-service;                 java -Dspring.profiles.active=development -jar build/libs/*.jar
+    - cd microservices/composite/product-composite-service; java -Dspring.profiles.active=development -jar build/libs/*.jar
+

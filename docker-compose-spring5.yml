@@ -2,6 +2,16 @@ version: '2.1'
 
 services:
 
+  zipkin:
+    build: microservices/support/zipkin-server
+    restart: always
+    ports:
+      - "9411:9411"
+    environment:
+      - MY_CONFIG_USER=${MY_CONFIG_USER}
+      - MY_CONFIG_PWD=${MY_CONFIG_PWD}
+      - JAVA_TOOL_OPTIONS=${MY_JAVA_TOOL_OPTIONS}
+
   rabbitmq:
     image: rabbitmq:3-management
     restart: always
