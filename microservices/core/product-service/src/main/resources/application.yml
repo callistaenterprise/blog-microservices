@@ -24,8 +24,8 @@ spring.sleuth.sampler.percentage: 1.0
 logging:
   level:
     root: INFO
-    se.callista: DEBUG
-    org.springframework.data: DEBUG
+    se.callista: WARN
+    org.springframework.data: INFO
 
 server.port: 8081
 

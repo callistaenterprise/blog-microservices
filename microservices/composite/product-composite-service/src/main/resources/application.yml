@@ -26,7 +26,7 @@ spring.sleuth.sampler.percentage: 1.0
 logging:
   level:
     root: INFO
-    se.callista: DEBUG
+    se.callista: WARN
 
 server.port: 8084
 
@@ -38,3 +38,27 @@ product-service.ribbon.listOfServers: localhost:8081
 recommendation-service.ribbon.listOfServers: localhost:8082
 review-service.ribbon.listOfServers: localhost:8083
 
+hystrix:
+  threadpool:
+    default:
+      # This property allows the configuration for maximumSize to take effect.  (Default: false)
+      allowMaximumSizeToDivergeFromCoreSize: true
+      # This is the maximum amount of concurrency that can be supported without starting to reject HystrixCommands.  (Default: 10)
+      maximumSize: 400
+      # This property sets the core thread-pool size. (Default: 10)
+      coreSize: 10
+      # Maximum LinkedBlockingQueue size - -1 for using SynchronousQueue (Default: -1)
+      maxQueueSize: -1
+      # Queue size rejection threshold (Default: 5)
+      queueSizeRejectionThreshold: 5
+  command:
+    default:
+      circuitBreaker:
+        sleepWindowInMilliseconds: 30000
+        requestVolumeThreshold: 3
+      execution:
+        isolation:
+#          strategy: SEMAPHORE, no thread pool but timeout handling stops to work
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 4000
