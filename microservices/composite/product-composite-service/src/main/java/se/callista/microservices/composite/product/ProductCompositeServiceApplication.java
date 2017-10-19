@@ -10,7 +10,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+//import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,7 +19,7 @@ import javax.net.ssl.HttpsURLConnection;
 @SpringBootApplication
 @EnableCircuitBreaker
 @EnableDiscoveryClient
-@EnableResourceServer
+//@EnableResourceServer
 @ComponentScan({"se.callista.microservices.composite.product", "se.callista.microservices.util"})
 public class ProductCompositeServiceApplication {
 

@@ -35,7 +35,8 @@ public class AsyncCallTests {
 
     private ProductCompositeIntegration mock = Mockito.mock(ProductCompositeIntegration.class);
 
-    private ServiceUtils util = new ServiceUtils(null, null);
+//    private ServiceUtils util = new ServiceUtils(null, null);
+    private ServiceUtils util = new ServiceUtils(null);
 
     @Before
     public void beforeTest() {

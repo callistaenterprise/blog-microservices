@@ -23,25 +23,26 @@ import java.net.UnknownHostException;
 public class ServiceUtils {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceUtils.class);
 
-    private final LoadBalancerClient loadBalancer;
+//    private final LoadBalancerClient loadBalancer;
     private final String port;
 
     private String serviceAddress = null;
 
     @Autowired
     public ServiceUtils(
-        @Value("${server.port}") String port,
-        LoadBalancerClient loadBalancer) {
+        @Value("${server.port}") String port) {
+//        @Value("${server.port}") String port,
+//        LoadBalancerClient loadBalancer) {
 
         this.port = port;
-        this.loadBalancer = loadBalancer;
+//        this.loadBalancer = loadBalancer;
     }
 
     /**
      *
      * @param serviceId
      * @return
-     */
+     * /
     public URI getServiceUrl(String serviceId) {
         return getServiceUrl(serviceId, null);
     }
@@ -51,7 +52,7 @@ public class ServiceUtils {
      * @param serviceId
      * @param fallbackUri
      * @return
-     */
+     * /
     protected URI getServiceUrl(String serviceId, String fallbackUri) {
         URI uri = null;
         try {
@@ -77,6 +78,7 @@ public class ServiceUtils {
 
         return uri;
     }
+    */
 
     public <T> ResponseEntity<T> createOkResponse(T body) {
         return createResponse(body, HttpStatus.OK);
