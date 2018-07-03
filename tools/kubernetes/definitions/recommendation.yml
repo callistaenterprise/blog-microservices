@@ -1,24 +1,24 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: product
+  name: recommendation
   labels:
-    app: product-service
+    app: recommendation-service
     image-tag: "Spring5-1.0.0"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: product-service
+      app: recommendation-service
   template:
     metadata:
       labels:
-        app: product-service
+        app: recommendation-service
         image-tag: "Spring5-1.0.0"
     spec:
       containers:
-      - name: product
-        image: magnuslarsson/ms-blog-product-service:Spring5-1.0.0
+      - name: recommendation
+        image: magnuslarsson/ms-blog-recommendation-service:Spring5-1.0.0
         env:
           - name: SPRING_PROFILES_ACTIVE
             value: "development,docker"
@@ -33,8 +33,8 @@ spec:
           containerPort: 8080
         livenessProbe:
           httpGet:
-            scheme: HTTPS
-            path: "/info"
+            scheme: HTTP
+            path: "/application/info"
             port: 8080
           initialDelaySeconds: 600
           periodSeconds: 60
@@ -44,11 +44,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: product
+#  name: recommendation
+  name: rec
 spec:
   type: ClusterIP
   selector:
-    app: product-service
+    app: recommendation-service
   ports:
     - port: 8080
       targetPort: 8080

@@ -18,6 +18,8 @@ spec:
       containers:
         - name: mongodb
           image: mongo:3.2.4
+          command: ["mongod"]
+          args: ["--smallfiles"]
           ports:
             - containerPort: 27017
 ---
@@ -27,9 +29,15 @@ kind: Service
 metadata:
   name: mongodb
 spec:
-  type: ClusterIP
+#  type: ClusterIP
+  type: NodePort
   selector:
     app: mongodb-app
   ports:
-  - port: 27017
+#  - port: 27017
+#    targetPort: 27017
+  - name: http
+    port: 27017
     targetPort: 27017
+    nodePort: 30017
+

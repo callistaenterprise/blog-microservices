@@ -15,7 +15,9 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 	"spring.cloud.discovery.enabled=false",
 	"my-secret-property=my-secret-test-property",
 	"MY_CONFIG_USER=u",
-	"MY_CONFIG_PWD=p"
+	"MY_CONFIG_PWD=p",
+	"spring.datasource.platform=h2",
+	"spring.datasource.url=jdbc:h2:mem:idpDbTest"
 })
 
 public class ReviewServiceApplicationTests {

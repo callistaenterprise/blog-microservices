@@ -33,8 +33,8 @@ spec:
           containerPort: 8080
         livenessProbe:
           httpGet:
-            scheme: HTTPS
-            path: "/info"
+            scheme: HTTP
+            path: "/application/info"
             port: 8080
           initialDelaySeconds: 600
           periodSeconds: 60
@@ -44,7 +44,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: product
+#  name: product
+  name: pro
 spec:
   type: ClusterIP
   selector:

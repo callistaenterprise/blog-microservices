@@ -2,9 +2,9 @@
   "kind": "Namespace",
   "apiVersion": "v1",
   "metadata": {
-    "name": "local",
+    "name": "myns",
     "labels": {
-      "name": "local"
+      "name": "myns"
     }
   }
 }

@@ -1,0 +1,51 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mongodb-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-app
+  template:
+    metadata:
+      labels:
+        app: mysql-app
+        image-tag: "5.7"
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+#        command: ["mysqld"]
+#        args: ["--max_connections=450"]
+        ports:
+        - containerPort: 3306
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: rootpwd
+          - name: MYSQL_DATABASE
+            value: revDb
+          - name: MYSQL_USER
+            value: user
+          - name: MYSQL_PASSWORD
+            value: pwdx
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+#  type: ClusterIP
+  type: NodePort
+  selector:
+    app: mysql-app
+  ports:
+#    - port: 3306
+#      targetPort: 3306
+  - name: http
+    port: 3306
+    targetPort: 3306
+    nodePort: 30006

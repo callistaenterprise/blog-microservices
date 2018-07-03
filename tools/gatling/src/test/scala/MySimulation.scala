@@ -14,11 +14,11 @@ class MySimulation extends Simulation {
   // val testTime   = 180 seconds
   // val minWaitMs  = 3000 milliseconds
   // val maxWaitMs  = 5000 milliseconds
-  val noOfUsers  = 500 // SYNC. Ger ca 400 req/s och lite drygt 10 ms svarstid
-  val rampUpTime = 12 seconds
-  val testTime   = 18 seconds
-  val minWaitMs  = 300 milliseconds
-  val maxWaitMs  = 500 milliseconds
+  val noOfUsers = 3000 // SYNC. Ger ca 400 req/s och lite drygt 10 ms svarstid
+  val rampUpTime = 30 seconds
+  val testTime   = 60 seconds
+  val minWaitMs  = 3000 milliseconds
+  val maxWaitMs  = 5000 milliseconds
 
   private val log = LoggerFactory.getLogger("composite.CompositeTestScenario")
 
@@ -27,8 +27,8 @@ class MySimulation extends Simulation {
   def httpHostname = conf.getString("callista.http.hostname")
 
   val baseUrl = "http://" + httpHostname + ":8084"
-  // val requestUrl = "/async/5"
-  val requestUrl = "/5"
+  val requestUrl = "/async/5"
+//  val requestUrl = "/5"
 
   val httpConf = http
     .baseURL(baseUrl)
@@ -39,12 +39,12 @@ class MySimulation extends Simulation {
     exec(http("Composite Test")
       .get(requestUrl)
       .check(status.is(200))
-      .check(jsonPath("$").saveAs("result"))
+//      .check(jsonPath("$").saveAs("result"))
     )
-    .exec(session => {
-      log.debug( "Result: {}", session( "result" ).as[String] )
-      session
-    })
+//    .exec(session => {
+//      log.debug( "Result: {}", session( "result" ).as[String] )
+//      session
+//    })
 
   setUp(
     scenario("Test Scenario")

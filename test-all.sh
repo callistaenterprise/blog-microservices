@@ -44,13 +44,14 @@ function waitForService() {
 }
 
 function waitForServices() {
-    waitForService $host:8761
-    waitForService $host:8761/eureka/apps/config-server
-    waitForService $host:8761/eureka/apps/edge-server
-    waitForService $host:8761/eureka/apps/product-service
-    waitForService $host:8761/eureka/apps/review-service
-    waitForService $host:8761/eureka/apps/recommendation-service
-    waitForService $host:8761/eureka/apps/composite-service
+    waitForService $host:8084/
+#    waitForService $host:8761
+#    waitForService $host:8761/eureka/apps/config-server
+#    waitForService $host:8761/eureka/apps/edge-server
+#    waitForService $host:8761/eureka/apps/product-service
+#    waitForService $host:8761/eureka/apps/review-service
+#    waitForService $host:8761/eureka/apps/recommendation-service
+#    waitForService $host:8761/eureka/apps/composite-service
 }
 
 
@@ -103,6 +104,11 @@ fi
 
 waitForServices
 
+echo "Call API... "
+echo "$ curl -s http://$host:8084/5 | jq ."
+curl -s http://$host:8084/5 | jq .
+
+
 #echo ''
 #echo "Call /info on each microservice:"
 #docker-compose exec composite wget -qO- localhost:8080/info | jq
@@ -111,19 +117,19 @@ waitForServices
 #docker-compose exec rec wget -qO- localhost:8080/info | jq
 
 
-echo ''
-echo "Get an OAuth Access Token:"
-echo "$ curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d scope=webshop -d username=user -d password=password | jq ."
-OAUTH_RESPOSE=`curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d scope=webshop -d username=user -d password=password`
-echo $OAUTH_RESPOSE | jq .
-export TOKEN=`echo $OAUTH_RESPOSE | jq -r .access_token`
-echo "ACCESS TOKEN: $TOKEN"
-
-echo ''
-echo "Call API with Access Token... "
-waitForAPI
-echo "$ curl -ks https://$host:$port/api/product/123 -H \"Authorization: Bearer \$TOKEN\" | jq ."
-curl -ks https://$host:$port/api/product/123 -H  "Authorization: Bearer $TOKEN" | jq .
+#echo ''
+#echo "Get an OAuth Access Token:"
+#echo "$ curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d scope=webshop -d username=user -d password=password | jq ."
+#OAUTH_RESPOSE=`curl -ks https://acme:acmesecret@$host:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d scope=webshop -d username=user -d password=password`
+#echo $OAUTH_RESPOSE | jq .
+#export TOKEN=`echo $OAUTH_RESPOSE | jq -r .access_token`
+#echo "ACCESS TOKEN: $TOKEN"
+#
+#echo ''
+#echo "Call API with Access Token... "
+#waitForAPI
+#echo "$ curl -ks https://$host:$port/api/product/123 -H \"Authorization: Bearer \$TOKEN\" | jq ."
+#curl -ks https://$host:$port/api/product/123 -H  "Authorization: Bearer $TOKEN" | jq .
 
 if [[ $@ == *"stop"* ]]
 then

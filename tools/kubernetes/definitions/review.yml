@@ -1,0 +1,66 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: review
+  labels:
+    app: review-service
+    image-tag: "Spring5-1.0.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: review-service
+  template:
+    metadata:
+      labels:
+        app: review-service
+        image-tag: "Spring5-1.0.0"
+    spec:
+      containers:
+      - name: review
+        image: magnuslarsson/ms-blog-review-service:Spring5-1.0.0
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: "development,docker"
+          - name: SPRING_CONFIG_LOCATION
+            value: "file:/config/"
+          - name: JAVA_TOOL_OPTIONS
+            value: "-Xmx256M"
+          - name: MY_CONFIG_USER
+            value: "config_client"
+          - name: MY_CONFIG_PWD
+            value: "config_client_pwd"
+        ports:
+        - name: https
+          containerPort: 8080
+        livenessProbe:
+          httpGet:
+            scheme: HTTP
+            path: "/application/info"
+            port: 8080
+          initialDelaySeconds: 600
+          periodSeconds: 60
+          timeoutSeconds: 1
+        volumeMounts:
+        - mountPath: /config
+          name: config
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: review-config
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+#  name: review
+  name: rev
+spec:
+  type: ClusterIP
+  selector:
+    app: review-service
+  ports:
+    - port: 8080
+      targetPort: 8080

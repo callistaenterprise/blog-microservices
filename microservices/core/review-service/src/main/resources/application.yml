@@ -3,7 +3,7 @@ endpoints.sensitive: false
 spring.datasource:
   url: jdbc:mysql://localhost/revDb?useSSL=false
   username: user
-  password: pwd
+  password: pwdx
   tomcat:
     testWhileIdle: true
     testOnBorrow: true

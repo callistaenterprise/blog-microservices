@@ -64,7 +64,7 @@ dependencies {
     compile("se.callista.microservises:util:0.0.1-SNAPSHOT")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile 'org.hsqldb:hsqldb'
+    testCompile("com.h2database:h2")
 }
 
 dependencyManagement {
