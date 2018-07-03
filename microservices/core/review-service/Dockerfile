@@ -6,5 +6,7 @@ EXPOSE 8080
 ADD ./build/libs/*.jar app.jar
 ADD src/main/resources/truststore.jks truststore.jks
 
+ADD prometheus-lib prometheus-lib
+
 # Regarding settings of java.security.egd, see http://wiki.apache.org/tomcat/HowTo/FasterStartUp#Entropy_Source
 ENTRYPOINT ["java","-Djavax.net.ssl.trustStore=truststore.jks","-Djavax.net.ssl.trustStorePassword=password","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]

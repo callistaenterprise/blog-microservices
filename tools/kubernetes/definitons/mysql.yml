@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: idp-db
+spec:
+  replicas: 1
+  selector:
+    app: idp-db-app
+  template:
+    metadata:
+      labels:
+        app: idp-db-app
+        image-tag: "1.7.0-RC2"
+    spec:
+      containers:
+      - name: idp-db
+        image: idp-db:1.7.0-RC2
+        ports:
+        - containerPort: 3306
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: rpwd
+          - name: MYSQL_DATABASE
+            value: idpDb
+          - name: MYSQL_USER
+            value: user
+          - name: MYSQL_PASSWORD
+            value: pwd
+          - name: JAVA_TOOL_OPTIONS
+            value: "-Xmx256M"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: idp-db
+spec:
+  type: ClusterIP
+  selector:
+    app: idp-db-app
+  ports:
+    - port: 3306
+      targetPort: 3306

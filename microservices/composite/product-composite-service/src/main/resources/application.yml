@@ -1,3 +1,5 @@
+endpoints.sensitive: false
+
 ---
 # For deployment in Docker containers
 spring:

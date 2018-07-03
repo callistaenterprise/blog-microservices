@@ -1,0 +1,94 @@
+version: '2'
+
+##      - prometheus_config:/etc/prometheus/
+#volumes:
+#    prometheus_data: {}
+#    grafana_data: {}
+##    prometheus_config:
+##      external: true
+ #   certificates:
+ #      external: true
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
+  dmdp-network:
+    external:
+      name: blogmicroservices_default
+
+services:
+  prometheus:
+##    image: prom/prometheus
+    build: .
+    container_name: prometheus
+# ML. Don't save data permanently for now
+#    volumes:
+#      - prometheus_data:/prometheus
+##      - prometheus_config:/etc/prometheus/
+    command:
+      - '-config.file=/etc/prometheus/prometheus.yml'
+      - '-storage.local.path=/prometheus'
+    restart: always
+    ports:
+      - 9090:9090
+    links:
+      - cadvisor:cadvisor
+    depends_on:
+      - cadvisor
+    networks:
+      - back-tier
+      - dmdp-network
+
+  node-exporter:
+    container_name: node-exporter
+    image: prom/node-exporter:v0.14.0
+    volumes:
+      - /proc:/host/proc
+      - /sys:/host/sys
+      - /:/rootfs
+    command:
+      - '-collector.procfs=/host/proc'
+      - '-collector.sysfs=/host/sysfs'
+      - '-collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+    restart: always
+    ports:
+      - 9100:9100
+    networks:
+      - back-tier
+
+  cadvisor:
+    image: google/cadvisor:v0.25.0
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - back-tier
+
+  grafana:
+#    image: grafana/grafana:4.2.0
+    build: grafana
+    depends_on:
+      - prometheus
+    restart: always
+    ports:
+      - 3000:3000
+# ML. Don't save data permanently for now
+#    volumes:
+#      - grafana_data:/var/lib/grafana
+    environment:
+#      - GF_DASHBOARDS_JSON_ENABLED=true
+#      - GF_DASHBOARDS_JSON_PATH=
+      - GF_USERS_ALLOW_ORG_CREATE=false
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+###      - GF_SERVER_ROOT_URL=http://${DNS_NAME}:3000
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    networks:
+      - back-tier
+      - front-tier

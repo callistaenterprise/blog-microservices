@@ -1,0 +1,73 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: gds
+  labels:
+    app: gds-app
+    image-tag: "1.7.0-RC2"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gds-app
+  template:
+    metadata:
+      labels:
+        app: gds-app
+        image-tag: "1.7.0-RC2"
+    spec:
+      containers:
+      - name: gds
+        image: gds:1.7.0-RC2
+        env:
+          - name: SPRING_CLOUD_CONFIG_LABEL
+            value: "develop"
+          - name: SPRING_RABBITMQ_PORT
+            value: "5671"
+          - name: SPRING_RABBITMQ_SSL_ENABLED
+            value: "true"
+          - name: SPRING_RABBITMQ_USERNAME
+            value: "notguest"
+          - name: SPRING_RABBITMQ_PASSWORD
+            value: "s0mep@ss"
+          - name: SPRING_PROFILES_ACTIVE
+            value: "docker,local-k8s"
+          - name: DMDP_DISABLE_SSL_HOSTNAME_CHECK
+            value: "true"
+          - name: SPRING_CLOUD_CONFIG_USERNAME
+            value: "configure"
+          - name: SPRING_CLOUD_CONFIG_PASSWORD
+            value: "s0mep@ss"
+          - name: JAVA_TOOL_OPTIONS
+            value: "-Xmx256M"
+        ports:
+        - name: https
+          containerPort: 8080
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: "/info"
+            port: 8080
+          initialDelaySeconds: 600
+          periodSeconds: 60
+          timeoutSeconds: 1
+        volumeMounts:
+        - mountPath: "/opt/certs"
+          name: external-certs
+      volumes:
+      - name: external-certs
+        secret:
+          secretName: our-secret
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gds
+spec:
+  type: ClusterIP
+  selector:
+    app: gds-app
+  ports:
+    - port: 8080
+      targetPort: 8080

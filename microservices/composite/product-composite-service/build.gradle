@@ -47,14 +47,13 @@ dependencies {
 //    compile("org.springframework.boot:spring-boot-starter-undertow")
 
     compile('org.springframework.boot:spring-boot-starter-webflux')
+    compile("org.springframework.boot:spring-boot-starter-actuator")
 
     // To prevent https://github.com/reactor/reactor-netty/issues/138 at high loads
     compile('io.projectreactor.ipc:reactor-netty:0.7.0.M2')
 
     /*
     compile("org.springframework.boot:spring-boot-devtools")
-
-    compile("org.springframework.boot:spring-boot-starter-actuator")
 
     compile("org.springframework.cloud:spring-cloud-starter-hystrix")
     compile("org.springframework.cloud:spring-cloud-starter-eureka")

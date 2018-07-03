@@ -70,20 +70,26 @@ public class ProductCompositeService {
     @GetMapping(path = "async/{productId}")
     public Mono<ProductAggregated> getProductAggregatedAsync(@PathVariable("productId") int id) {
 
+//        LOG.error("### Called: /async/{}", id);
         LOG.trace("### Called: /async/{}", id);
 
-        return Mono.zip(
-            values -> new ProductAggregated(
-                (Product)values[0],
-                (List<Recommendation>)values[1],
-                (List<Review>)values[2],
-                util.getServiceAddress()),
-            integration.getProductAsync(id),
-            integration.getRecommendationsAsync(id).collectList(),
-            integration.getReviewsAsync(id).collectList())
-            .doOnSubscribe(s  -> logStartRequest())
-            .doOnError    (ex -> logEndRequestWithError(ex))
-            .doOnSuccess  (p  -> logEndRequest());
+        try {
+            return Mono.zip(
+                    values -> new ProductAggregated(
+                            (Product) values[0],
+                            (List<Recommendation>) values[1],
+                            (List<Review>) values[2],
+                            util.getServiceAddress()),
+                    integration.getProductAsync(id),
+                    integration.getRecommendationsAsync(id).collectList(),
+                    integration.getReviewsAsync(id).collectList())
+                    .doOnSubscribe(s -> logStartRequest())
+                    .doOnError(ex -> logEndRequestWithError(ex))
+                    .doOnSuccess(p -> logEndRequest());
+        } catch (Throwable ex) {
+            LOG.error("### ASYNC Error: " + ex.toString(), ex);
+            throw ex;
+        }
     }
 
     /*

@@ -1,0 +1,54 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: product
+  labels:
+    app: product-service
+    image-tag: "Spring5-1.0.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+        image-tag: "Spring5-1.0.0"
+    spec:
+      containers:
+      - name: product
+        image: magnuslarsson/ms-blog-product-service:Spring5-1.0.0
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: "development,docker"
+          - name: JAVA_TOOL_OPTIONS
+            value: "-Xmx256M"
+          - name: MY_CONFIG_USER
+            value: "config_client"
+          - name: MY_CONFIG_PWD
+            value: "config_client_pwd"
+        ports:
+        - name: https
+          containerPort: 8080
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: "/info"
+            port: 8080
+          initialDelaySeconds: 600
+          periodSeconds: 60
+          timeoutSeconds: 1
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: product
+spec:
+  type: ClusterIP
+  selector:
+    app: product-service
+  ports:
+    - port: 8080
+      targetPort: 8080

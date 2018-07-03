@@ -26,6 +26,25 @@ services:
       - "27017:27017"
     command: mongod --smallfiles
 
+  mysql:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpwd
+      - MYSQL_DATABASE=revDb
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+    healthcheck:
+#      test: ["CMD", "mysql", "--user=root", "--password=rootpwd", "-e", "'select 1'"]
+#      test: ["CMD", "sleep 10"]
+      test: ["CMD", "ls"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    command: mysqld --max_connections=450
+
   pro:
     build: microservices/core/product-service
     restart: always
@@ -47,6 +66,9 @@ services:
   rev:
     build: microservices/core/review-service
     restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
     environment:
       - SPRING_PROFILES_ACTIVE=development,docker
       - MY_CONFIG_USER=${MY_CONFIG_USER}
@@ -57,7 +79,7 @@ services:
     build: microservices/composite/product-composite-service
     restart: always
     ports:
-      - "8080:8080"
+      - "8084:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=development,docker
       - MY_CONFIG_USER=${MY_CONFIG_USER}

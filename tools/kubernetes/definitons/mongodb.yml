@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb-app
+  template:
+    metadata:
+      labels:
+        app: mongodb-app
+        image-tag: "3.2.4"
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:3.2.4
+          ports:
+            - containerPort: 27017
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  type: ClusterIP
+  selector:
+    app: mongodb-app
+  ports:
+  - port: 27017
+    targetPort: 27017

@@ -20,8 +20,11 @@ import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservices.util.SetProcTimeBean;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
@@ -89,7 +92,7 @@ public class ReviewService {
 
             cpuCruncher.exec();
 
-            List<Review> list = repository.findByProductId(productId).stream().map(e -> toApi(e)).collect(Collectors.toList());
+            List<Review> list = getByProductId(productId).stream().map(e -> toApi(e)).collect(Collectors.toList());
 
             LOG.debug("/reviews response size: {}", list.size());
 
@@ -107,11 +110,17 @@ public class ReviewService {
 
         LOG.trace("### Called: /review-async/?productId={}", id);
 
-        return asyncFlux(repository.findByProductId(id))
+        return asyncFlux(getByProductId(id))
             .map(e -> toApi(e))
             .doOnSubscribe(s  -> LOG.debug("review-async START, productId: {}", id))
             .doOnError    (ex -> LOG.warn ("review-async ERROR", ex))
             .doOnComplete (() -> LOG.debug("review-async DONE"));
+    }
+
+    @Transactional
+    protected Collection<ReviewEntity> getByProductId(int id) {
+//        return Collections.singleton(new ReviewEntity(id, 1, "a", "s", "c"));
+        return repository.findByProductId(id);
     }
 
     /**

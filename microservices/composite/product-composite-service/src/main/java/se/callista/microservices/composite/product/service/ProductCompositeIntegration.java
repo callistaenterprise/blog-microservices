@@ -76,7 +76,8 @@ public class ProductCompositeIntegration {
             .timeout(Duration.ofSeconds(timeoutSec))
             .flatMap(cr -> cr.bodyToMono(Product.class))
             .doOnSubscribe(s -> logStartRequest("product", url))
-            .doOnSuccess  (p -> logEndRequest("product"));
+            .doOnSuccess  (p -> logEndRequest("product"))
+            .doOnError(ex -> logEndRequestWithError("product", ex));
     }
 
     public Flux<Recommendation> getRecommendationsAsync(int productId) {
@@ -88,7 +89,8 @@ public class ProductCompositeIntegration {
             .timeout(Duration.ofSeconds(timeoutSec))
             .flatMapMany(cr -> cr.bodyToFlux(Recommendation.class))
             .doOnSubscribe(s -> logStartRequest("recommendations", url))
-            .doOnComplete (() -> logEndRequest("recommendations"));
+            .doOnComplete (() -> logEndRequest("recommendations"))
+            .doOnError(ex -> logEndRequestWithError("recommendations", ex));
     }
 
     public Flux<Review> getReviewsAsync(int productId) {
@@ -100,7 +102,8 @@ public class ProductCompositeIntegration {
             .timeout(Duration.ofSeconds(timeoutSec))
             .flatMapMany(cr -> cr.bodyToFlux(Review.class))
             .doOnSubscribe(s -> logStartRequest("reviews", url))
-            .doOnComplete (() -> logEndRequest("reviews"));
+            .doOnComplete (() -> logEndRequest("reviews"))
+            .doOnError(ex -> logEndRequestWithError("reviews", ex));
     }
 
     private void logStartRequest(String component, String url) {
@@ -108,6 +111,10 @@ public class ProductCompositeIntegration {
     }
     private void logEndRequest(String component) {
         LOG.debug("Call to {} DONE", component);
+    }
+
+    private void logEndRequestWithError(String component, Throwable ex) {
+        LOG.warn("Call to {} FAILED, EX: {}", component, ex.toString());
     }
 
     // -------------- //
